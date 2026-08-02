@@ -209,6 +209,16 @@ export function ordinalWord(n: number): string {
   return ORDINAL_WORDS[n - 1] ?? ordinal(n)
 }
 
+/**
+ * Group letter on a Finals Summary. Roster labels the group finals A, B, …,
+ * verified on 27550/337021 and 27545/353923, which both run groups 1 and 2 as
+ * A and B. Group 0 means the event was not split, so it has no letter.
+ */
+export function groupLabel(groupNo: number | undefined): string {
+  if (!groupNo || groupNo < 1) return ''
+  return groupNo <= 26 ? String.fromCharCode(64 + groupNo) : String(groupNo)
+}
+
 /** Plan §9.3 state expansion. */
 export const STATE_NAMES: Record<string, string> = {
   SA: 'South Australia',

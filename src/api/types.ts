@@ -80,6 +80,15 @@ export interface MeetingParticipantDto {
   clubIdFk?: number
   position?: number
   lane?: number
+  /**
+   * On a Finals Summary, which group final this entry competed in: 1 → "A",
+   * 2 → "B". Zero on an event that was not split.
+   */
+  groupNo?: number
+  /** Place within that group. */
+  groupPlace?: number
+  /** The group final's own meeting event. */
+  groupMeetingEventIdFk?: number
   /** Overall finishing position; absent for DNF / DNS / DQ. */
   place?: number
   combinedEventScore?: number

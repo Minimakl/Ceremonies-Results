@@ -55,7 +55,8 @@ Rows come from `mpList` filtered to this event, joined to `athleteList`,
 
 | Column | Source | Transform |
 |---|---|---|
-| Lane | `mp.lane` | verbatim |
+| Lane / Order | `mp.lane` | verbatim |
+| Group | `mp.groupNo`, `mp.groupPlace` | 1 → "A", 2 → "B"; shown only on a Finals Summary, as "A (1)" on the Results tab |
 | Order/Pos | `mp.place` | verbatim; blank for DNF/DNS/DQ |
 | **Participant** | see §5 | |
 | Country | `athlete.country` | verbatim — the athletics code ("RSA"), **not** `countryCode` ("ZAF") |
@@ -107,6 +108,13 @@ we: `10.34 (.334)`. The number of digits comes from the result's own
 
 No mark and a terminal status → the status is shown instead: `DidNotFinish` →
 DNF, `DidNotStart` → DNS, `Disqualified` → DQ, `NoMark` → NM.
+
+Row order matches Roster's own pages: the **Results** tab is ordered by
+`mp.place` with DNF/DNS/DQ last, and the **Start list** tab by **group, then
+lane or start order**. The group matters only on a Finals Summary, where each
+group final numbers its entries from 1 — 27550/337021 runs order 1–12 in group
+A and 1–2 in group B, so ordering on the number alone would interleave them and
+open the list with the wrong athlete.
 
 ## 7. Ceremonies order
 

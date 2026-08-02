@@ -1,0 +1,1494 @@
+{
+ "type": "Full",
+ "athleteList": [
+  {
+   "athleteIdPk": 41971,
+   "athleteName": "Cameron Crombie",
+   "firstName": "Cameron",
+   "lastName": "Crombie",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178268,
+   "athleteName": "Benjamin Kalenjuk",
+   "firstName": "Benjamin",
+   "lastName": "Kalenjuk",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178273,
+   "athleteName": "Christopher Albert",
+   "firstName": "Christopher",
+   "lastName": "Albert",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178286,
+   "athleteName": "Hugo Taheny",
+   "firstName": "Hugo",
+   "lastName": "Taheny",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178313,
+   "athleteName": "Malachi Canning",
+   "firstName": "Malachi",
+   "lastName": "Canning",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178331,
+   "athleteName": "Sam Paech",
+   "firstName": "Sam",
+   "lastName": "Paech",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178340,
+   "athleteName": "Tom Burrows",
+   "firstName": "Tom",
+   "lastName": "Burrows",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178458,
+   "athleteName": "Todd Hodgetts",
+   "firstName": "Todd",
+   "lastName": "Hodgetts",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178576,
+   "athleteName": "Mark Everett",
+   "firstName": "Mark",
+   "lastName": "Everett",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 214692,
+   "athleteName": "Matt Sheppard",
+   "firstName": "Matt",
+   "lastName": "Sheppard",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 300030,
+   "athleteName": "Lee O'Halloran",
+   "firstName": "Lee",
+   "lastName": "O'Halloran",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 386396,
+   "athleteName": "Daniel Ganambarr",
+   "firstName": "Daniel",
+   "lastName": "Ganambarr",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 386403,
+   "athleteName": "Ryan Blair",
+   "firstName": "Ryan",
+   "lastName": "Blair",
+   "country": "AUS",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 386404,
+   "athleteName": "Stephen Martin",
+   "firstName": "Stephen",
+   "lastName": "Martin",
+   "country": "AUS",
+   "countryCode": "AUS"
+  }
+ ],
+ "clubList": [
+  {
+   "clubIdPk": 16353,
+   "shortName": "QLD",
+   "longName": "Queensland",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16416,
+   "shortName": "NSW",
+   "longName": "New South Wales",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16417,
+   "shortName": "TAS",
+   "longName": "Tasmania",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16418,
+   "shortName": "VIC",
+   "longName": "Victoria",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16420,
+   "shortName": "SA",
+   "longName": "South Australia",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16426,
+   "shortName": "ACT",
+   "longName": "Australian Capital Territory",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 26131,
+   "shortName": "NT",
+   "longName": "Northern Territory",
+   "countryCode": "AUS"
+  }
+ ],
+ "relayList": [],
+ "mpList": [
+  {
+   "op": "Create",
+   "entityIdPk": 2863648,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863648,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178286,
+    "clubIdFk": 16420,
+    "position": 13,
+    "place": 4,
+    "lane": 11,
+    "groupNo": 1,
+    "groupPlace": 4,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "4kg 81.09"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863646,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863646,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178331,
+    "clubIdFk": 16420,
+    "position": 14,
+    "place": 9,
+    "lane": 12,
+    "groupNo": 1,
+    "groupPlace": 7,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "5kg 59.01"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863645,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863645,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 300030,
+    "clubIdFk": 16426,
+    "position": 12,
+    "place": 2,
+    "lane": 10,
+    "groupNo": 1,
+    "groupPlace": 2,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "6kg 87.61"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863643,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863643,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178268,
+    "clubIdFk": 16426,
+    "position": 11,
+    "place": 11,
+    "lane": 9,
+    "groupNo": 1,
+    "groupPlace": 9,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "4kg 47.81"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863640,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863640,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178576,
+    "clubIdFk": 16416,
+    "position": 8,
+    "place": 6,
+    "lane": 6,
+    "groupNo": 1,
+    "groupPlace": 6,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "5kg 74.67"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863636,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863636,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 386403,
+    "clubIdFk": 16418,
+    "position": 4,
+    "place": 3,
+    "lane": 2,
+    "groupNo": 1,
+    "groupPlace": 3,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "5kg 83.69"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863642,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863642,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178458,
+    "clubIdFk": 16418,
+    "position": 10,
+    "place": 5,
+    "lane": 8,
+    "groupNo": 1,
+    "groupPlace": 5,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "7.26kg 77.27"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863637,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863637,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178340,
+    "clubIdFk": 16353,
+    "position": 5,
+    "place": 11,
+    "lane": 3,
+    "groupNo": 1,
+    "groupPlace": 10,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "7.26kg 43.89"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2911315,
+   "entityDto": {
+    "meetingParticipantIdPk": 2911315,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 214692,
+    "clubIdFk": 16353,
+    "position": 3,
+    "place": 7,
+    "lane": 2,
+    "groupNo": 2,
+    "groupPlace": 1,
+    "groupMeetingEventIdFk": 397062,
+    "startStatus": "Ok",
+    "notesPublic": "4kg 73.83",
+    "initialPersonalBest": 940
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863639,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863639,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 41971,
+    "clubIdFk": 16426,
+    "position": 7,
+    "place": 1,
+    "lane": 5,
+    "groupNo": 1,
+    "groupPlace": 1,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "5kg 96.55"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863638,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863638,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178313,
+    "clubIdFk": 16416,
+    "position": 6,
+    "place": 10,
+    "lane": 4,
+    "groupNo": 1,
+    "groupPlace": 8,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "7.26kg 52.28"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863635,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863635,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 178273,
+    "clubIdFk": 16417,
+    "position": 2,
+    "place": 14,
+    "lane": 1,
+    "groupNo": 1,
+    "groupPlace": 12,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "4kg 39.37"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2911314,
+   "entityDto": {
+    "meetingParticipantIdPk": 2911314,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 386404,
+    "clubIdFk": 16353,
+    "position": 1,
+    "place": 8,
+    "lane": 1,
+    "groupNo": 2,
+    "groupPlace": 2,
+    "groupMeetingEventIdFk": 397062,
+    "startStatus": "Ok",
+    "notesPublic": "4kg 64.22"
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2863641,
+   "entityDto": {
+    "meetingParticipantIdPk": 2863641,
+    "meetingEventIdFk": 337021,
+    "athleteIdFk": 386396,
+    "clubIdFk": 26131,
+    "position": 9,
+    "place": 12,
+    "lane": 7,
+    "groupNo": 1,
+    "groupPlace": 11,
+    "groupMeetingEventIdFk": 397061,
+    "startStatus": "Ok",
+    "notesPublic": "7.26kg 39.86"
+   }
+  }
+ ],
+ "resultList": [
+  {
+   "op": "Create",
+   "entityIdPk": 22830347,
+   "entityDto": {
+    "resultIdPk": 22830347,
+    "meetingParticipantIdFk": 2911314,
+    "attempt": 0,
+    "result": 980,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830348,
+   "entityDto": {
+    "resultIdPk": 22830348,
+    "meetingParticipantIdFk": 2911314,
+    "attempt": 1,
+    "result": 914,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830349,
+   "entityDto": {
+    "resultIdPk": 22830349,
+    "meetingParticipantIdFk": 2911314,
+    "attempt": 2,
+    "result": 927,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830350,
+   "entityDto": {
+    "resultIdPk": 22830350,
+    "meetingParticipantIdFk": 2911314,
+    "attempt": 3,
+    "result": 929,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830351,
+   "entityDto": {
+    "resultIdPk": 22830351,
+    "meetingParticipantIdFk": 2911314,
+    "attempt": 4,
+    "result": 947,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830352,
+   "entityDto": {
+    "resultIdPk": 22830352,
+    "meetingParticipantIdFk": 2911314,
+    "attempt": 5,
+    "result": 935,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830353,
+   "entityDto": {
+    "resultIdPk": 22830353,
+    "meetingParticipantIdFk": 2911315,
+    "attempt": 0,
+    "result": 932,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830354,
+   "entityDto": {
+    "resultIdPk": 22830354,
+    "meetingParticipantIdFk": 2911315,
+    "attempt": 1,
+    "result": 902,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830355,
+   "entityDto": {
+    "resultIdPk": 22830355,
+    "meetingParticipantIdFk": 2911315,
+    "attempt": 2,
+    "result": 920,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830356,
+   "entityDto": {
+    "resultIdPk": 22830356,
+    "meetingParticipantIdFk": 2911315,
+    "attempt": 3,
+    "result": 964,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830357,
+   "entityDto": {
+    "resultIdPk": 22830357,
+    "meetingParticipantIdFk": 2911315,
+    "attempt": 4,
+    "result": 996,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22830358,
+   "entityDto": {
+    "resultIdPk": 22830358,
+    "meetingParticipantIdFk": 2911315,
+    "attempt": 5,
+    "result": 988,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880396,
+   "entityDto": {
+    "resultIdPk": 22880396,
+    "meetingParticipantIdFk": 2863635,
+    "attempt": 0,
+    "result": 504,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880397,
+   "entityDto": {
+    "resultIdPk": 22880397,
+    "meetingParticipantIdFk": 2863635,
+    "attempt": 1,
+    "result": 447,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880398,
+   "entityDto": {
+    "resultIdPk": 22880398,
+    "meetingParticipantIdFk": 2863635,
+    "attempt": 2,
+    "result": 451,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880399,
+   "entityDto": {
+    "resultIdPk": 22880399,
+    "meetingParticipantIdFk": 2863635,
+    "attempt": 3,
+    "resultStatus": "Retired",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880400,
+   "entityDto": {
+    "resultIdPk": 22880400,
+    "meetingParticipantIdFk": 2863635,
+    "attempt": 4,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880401,
+   "entityDto": {
+    "resultIdPk": 22880401,
+    "meetingParticipantIdFk": 2863635,
+    "attempt": 5,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880408,
+   "entityDto": {
+    "resultIdPk": 22880408,
+    "meetingParticipantIdFk": 2863637,
+    "attempt": 0,
+    "result": 716,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880409,
+   "entityDto": {
+    "resultIdPk": 22880409,
+    "meetingParticipantIdFk": 2863637,
+    "attempt": 1,
+    "result": 722,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880410,
+   "entityDto": {
+    "resultIdPk": 22880410,
+    "meetingParticipantIdFk": 2863637,
+    "attempt": 2,
+    "result": 759,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880411,
+   "entityDto": {
+    "resultIdPk": 22880411,
+    "meetingParticipantIdFk": 2863637,
+    "attempt": 3,
+    "resultStatus": "Retired",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880412,
+   "entityDto": {
+    "resultIdPk": 22880412,
+    "meetingParticipantIdFk": 2863637,
+    "attempt": 4,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880413,
+   "entityDto": {
+    "resultIdPk": 22880413,
+    "meetingParticipantIdFk": 2863637,
+    "attempt": 5,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880432,
+   "entityDto": {
+    "resultIdPk": 22880432,
+    "meetingParticipantIdFk": 2863641,
+    "attempt": 0,
+    "result": 688,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880433,
+   "entityDto": {
+    "resultIdPk": 22880433,
+    "meetingParticipantIdFk": 2863641,
+    "attempt": 1,
+    "result": 694,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880434,
+   "entityDto": {
+    "resultIdPk": 22880434,
+    "meetingParticipantIdFk": 2863641,
+    "attempt": 2,
+    "result": 637,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880435,
+   "entityDto": {
+    "resultIdPk": 22880435,
+    "meetingParticipantIdFk": 2863641,
+    "attempt": 3,
+    "resultStatus": "Retired",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880436,
+   "entityDto": {
+    "resultIdPk": 22880436,
+    "meetingParticipantIdFk": 2863641,
+    "attempt": 4,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880437,
+   "entityDto": {
+    "resultIdPk": 22880437,
+    "meetingParticipantIdFk": 2863641,
+    "attempt": 5,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880444,
+   "entityDto": {
+    "resultIdPk": 22880444,
+    "meetingParticipantIdFk": 2863643,
+    "attempt": 0,
+    "result": 601,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880445,
+   "entityDto": {
+    "resultIdPk": 22880445,
+    "meetingParticipantIdFk": 2863643,
+    "attempt": 1,
+    "result": 585,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880446,
+   "entityDto": {
+    "resultIdPk": 22880446,
+    "meetingParticipantIdFk": 2863643,
+    "attempt": 2,
+    "result": 612,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880447,
+   "entityDto": {
+    "resultIdPk": 22880447,
+    "meetingParticipantIdFk": 2863643,
+    "attempt": 3,
+    "resultStatus": "Retired",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880448,
+   "entityDto": {
+    "resultIdPk": 22880448,
+    "meetingParticipantIdFk": 2863643,
+    "attempt": 4,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880449,
+   "entityDto": {
+    "resultIdPk": 22880449,
+    "meetingParticipantIdFk": 2863643,
+    "attempt": 5,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880485,
+   "entityDto": {
+    "resultIdPk": 22880485,
+    "meetingParticipantIdFk": 2863636,
+    "attempt": 0,
+    "result": 1256,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880486,
+   "entityDto": {
+    "resultIdPk": 22880486,
+    "meetingParticipantIdFk": 2863636,
+    "attempt": 1,
+    "result": 1292,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880487,
+   "entityDto": {
+    "resultIdPk": 22880487,
+    "meetingParticipantIdFk": 2863636,
+    "attempt": 2,
+    "result": 1193,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880488,
+   "entityDto": {
+    "resultIdPk": 22880488,
+    "meetingParticipantIdFk": 2863636,
+    "attempt": 3,
+    "result": 1251,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880489,
+   "entityDto": {
+    "resultIdPk": 22880489,
+    "meetingParticipantIdFk": 2863636,
+    "attempt": 4,
+    "result": 1279,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880490,
+   "entityDto": {
+    "resultIdPk": 22880490,
+    "meetingParticipantIdFk": 2863636,
+    "attempt": 5,
+    "result": 1335,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880531,
+   "entityDto": {
+    "resultIdPk": 22880531,
+    "meetingParticipantIdFk": 2863638,
+    "attempt": 0,
+    "result": 836,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880532,
+   "entityDto": {
+    "resultIdPk": 22880532,
+    "meetingParticipantIdFk": 2863638,
+    "attempt": 1,
+    "result": 872,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880533,
+   "entityDto": {
+    "resultIdPk": 22880533,
+    "meetingParticipantIdFk": 2863638,
+    "attempt": 2,
+    "result": 870,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880534,
+   "entityDto": {
+    "resultIdPk": 22880534,
+    "meetingParticipantIdFk": 2863638,
+    "attempt": 3,
+    "result": 890,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880535,
+   "entityDto": {
+    "resultIdPk": 22880535,
+    "meetingParticipantIdFk": 2863638,
+    "attempt": 4,
+    "result": 904,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880536,
+   "entityDto": {
+    "resultIdPk": 22880536,
+    "meetingParticipantIdFk": 2863638,
+    "attempt": 5,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880565,
+   "entityDto": {
+    "resultIdPk": 22880565,
+    "meetingParticipantIdFk": 2863639,
+    "attempt": 0,
+    "result": 1418,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880566,
+   "entityDto": {
+    "resultIdPk": 22880566,
+    "meetingParticipantIdFk": 2863639,
+    "attempt": 1,
+    "result": 1516,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880567,
+   "entityDto": {
+    "resultIdPk": 22880567,
+    "meetingParticipantIdFk": 2863639,
+    "attempt": 2,
+    "result": 1540,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880568,
+   "entityDto": {
+    "resultIdPk": 22880568,
+    "meetingParticipantIdFk": 2863639,
+    "attempt": 3,
+    "result": 1477,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880569,
+   "entityDto": {
+    "resultIdPk": 22880569,
+    "meetingParticipantIdFk": 2863639,
+    "attempt": 4,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880570,
+   "entityDto": {
+    "resultIdPk": 22880570,
+    "meetingParticipantIdFk": 2863639,
+    "attempt": 5,
+    "result": 1365,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880639,
+   "entityDto": {
+    "resultIdPk": 22880639,
+    "meetingParticipantIdFk": 2863640,
+    "attempt": 0,
+    "result": 1051,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880640,
+   "entityDto": {
+    "resultIdPk": 22880640,
+    "meetingParticipantIdFk": 2863640,
+    "attempt": 1,
+    "result": 1159,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880641,
+   "entityDto": {
+    "resultIdPk": 22880641,
+    "meetingParticipantIdFk": 2863640,
+    "attempt": 2,
+    "result": 1179,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880642,
+   "entityDto": {
+    "resultIdPk": 22880642,
+    "meetingParticipantIdFk": 2863640,
+    "attempt": 3,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880643,
+   "entityDto": {
+    "resultIdPk": 22880643,
+    "meetingParticipantIdFk": 2863640,
+    "attempt": 4,
+    "result": 1137,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880644,
+   "entityDto": {
+    "resultIdPk": 22880644,
+    "meetingParticipantIdFk": 2863640,
+    "attempt": 5,
+    "result": 1191,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880655,
+   "entityDto": {
+    "resultIdPk": 22880655,
+    "meetingParticipantIdFk": 2863642,
+    "attempt": 0,
+    "result": 1318,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880656,
+   "entityDto": {
+    "resultIdPk": 22880656,
+    "meetingParticipantIdFk": 2863642,
+    "attempt": 1,
+    "result": 1306,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880657,
+   "entityDto": {
+    "resultIdPk": 22880657,
+    "meetingParticipantIdFk": 2863642,
+    "attempt": 2,
+    "result": 1288,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880658,
+   "entityDto": {
+    "resultIdPk": 22880658,
+    "meetingParticipantIdFk": 2863642,
+    "attempt": 3,
+    "result": 1285,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880659,
+   "entityDto": {
+    "resultIdPk": 22880659,
+    "meetingParticipantIdFk": 2863642,
+    "attempt": 4,
+    "result": 1309,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880660,
+   "entityDto": {
+    "resultIdPk": 22880660,
+    "meetingParticipantIdFk": 2863642,
+    "attempt": 5,
+    "result": 1336,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880712,
+   "entityDto": {
+    "resultIdPk": 22880712,
+    "meetingParticipantIdFk": 2863645,
+    "attempt": 0,
+    "result": 1441,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880713,
+   "entityDto": {
+    "resultIdPk": 22880713,
+    "meetingParticipantIdFk": 2863645,
+    "attempt": 1,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880714,
+   "entityDto": {
+    "resultIdPk": 22880714,
+    "meetingParticipantIdFk": 2863645,
+    "attempt": 2,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880715,
+   "entityDto": {
+    "resultIdPk": 22880715,
+    "meetingParticipantIdFk": 2863645,
+    "attempt": 3,
+    "result": 1353,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880716,
+   "entityDto": {
+    "resultIdPk": 22880716,
+    "meetingParticipantIdFk": 2863645,
+    "attempt": 4,
+    "result": 1472,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880717,
+   "entityDto": {
+    "resultIdPk": 22880717,
+    "meetingParticipantIdFk": 2863645,
+    "attempt": 5,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880778,
+   "entityDto": {
+    "resultIdPk": 22880778,
+    "meetingParticipantIdFk": 2863648,
+    "attempt": 0,
+    "result": 955,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880779,
+   "entityDto": {
+    "resultIdPk": 22880779,
+    "meetingParticipantIdFk": 2863648,
+    "attempt": 1,
+    "result": 1006,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880780,
+   "entityDto": {
+    "resultIdPk": 22880780,
+    "meetingParticipantIdFk": 2863648,
+    "attempt": 2,
+    "result": 956,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880781,
+   "entityDto": {
+    "resultIdPk": 22880781,
+    "meetingParticipantIdFk": 2863648,
+    "attempt": 3,
+    "result": 972,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880782,
+   "entityDto": {
+    "resultIdPk": 22880782,
+    "meetingParticipantIdFk": 2863648,
+    "attempt": 4,
+    "result": 976,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880783,
+   "entityDto": {
+    "resultIdPk": 22880783,
+    "meetingParticipantIdFk": 2863648,
+    "attempt": 5,
+    "result": 1038,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880834,
+   "entityDto": {
+    "resultIdPk": 22880834,
+    "meetingParticipantIdFk": 2863646,
+    "attempt": 0,
+    "result": 1032,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880835,
+   "entityDto": {
+    "resultIdPk": 22880835,
+    "meetingParticipantIdFk": 2863646,
+    "attempt": 1,
+    "result": 1015,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880836,
+   "entityDto": {
+    "resultIdPk": 22880836,
+    "meetingParticipantIdFk": 2863646,
+    "attempt": 2,
+    "result": 995,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880837,
+   "entityDto": {
+    "resultIdPk": 22880837,
+    "meetingParticipantIdFk": 2863646,
+    "attempt": 3,
+    "resultStatus": "Fouled",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880838,
+   "entityDto": {
+    "resultIdPk": 22880838,
+    "meetingParticipantIdFk": 2863646,
+    "attempt": 4,
+    "result": 990,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880839,
+   "entityDto": {
+    "resultIdPk": 22880839,
+    "meetingParticipantIdFk": 2863646,
+    "attempt": 5,
+    "result": 1034,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  }
+ ],
+ "athleteExtraList": [],
+ "relayExtraList": []
+}

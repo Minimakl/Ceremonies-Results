@@ -180,6 +180,10 @@ export interface EventRow {
   clubLong: string
   lane?: number
   position?: number
+  /** On a Finals Summary, the group this entry competed in (1 → "A"). */
+  group?: number
+  /** Place within that group. */
+  groupPlace?: number
   /** Overall finishing position (Roster place); absent for DNF/DNS/DQ. */
   place?: number
   /** Formatted best mark / points, or DNF/DNS/DQ label. */
@@ -316,6 +320,8 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
         clubLong: club?.longName ?? '',
         lane: mp.lane,
         position: mp.position,
+        group: mp.groupNo,
+        groupPlace: mp.groupPlace,
         place: mp.place,
         result,
         resultRaw,
@@ -337,9 +343,20 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
   })
 }
 
-/** Start-list order: lane order for track, start order otherwise. */
+/**
+ * Start-list order, exactly as Roster lists it: **group first, then lane or
+ * start order**.
+ *
+ * The group matters on a Finals Summary, where each group final numbers its
+ * own entries from 1 — 27550/337021 runs order 1–12 in group A and 1–2 in
+ * group B, and Roster starts the list with Christopher ALBERT, group A order
+ * 1, not with the group B entry that shares order 1. Sorting on the order
+ * number alone interleaves the two groups.
+ */
 export function startListRows(rows: EventRow[]): EventRow[] {
   return [...rows].sort((a, b) => {
+    const byGroup = (a.group ?? 0) - (b.group ?? 0)
+    if (byGroup !== 0) return byGroup
     if (a.lane != null && b.lane != null) return a.lane - b.lane
     return (a.position ?? 0) - (b.position ?? 0)
   })

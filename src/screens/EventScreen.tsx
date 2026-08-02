@@ -5,6 +5,7 @@ import { usePoll } from '../state/usePoll'
 import { LiveIndicator } from '../components/LiveIndicator'
 import { ArrowLeftIcon, SidebarToggleIcon } from '../components/icons'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
+import { groupLabel } from '../domain/format'
 import { buildCeremoniesList, type CeremonyRow } from '../domain/ceremonies'
 import { generateScript, SCRIPT_PLACEHOLDER } from '../domain/script'
 import type { StatusColour } from '../domain/status'
@@ -180,8 +181,13 @@ export function EventScreen() {
  * always tell where an athlete is from and not just which club they run for.
  * Track: Lane, Participant, Country, PB, SB.
  * Field: Participant, Country, Club, PB, SB.
+ *
+ * On a Finals Summary a Group column is added, as Roster has, because the
+ * order number restarts at 1 for each group and the list would otherwise look
+ * mis-sorted.
  */
 function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
+  const grouped = rows.some((r) => (r.group ?? 0) > 0)
   return (
     <table className="table">
       <thead>
@@ -190,6 +196,7 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
           <th>Participant</th>
           <th>Country</th>
           {!track && <th>Club</th>}
+          {grouped && <th>Group</th>}
           <th>PB</th>
           <th>SB</th>
         </tr>
@@ -201,6 +208,7 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
             <td className="cell-name">{r.name}</td>
             <td>{r.country}</td>
             {!track && <td>{r.club}</td>}
+            {grouped && <td>{groupLabel(r.group)}</td>}
             <td className="num">{r.pb}</td>
             <td className="num">{r.sb}</td>
           </tr>
@@ -212,6 +220,7 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
 
 /** Results (plan §6.2): exactly as Roster shows them; everyone appears. */
 function ResultsTab({ rows, hasPara }: { rows: EventRow[]; hasPara: boolean }) {
+  const grouped = rows.some((r) => (r.group ?? 0) > 0)
   return (
     <table className="table">
       <thead>
@@ -220,6 +229,7 @@ function ResultsTab({ rows, hasPara }: { rows: EventRow[]; hasPara: boolean }) {
           <th>Participant</th>
           <th>Country</th>
           <th>Club</th>
+          {grouped && <th>Group</th>}
           <th>Result</th>
           {hasPara && <th>%</th>}
           <th>Notes</th>
@@ -232,6 +242,13 @@ function ResultsTab({ rows, hasPara }: { rows: EventRow[]; hasPara: boolean }) {
             <td className="cell-name">{r.name}</td>
             <td>{r.country}</td>
             <td>{r.club}</td>
+            {/* Roster writes the group and the place within it: "A (1)". */}
+            {grouped && (
+              <td>
+                {groupLabel(r.group)}
+                {r.groupPlace != null ? ` (${r.groupPlace})` : ''}
+              </td>
+            )}
             <td className="cell-result">
               {r.isFinisher ? r.result : <span className="dnf">{r.result}</span>}
             </td>

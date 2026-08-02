@@ -83,6 +83,14 @@ The script is unchanged for these events — a para summary is ranked on
 percentage but still announces the athlete's mark, per §9.6. Revisit if the
 client asks for the percentage to be read.
 
+**Start-list order on a summary.** Each group final numbers its own entries
+from 1, so the summary's start list is ordered by **group, then order**, which
+is how Roster lists it: 27550/337021 runs order 1–12 in group A, then 1–2 in
+group B, opening with Christopher ALBERT. A **Group** column is added on
+summaries, as Roster has, since the order number restarting at 1 otherwise
+looks like a sorting fault. Roster letters the groups A, B, … and the Results
+tab writes the place within the group beside it, "A (1)".
+
 ## 4. The Five Status Colours
 
 | Colour | Meaning | Set by |
