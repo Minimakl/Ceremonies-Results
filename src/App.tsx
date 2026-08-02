@@ -10,39 +10,82 @@ import {
 import { HomeScreen } from './screens/HomeScreen'
 import { EventScreen } from './screens/EventScreen'
 import { NotStartedScreen } from './screens/NotStartedScreen'
+import { CompetitionsScreen } from './screens/CompetitionsScreen'
 import { Sidebar } from './components/Sidebar'
 import { useCompetition } from './state/useCompetition'
 import type { CompetitionContextValue } from './state/competitionContext'
+import type { AppLayoutValue } from './state/appLayout'
 import { competitionDays, filterByDays } from './domain/dates'
 import './app.css'
 
-export const DEFAULT_COMPETITION = 27550
-
 const MOBILE_BREAKPOINT = 861
+
+/**
+ * Shell shared by every screen: the sidebar stays put whether the operator is
+ * browsing competitions or working through a board.
+ */
+function AppLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(
+    () => window.innerWidth >= MOBILE_BREAKPOINT,
+  )
+  const [activeMeetingId, setActiveMeetingId] = useState<number | null>(null)
+  const [activeName, setActiveName] = useState<string>()
+
+  const closeIfOverlay = useCallback(() => {
+    if (window.innerWidth < MOBILE_BREAKPOINT) setSidebarOpen(false)
+  }, [])
+
+  const layout = useMemo<AppLayoutValue & { setActiveName: (n?: string) => void }>(
+    () => ({
+      sidebarOpen,
+      setSidebarOpen,
+      activeMeetingId,
+      setActiveMeetingId,
+      setActiveName,
+    }),
+    [sidebarOpen, activeMeetingId],
+  )
+
+  return (
+    <div className="app">
+      {sidebarOpen && <Sidebar activeName={activeName} onNavigate={closeIfOverlay} />}
+      {sidebarOpen && (
+        <button
+          className="scrim"
+          aria-label="Close sidebar"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      <Outlet context={layout} />
+    </div>
+  )
+}
 
 /**
  * The competition id lives in the URL path, not a query string: tapping an
  * event card must not be able to lose track of which competition is open,
  * and an event URL has to survive a refresh or a share.
- *
- * The sidebar and the day selection live here rather than in a screen so they
- * stay put when moving between the board, the not-started list and an event.
  */
 function CompetitionShell() {
   const { meetingId: meetingIdParam } = useParams()
   const parsed = Number(meetingIdParam)
-  const meetingId =
-    Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_COMPETITION
+  const meetingId = Number.isFinite(parsed) && parsed > 0 ? parsed : 0
   const competition = useCompetition(meetingId)
-  const [sidebarOpen, setSidebarOpen] = useState(
-    () => window.innerWidth >= MOBILE_BREAKPOINT,
-  )
+  const layout = useAppLayoutRaw()
   const [selectedDays, setSelectedDays] = useState<ReadonlySet<string>>(
     () => new Set(),
   )
 
   // A day selection only means something within one competition.
   useEffect(() => setSelectedDays(new Set()), [meetingId])
+
+  // Tell the shell which competition is loaded, for Back and for the sidebar.
+  useEffect(() => {
+    layout.setActiveMeetingId(meetingId)
+  }, [layout, meetingId])
+  useEffect(() => {
+    layout.setActiveName(competition.details?.meetingName)
+  }, [layout, competition.details?.meetingName])
 
   const timeZone = competition.details?.tz
   const days = useMemo(
@@ -62,20 +105,14 @@ function CompetitionShell() {
       return next
     })
   }, [])
-
   const clearDays = useCallback(() => setSelectedDays(new Set()), [])
-
-  // On a phone the sidebar overlays the board, so following a link closes it.
-  const closeIfOverlay = useCallback(() => {
-    if (window.innerWidth < MOBILE_BREAKPOINT) setSidebarOpen(false)
-  }, [])
 
   const context = useMemo<CompetitionContextValue>(
     () => ({
       competition,
       meetingId,
-      sidebarOpen,
-      setSidebarOpen,
+      sidebarOpen: layout.sidebarOpen,
+      setSidebarOpen: layout.setSidebarOpen,
       days,
       selectedDays,
       toggleDay,
@@ -85,7 +122,8 @@ function CompetitionShell() {
     [
       competition,
       meetingId,
-      sidebarOpen,
+      layout.sidebarOpen,
+      layout.setSidebarOpen,
       days,
       selectedDays,
       toggleDay,
@@ -94,32 +132,28 @@ function CompetitionShell() {
     ],
   )
 
-  return (
-    <div className="app">
-      {sidebarOpen && <Sidebar meetingId={meetingId} onNavigate={closeIfOverlay} />}
-      {sidebarOpen && (
-        <button
-          className="scrim"
-          aria-label="Close sidebar"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-      <Outlet context={context} />
-    </div>
-  )
+  return <Outlet context={context} />
+}
+
+// Typed access to the layout context from inside the nested competition shell.
+import { useOutletContext } from 'react-router-dom'
+function useAppLayoutRaw() {
+  return useOutletContext<AppLayoutValue & { setActiveName: (n?: string) => void }>()
 }
 
 export default function App() {
-  const home = `/c/${DEFAULT_COMPETITION}`
   return (
     <HashRouter>
       <Routes>
-        <Route path="/c/:meetingId" element={<CompetitionShell />}>
-          <Route index element={<HomeScreen />} />
-          <Route path="not-started" element={<NotStartedScreen />} />
-          <Route path="event/:meId" element={<EventScreen />} />
+        <Route element={<AppLayout />}>
+          <Route path="/competitions" element={<CompetitionsScreen />} />
+          <Route path="/c/:meetingId" element={<CompetitionShell />}>
+            <Route index element={<HomeScreen />} />
+            <Route path="not-started" element={<NotStartedScreen />} />
+            <Route path="event/:meId" element={<EventScreen />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/competitions" replace />} />
         </Route>
-        <Route path="*" element={<Navigate to={home} replace />} />
       </Routes>
     </HashRouter>
   )

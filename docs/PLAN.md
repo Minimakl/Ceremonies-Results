@@ -20,10 +20,37 @@ A dashboard that shows **finals only**, colour-coded by readiness, with a per-ev
 | Filter | Setting |
 |---|---|
 | Competitions | Any competition on Roster Athletics |
-| Location | Competition venue is in Australia (a competition location filter; nothing to do with athlete nationality) |
-| Date | 2026 onwards |
+| Location | ~~Australia only~~ **Revised 2 Aug 2026: any country.** See §3.1 |
+| Date | Any — filterable from/to. See §3.1 |
 | Rounds | Finals only. No heats, no prelims, no semis |
 | Athletes | All age groups, both sexes, para and able-bodied |
+
+### 3.1 Competitions browser (revised 2 Aug 2026)
+
+The Australia-only, 2026-onwards scope is replaced by a **Competitions screen**
+reached from a single **Competitions** button in the sidebar — the sidebar does
+not list competitions, because Roster carries thousands and a long list is the
+overwhelm this tool exists to remove.
+
+The screen has a **search bar**, a **country filter** and a **from/to date
+filter**, and a **Back button** like every other screen. Selecting a
+competition opens a confirmation panel showing its date and time, venue,
+address, city and country, organiser, status and Roster id, so the operator can
+be certain they have the right meet before committing. A **Set as my
+competition** button then loads it.
+
+Everything is read live from Roster:
+
+| Shown | Source |
+|---|---|
+| Search results | `POST /api/public/meeting/search/v2` — the same request body Roster's own browser posts |
+| Unfiltered list | `GET /api/public/meeting/list/v2` (Roster's highlights) |
+| Confirmation panel | `GET /api/public/meeting/{id}/details` |
+| Country names and flags | Roster's own `locationService` country table, extracted verbatim (253 entries, including Roster-specific entries such as Wales and Athlete Refugee Team) |
+
+Times are shown as Roster stores them — venue-local wall time, with the zone
+named beside them — so the dashboard never disagrees with the competition's own
+Roster page.
 
 ## 4. The Five Status Colours
 

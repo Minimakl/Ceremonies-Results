@@ -147,7 +147,20 @@ export interface MeetingDetailsDto {
   startDateTime?: string
   endDateTime?: string
   meetingStatus?: string
-  address?: { city?: string; country?: string }
+  address?: {
+    city?: string
+    countryCode?: string
+    postcode?: string
+    stateCode?: string
+    streetAddress?: string
+    venueName?: string
+  }
+  /** Roster's own organiser naming. */
+  organiserName?: string
+  organiserDisplayName?: string
+  organisationId?: number
+  venueName?: string
+  level?: string
   sportEvents?: SportEventDto[]
   /** The age groups this meeting actually uses, with their names. */
   ageGroups?: AgeGroupDto[]
@@ -160,4 +173,55 @@ export interface SeImplementDto {
   /** Weight/size. Kilogram unit stores hundredths (200 = 2 kg). */
   implement?: number
   implementUnit?: string
+}
+
+/**
+ * One row of Roster's competition search — `POST /api/public/meeting/search/v2`
+ * and `GET /api/public/meeting/list/v2` return the same item shape.
+ */
+export interface MeetingSummaryDto {
+  meetingId: number
+  organisationId?: number
+  meetingName: string
+  imgUrl?: string
+  /** Venue-local wall time, "YYYY-MM-DD HH:mm:ss". */
+  startDateTime?: string
+  endDateTime?: string
+  tz?: string
+  city?: string
+  countryCode?: string
+  venueName?: string
+  meetingStatus?: string
+  enableRegistration?: boolean
+  registrationDeadline?: string
+  restricted?: boolean
+  sponsorName?: string
+}
+
+/** Roster's cursor-paged search response. */
+export interface MeetingSearchResponse {
+  meets: MeetingSummaryDto[]
+  /** How many results precede / follow this page. */
+  before: number
+  after: number
+}
+
+/** The request body Roster's own competition browser posts. */
+export interface MeetingSearchRequest {
+  tz: string
+  tzMinutes: number
+  orgId: number | null
+  before: string | null
+  beforeId: number | null
+  after: string | null
+  afterId: number | null
+  /** Upper bound on start time, "YYYY-MM-DD HH:mm:ss". */
+  beforeFilter: string | null
+  /** Lower bound on start time. */
+  afterFilter: string | null
+  first: boolean | null
+  last: boolean | null
+  countryCode: string | null
+  regOpen: boolean | null
+  text: string | null
 }

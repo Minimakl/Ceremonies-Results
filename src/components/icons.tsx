@@ -75,3 +75,12 @@ export function ChevronDownIcon({ size = 14 }: IconProps = {}) {
     </svg>
   )
 }
+
+export function SearchIcon({ size = 15 }: IconProps = {}) {
+  return (
+    <svg {...base(size)}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  )
+}

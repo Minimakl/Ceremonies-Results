@@ -996,3 +996,241 @@ input {
     padding: 14px;
   }
 }
+
+/* ============================================================
+   Competitions browser
+   ============================================================ */
+
+.nav__current {
+  margin: 6px 8px 0;
+  padding: 10px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav__current .nav__label {
+  padding: 0;
+}
+
+.nav__current-name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.filters__search {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding: 9px 12px;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+}
+
+.filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filters__label {
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.filters__field select,
+.filters__field input {
+  padding: 8px 10px;
+  font-size: 13.5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+  max-width: 15rem;
+}
+
+.filters__hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.complist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+}
+
+.comp {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 13px 15px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.13s, box-shadow 0.13s, transform 0.13s;
+}
+
+.comp:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.comp--selected,
+.comp--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.comp__name {
+  font-size: 14px;
+  font-weight: 620;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.comp__meta {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.35;
+}
+
+.comp__badge {
+  align-self: flex-start;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 650;
+  color: var(--accent);
+  background: var(--accent-tint);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+/* Detail confirmation panel */
+
+.scrim--modal {
+  z-index: 40;
+  display: block;
+}
+
+.detail {
+  position: fixed;
+  z-index: 45;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(86vh, 760px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px -12px rgba(16, 18, 20, 0.34);
+  padding: 20px 22px 22px;
+}
+
+.detail__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detail__title {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 660;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.detail__grid {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  gap: 10px 14px;
+  margin: 0 0 20px;
+  font-size: 13.5px;
+}
+
+.detail__grid dt {
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: 2px;
+}
+
+.detail__grid dd {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.detail__sub {
+  color: var(--ink-3);
+}
+
+.detail__set {
+  width: 100%;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 620;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.detail__set:hover {
+  background: var(--accent-hover);
+}
+
+.detail__note {
+  margin: 10px 0 0;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .detail__grid {
+    grid-template-columns: 1fr;
+    gap: 2px 0;
+  }
+  .detail__grid dd {
+    margin-bottom: 10px;
+  }
+}
+
+.comp--byid {
+  border-style: dashed;
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}

@@ -1,25 +1,21 @@
-import { useNavigate } from 'react-router-dom'
-import { MedalIcon, PlusIcon } from './icons'
-
-const REFERENCE_COMPETITIONS = [
-  { id: 27550, name: '2026 Australian Athletics Championships' },
-  { id: 27236, name: '2026 Maurie Plant Meet Melbourne' },
-  { id: 27351, name: '2025 WA All Schools Championships' },
-]
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ChevronRightIcon, MedalIcon, SearchIcon } from './icons'
 
 interface Props {
-  meetingId: number
+  /** Name of the competition currently loaded, if any. */
+  activeName?: string
   onNavigate: () => void
 }
 
-/** Persistent navigation — the same on the board and inside an event. */
-export function Sidebar({ meetingId, onNavigate }: Props) {
+/**
+ * Persistent navigation. Deliberately short: competitions live behind a single
+ * button rather than being listed here, because Roster carries thousands and a
+ * sidebar full of them is exactly the overwhelm this tool exists to remove.
+ */
+export function Sidebar({ activeName, onNavigate }: Props) {
   const navigate = useNavigate()
-
-  const open = (id: number) => {
-    navigate(`/c/${id}`)
-    onNavigate()
-  }
+  const location = useLocation()
+  const onCompetitions = location.pathname.startsWith('/competitions')
 
   return (
     <nav className="nav">
@@ -33,40 +29,24 @@ export function Sidebar({ meetingId, onNavigate }: Props) {
         </span>
       </div>
 
-      <div className="nav__label">Competitions</div>
-      {REFERENCE_COMPETITIONS.map((c) => (
-        <button
-          key={c.id}
-          className={c.id === meetingId ? 'nav__item nav__item--active' : 'nav__item'}
-          onClick={() => open(c.id)}
-        >
-          <span className="nav__dot" />
-          {c.name}
-        </button>
-      ))}
-
-      <form
-        className="nav__form"
-        onSubmit={(e) => {
-          e.preventDefault()
-          const form = e.currentTarget
-          const id = Number(new FormData(form).get('comp'))
-          if (Number.isFinite(id) && id > 0) {
-            open(id)
-            form.reset()
-          }
+      <button
+        className={onCompetitions ? 'nav__item nav__item--active' : 'nav__item'}
+        onClick={() => {
+          navigate('/competitions')
+          onNavigate()
         }}
       >
-        <input
-          name="comp"
-          inputMode="numeric"
-          placeholder="Competition ID"
-          aria-label="Open a Roster competition by ID"
-        />
-        <button type="submit" aria-label="Open competition">
-          <PlusIcon />
-        </button>
-      </form>
+        <SearchIcon size={15} />
+        Competitions
+        <ChevronRightIcon size={14} />
+      </button>
+
+      {activeName && (
+        <div className="nav__current">
+          <span className="nav__label">Currently set</span>
+          <span className="nav__current-name">{activeName}</span>
+        </div>
+      )}
     </nav>
   )
 }
