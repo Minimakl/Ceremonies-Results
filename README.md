@@ -26,7 +26,7 @@ npm test           # vitest — includes the two verified worked examples
 npm run build      # production build
 ```
 
-The app loads live data through the dev-server proxy. If the network or the
-proxy is unavailable it falls back to bundled fixtures of the two reference
-events (2026 Aus Champs Decathlon final, 2026 Maurie Plant discus final), so
-the whole UI is clickable offline.
+The app always reads live data from Roster through the `/roster-api` proxy —
+provided by the Vite dev server locally, and by a `vercel.json` rewrite in
+production. The snapshots under `src/fixtures/` are test data only; see
+`src/fixtures/README.md`.
