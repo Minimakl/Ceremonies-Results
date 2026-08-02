@@ -102,6 +102,39 @@ export function formatDuration(raw: number, decimalDigits = 2): string {
   return time
 }
 
+/**
+ * Turn a displayed duration into the words a ceremonies manager says aloud:
+ * "4:12.45" → "4 minutes 12 point 45 seconds", "10.34" → "10 point 45 seconds".
+ *
+ * Derived from the *displayed* string rather than the raw value, so the script
+ * can never state a different time from the one on the Results tab. A
+ * thousandths tie-break ("10.34 (.334)") is spoken as the official time — the
+ * finer reading separates places on paper, it is not read out.
+ */
+export function spokenDuration(display: string): string {
+  const core = display.replace(/\s*\(.*\)\s*$/, '').trim()
+  const parts = core.split(':')
+  const seconds = parts.pop() ?? ''
+  const [whole, fraction] = seconds.split('.')
+  const said: string[] = []
+
+  const unit = (value: number, word: string) =>
+    `${value} ${word}${value === 1 ? '' : 's'}`
+
+  if (parts.length === 2) {
+    said.push(unit(Number(parts[0]), 'hour'), unit(Number(parts[1]), 'minute'))
+  } else if (parts.length === 1) {
+    said.push(unit(Number(parts[0]), 'minute'))
+  }
+
+  said.push(
+    fraction != null
+      ? `${Number(whole)} point ${fraction} seconds`
+      : `${Number(whole)} seconds`,
+  )
+  return said.join(' ')
+}
+
 /** Format a raw Roster integer mark for display, on the scale Roster stores it. */
 export function formatMark(
   raw: number | undefined,

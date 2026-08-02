@@ -333,7 +333,55 @@ Senior".
 
 ### 9.4 Other event types
 
-**PLACEHOLDER.** Scripts for individual track events, individual field events, relays, and para events will be provided later. The Script tab for those events should display a "script coming soon" placeholder until then. Note for later: "with a total of {X} points" only fits combined events; track will need a time phrasing and field a distance phrasing.
+**PLACEHOLDER.** Scripts for individual field events and relays will be provided later. The Script tab for those events shows a "script coming soon" placeholder until then. Individual timed track events are now specified — see §9.5.
+
+### 9.5 Individual timed track events (revised 2 Aug 2026)
+
+Applies when Roster's event name is one of the following 21 events. Matched on
+Roster's exact name, with any trailing implement/detail parenthetical stripped.
+Relays are **not** in this list and keep the placeholder.
+
+100m · 200m · 400m · 80m Hurdles · 90m Hurdles · 100m Hurdles · 110m Hurdles ·
+200m Hurdles · 400m Hurdles · 100m Wheelchair · 200m Wheelchair ·
+400m Wheelchair · 800m · 1500m · 3000m · 5000m · 2000m Steeplechase ·
+3000m Steeplechase · 3000m Race Walk · 5000m Race Walk · 800m Wheelchair
+
+Template — medallists only, read bronze → silver → gold:
+
+```
+Your medallists for the
+{Sex} {Age group} {Event}
+Championship
+
+Third place and bronze medallist with a time of
+{spoken time}
+representing
+{Club/team}
+{Name}
+
+Second place and silver medallist with a time of
+…
+
+First place and gold medallist with a time of
+…
+
+Your medallists for the
+{Sex} {Age group} {Event}
+```
+
+**Spoken time.** Derived from the *displayed* time, never re-derived from the
+raw value, so the script can never state a time that differs from the Results
+tab. "4:12.45" → "4 minutes 12 point 45 seconds". A thousandths tie-break
+("10.34 (.334)") is spoken as the official time — the finer reading separates
+places on paper and is not read aloud. Units are singular at 1 ("1 minute").
+
+Two points resolved by judgement, flagged for confirmation:
+
+1. **Sub-minute races have no minutes segment.** A 10.34 is spoken
+   "10 point 34 seconds", not "0 minutes 10 point 34 seconds".
+2. **No international section.** Unlike the combined-events script, the
+   supplied template has no international-athletes block, so international
+   athletes are not read aloud even when they hold a medal place.
 
 ## 10. Data Facts Confirmed From Live Roster Data
 
