@@ -38,29 +38,75 @@ export function participantDisplayName(
 }
 
 /**
- * Format a raw Roster integer mark for display.
- * Field events store centimetres (6751 → "67.51"); combined events store
- * points (6959 → "6959"); track events store centiseconds
- * (4571 → "45.71", 24571 → "4:05.71").
+ * Roster's storage scales differ by result type, which is the whole trap here:
+ *
+ *   Durations  — ten-thousandths of a second. 2524500 → 4:12.45, 99600 → 9.96
+ *   Distances  — centimetres.                 826     → 8.26 m, 6751 → 67.51 m
+ *   Combined   — points, unscaled.            6959    → 6959
+ *
+ * Verified against live Roster pages (1500m 27351/316510, 100m 27550/337277,
+ * long jump 27550/337387).
  */
-export function formatMark(raw: number | undefined, kind: EventKind): string {
+const DURATION_UNITS_PER_SECOND = 10_000
+const DISTANCE_UNITS_PER_METRE = 100
+
+/**
+ * Format a duration the way Roster — and World Athletics — do.
+ *
+ * Times are rounded **up** to the displayed precision, never to nearest: a
+ * 10.3340 reads 10.34, not 10.33. When a race is timed to more than
+ * hundredths to separate places, Roster appends the finer reading in
+ * parentheses ("10.34 (.334)"), and so does this, because two athletes on the
+ * same displayed time is exactly the moment an operator must not have to guess
+ * who placed higher.
+ */
+export function formatDuration(raw: number, decimalDigits = 2): string {
+  const shown = Math.min(Math.max(decimalDigits, 1), 2)
+  const unitsPerShownDigit = DURATION_UNITS_PER_SECOND / 10 ** shown
+
+  // Round up to the displayed precision, in integer units (no float drift).
+  const rounded = Math.ceil(raw / unitsPerShownDigit) * unitsPerShownDigit
+  const totalSeconds = Math.floor(rounded / DURATION_UNITS_PER_SECOND)
+  const fraction = String(
+    (rounded % DURATION_UNITS_PER_SECOND) / unitsPerShownDigit,
+  ).padStart(shown, '0')
+
+  const seconds = totalSeconds % 60
+  const minutes = Math.floor(totalSeconds / 60)
+  let time: string
+  if (minutes === 0) {
+    time = `${seconds}.${fraction}`
+  } else if (minutes < 60) {
+    time = `${minutes}:${String(seconds).padStart(2, '0')}.${fraction}`
+  } else {
+    time =
+      `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}` +
+      `:${String(seconds).padStart(2, '0')}.${fraction}`
+  }
+
+  if (decimalDigits > shown) {
+    const finer = Math.floor(
+      (raw % DURATION_UNITS_PER_SECOND) / 10 ** (4 - decimalDigits),
+    )
+    time += ` (.${String(finer).padStart(decimalDigits, '0')})`
+  }
+  return time
+}
+
+/** Format a raw Roster integer mark for display. */
+export function formatMark(
+  raw: number | undefined,
+  kind: EventKind,
+  decimalDigits = 2,
+): string {
   if (raw == null) return ''
   switch (kind) {
     case 'combined':
       return String(raw)
     case 'field':
-      return (raw / 100).toFixed(2)
-    case 'track': {
-      const totalSeconds = raw / 100
-      if (totalSeconds < 60) return totalSeconds.toFixed(2)
-      const minutes = Math.floor(totalSeconds / 60)
-      const seconds = totalSeconds - minutes * 60
-      if (minutes < 60) return `${minutes}:${seconds.toFixed(2).padStart(5, '0')}`
-      const hours = Math.floor(minutes / 60)
-      return `${hours}:${String(minutes % 60).padStart(2, '0')}:${seconds
-        .toFixed(2)
-        .padStart(5, '0')}`
-    }
+      return (raw / DISTANCE_UNITS_PER_METRE).toFixed(2)
+    case 'track':
+      return formatDuration(raw, decimalDigits)
   }
 }
 

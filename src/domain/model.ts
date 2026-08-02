@@ -162,20 +162,35 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
       // Best mark: combined events carry the score on the participant; other
       // events take the best Ok attempt.
       let resultRaw: number | undefined
+      // Roster records the precision each mark was timed to; a race split on
+      // thousandths must be displayed as such (see formatDuration).
+      let decimalDigits = 2
       if (final.isCombined) {
         resultRaw = mp.combinedEventScore
       } else {
-        const marks = results
-          .filter((r) => r.resultStatus === 'Ok' && r.result != null)
-          .map((r) => r.result!)
-        if (marks.length > 0) {
-          resultRaw = final.kind === 'track' ? Math.min(...marks) : Math.max(...marks)
+        const counting = results.filter(
+          (r) => r.resultStatus === 'Ok' && r.result != null,
+        )
+        if (counting.length > 0) {
+          const best = counting.reduce((a, b) =>
+            final.kind === 'track'
+              ? b.result! < a.result!
+                ? b
+                : a
+              : b.result! > a.result!
+                ? b
+                : a,
+          )
+          resultRaw = best.result
+          decimalDigits = best.decimalDigits ?? 2
         }
       }
 
       const statusLabel = startStatusLabel(mp.startStatus)
       const result =
-        resultRaw != null ? formatMark(resultRaw, final.kind) : statusLabel
+        resultRaw != null
+          ? formatMark(resultRaw, final.kind, decimalDigits)
+          : statusLabel
 
       // Notes: PB/SB record markers from the counting result(s).
       const recordTypes = new Set<string>()

@@ -113,7 +113,8 @@ isLive(me)     = !me.resultsComplete && (me.hasResults || isPastStartTime(me))
 |---|---|
 | `meetingParticipantIdFk` | joins participant |
 | `attempt` | attempt number |
-| `result` | integer mark. Field events: centimetres (6751 → 67.51 m). Combined: points. Track: centiseconds (see `decimalDigits`) |
+| `result` | integer mark — **the scale differs by result type**, see below |
+| `decimalDigits` | precision this mark was timed to (2 normally, 3 when a race is split on thousandths) |
 | `resultStatus` | `Ok` \| ... |
 | `record` | `None` \| `PersonalBest` \| `SeasonBest` |
 | `records[].recordType` | `PB` / `SB` labels shown in Notes |
@@ -138,6 +139,29 @@ Australia venue filter), and the `sportEvents` catalogue
 - `27236/results-v2/371113`: 6 athletes matching plan §7.4 exactly —
   Denny AUS 1, Okoye GBR 2, Stona JAM 3, Romero CHI 4, Miller AUS 5,
   Giddings AUS 6.
+
+## Result scales (verified against live Roster pages)
+
+`result`, `initialPersonalBest` and `initialSeasonBest` are integers on
+**different scales depending on the event type** — this is the single easiest
+thing to get wrong:
+
+| Type | Unit | Example |
+|---|---|---|
+| Durations (track) | **ten-thousandths of a second** | `2524500` → 4:12.45; `99600` → 9.96 |
+| Distances (field) | **centimetres** | `826` → 8.26 m; `6751` → 67.51 m |
+| Combined events | points, unscaled | `6959` → 6959 |
+
+Two further rules for durations, both taken from Roster's own rendering:
+
+- Times are rounded **up** to the displayed precision (the World Athletics
+  rule), never to nearest. `103340` displays as `10.34`, not `10.33`.
+- When `decimalDigits > 2` — a race timed finer to separate places — Roster
+  appends the finer reading in parentheses: 5th and 6th in the 2026 Aus Champs
+  100m final render as `10.34 (.334)` and `10.34 (.337)`.
+
+Sources: 1500m Final Men U18 (27351/316510), 100m Final Men Senior
+(27550/337277), Long Jump Final Men Senior (27550/337387).
 
 ## Notes / risks
 
