@@ -66,6 +66,8 @@ export interface MeetingParticipantDto {
   meetingEventIdFk: number
   athleteIdFk?: number
   relayTeamIdFk?: number
+  /** Set on a relay leg, pointing at the team's own participant row. */
+  meetingParticipantRelayTeamIdFk?: number
   clubIdFk?: number
   position?: number
   lane?: number
@@ -94,20 +96,39 @@ export interface ResultsPayload {
   type: 'Full' | 'Update'
   athleteList: AthleteDto[]
   clubList: ClubDto[]
-  relayList: unknown[]
+  relayList: RelayTeamDto[]
   mpList: WsEnvelope<MeetingParticipantDto>[]
   resultList: WsEnvelope<ResultDto>[]
   athleteExtraList: unknown[]
   relayExtraList: unknown[]
 }
 
+export interface RelayTeamDto {
+  relayTeamIdPk: number
+  clubIdFk?: number
+  longName?: string
+  shortName?: string
+  countryCode?: string
+  gender?: string
+  national?: boolean
+}
+
+/** How Roster stores and scores an event's marks. */
+export type ResultType = 'Duration' | 'Distance' | 'Numeric'
+export type Scoring = 'Lowest' | 'Highest'
+
 export interface SportEventDto {
   eventIdPk: number
   eventName: string
   eventType?: string
+  /** Authoritative: Duration = time, Distance = centimetres, Numeric = points. */
+  resultType?: ResultType
+  /** Whether the best mark is the smallest (a time) or the largest. */
+  scoring?: Scoring
   lanes?: boolean
   relay?: boolean
   combined?: boolean
+  verticalJump?: boolean
   hasImplements?: boolean
 }
 

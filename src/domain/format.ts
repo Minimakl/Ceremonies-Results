@@ -1,19 +1,28 @@
 // Text and value formatting shared across the app and the script generator.
 
-export type EventKind = 'track' | 'field' | 'combined'
+import type { ResultType, Scoring } from '../api/types'
 
-/** Classify a Roster eventType (from the sport-event catalogue). */
-export function eventKind(eventType: string | undefined, combined: boolean): EventKind {
-  if (combined || eventType === 'Combined') return 'combined'
-  if (
-    eventType === 'Throw' ||
-    eventType === 'Jump' ||
-    eventType === 'HorizontalJump' ||
-    eventType === 'VerticalJump'
-  ) {
-    return 'field'
-  }
-  return 'track'
+/**
+ * Roster's sport-event catalogue states the result type outright, and that is
+ * what the app uses. This fallback only runs when a catalogue entry is missing
+ * the field.
+ *
+ * Inferring from `eventType` alone is not safe — 42 events in Roster's
+ * catalogue contradict it, including "One Hour" and "One Hour Race Walk",
+ * which have eventType "Distance" but record a **distance covered**, not a
+ * time. Getting that backwards would print a distance as a clock time.
+ */
+export function inferResultType(
+  eventType: string | undefined,
+  combined: boolean,
+): ResultType {
+  if (combined || eventType === 'Combined') return 'Numeric'
+  if (eventType === 'Throw' || eventType === 'Jump') return 'Distance'
+  return 'Duration'
+}
+
+export function inferScoring(resultType: ResultType): Scoring {
+  return resultType === 'Duration' ? 'Lowest' : 'Highest'
 }
 
 /** "Sam" + "Talbot" → "Sam TALBOT" (plan §7.3 wording). */
@@ -93,19 +102,19 @@ export function formatDuration(raw: number, decimalDigits = 2): string {
   return time
 }
 
-/** Format a raw Roster integer mark for display. */
+/** Format a raw Roster integer mark for display, on the scale Roster stores it. */
 export function formatMark(
   raw: number | undefined,
-  kind: EventKind,
+  resultType: ResultType,
   decimalDigits = 2,
 ): string {
   if (raw == null) return ''
-  switch (kind) {
-    case 'combined':
+  switch (resultType) {
+    case 'Numeric':
       return String(raw)
-    case 'field':
+    case 'Distance':
       return (raw / DISTANCE_UNITS_PER_METRE).toFixed(2)
-    case 'track':
+    case 'Duration':
       return formatDuration(raw, decimalDigits)
   }
 }

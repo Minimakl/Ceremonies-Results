@@ -11,19 +11,19 @@ import { formatDuration, formatMark } from './format'
  */
 describe('result formatting matches Roster', () => {
   it('formats middle-distance times (ten-thousandths of a second)', () => {
-    expect(formatMark(2524500, 'track')).toBe('4:12.45') // Matthew STONER
-    expect(formatMark(2595000, 'track')).toBe('4:19.50') // Callum CUMMING
-    expect(formatMark(2604400, 'track')).toBe('4:20.44') // Oliver LEFORT
-    expect(formatMark(2633600, 'track')).toBe('4:23.36') // Lachlan ANGELATOS
-    expect(formatMark(2642100, 'track')).toBe('4:24.21') // Daniel DAVIES
-    expect(formatMark(2653400, 'track')).toBe('4:25.34') // Jack MALLABONE
+    expect(formatMark(2524500, 'Duration')).toBe('4:12.45') // Matthew STONER
+    expect(formatMark(2595000, 'Duration')).toBe('4:19.50') // Callum CUMMING
+    expect(formatMark(2604400, 'Duration')).toBe('4:20.44') // Oliver LEFORT
+    expect(formatMark(2633600, 'Duration')).toBe('4:23.36') // Lachlan ANGELATOS
+    expect(formatMark(2642100, 'Duration')).toBe('4:24.21') // Daniel DAVIES
+    expect(formatMark(2653400, 'Duration')).toBe('4:25.34') // Jack MALLABONE
   })
 
   it('formats sprint times', () => {
-    expect(formatMark(99600, 'track')).toBe('9.96') // Lachlan KENNEDY
-    expect(formatMark(101600, 'track')).toBe('10.16')
-    expect(formatMark(103300, 'track')).toBe('10.33')
-    expect(formatMark(105000, 'track')).toBe('10.50')
+    expect(formatMark(99600, 'Duration')).toBe('9.96') // Lachlan KENNEDY
+    expect(formatMark(101600, 'Duration')).toBe('10.16')
+    expect(formatMark(103300, 'Duration')).toBe('10.33')
+    expect(formatMark(105000, 'Duration')).toBe('10.50')
   })
 
   it('rounds up to the displayed precision, as World Athletics requires', () => {
@@ -35,8 +35,8 @@ describe('result formatting matches Roster', () => {
 
   it('shows the finer reading when places are split on thousandths', () => {
     // Roster renders "10.34 (.334)" and "10.34 (.337)" for 5th and 6th.
-    expect(formatMark(103340, 'track', 3)).toBe('10.34 (.334)')
-    expect(formatMark(103370, 'track', 3)).toBe('10.34 (.337)')
+    expect(formatMark(103340, 'Duration', 3)).toBe('10.34 (.334)')
+    expect(formatMark(103370, 'Duration', 3)).toBe('10.34 (.337)')
   })
 
   it('handles hand timing and long races', () => {
@@ -47,8 +47,8 @@ describe('result formatting matches Roster', () => {
   })
 
   it('formats distances in centimetres and combined scores unscaled', () => {
-    expect(formatMark(826, 'field')).toBe('8.26') // Liam ADCOCK long jump
-    expect(formatMark(6751, 'field')).toBe('67.51') // Matthew DENNY discus
-    expect(formatMark(6959, 'combined')).toBe('6959') // Sam TALBOT decathlon
+    expect(formatMark(826, 'Distance')).toBe('8.26') // Liam ADCOCK long jump
+    expect(formatMark(6751, 'Distance')).toBe('67.51') // Matthew DENNY discus
+    expect(formatMark(6959, 'Numeric')).toBe('6959') // Sam TALBOT decathlon
   })
 })

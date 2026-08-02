@@ -140,6 +140,37 @@ Australia venue filter), and the `sportEvents` catalogue
   Denny AUS 1, Okoye GBR 2, Stona JAM 3, Romero CHI 4, Miller AUS 5,
   Giddings AUS 6.
 
+## Event metadata — never inferred
+
+`/details` returns a `sportEvents` catalogue in which **every event declares how
+its marks are stored and scored**. The app reads these fields directly rather
+than guessing from `eventName` or `eventType`:
+
+| Field | Values | Used for |
+|---|---|---|
+| `resultType` | `Duration` \| `Distance` \| `Numeric` | which scale to format on |
+| `scoring` | `Lowest` \| `Highest` | whether the best mark is the smallest or largest |
+| `relay` | boolean | competitors are teams, not athletes |
+| `verticalJump` | boolean | High Jump, Pole Vault, Standing High Jump |
+| `lanes` | boolean | whether the start list has a Lane column |
+
+Inferring `resultType` from `eventType` is **not safe**. Across Roster's 575
+global sport events, 42 contradict the obvious mapping — most importantly
+`One Hour`, `24 Hours` and `One Hour Race Walk`, which carry
+`eventType: "Distance"` but record a **distance covered**, not a time.
+Formatting one of those as a clock time would print a wildly wrong value.
+`inferResultType` exists only as a fallback for a catalogue entry missing the
+field.
+
+## Relays
+
+A relay's `results-v2` payload contains a participant row per **team** *and* per
+**leg**. Team rows have `relayTeamIdFk` and no `meetingParticipantRelayTeamIdFk`;
+leg rows carry the latter, pointing at their team's participant row. The team's
+name comes from `relayList[].longName` — Roster displays "New South Wales", and
+"New Zealand" for a national team. A relay final at the 2026 Aus Champs has 25
+participant rows for 5 teams.
+
 ## Result scales (verified against live Roster pages)
 
 `result`, `initialPersonalBest` and `initialSeasonBest` are integers on

@@ -8,15 +8,16 @@ import type {
   SportEventDto,
 } from '../api/types'
 import {
-  eventKind,
   formatAgeGroupName,
   formatMark,
   genderLabel,
   implementLabel,
+  inferResultType,
+  inferScoring,
   participantDisplayName,
   startStatusLabel,
-  type EventKind,
 } from './format'
+import type { ResultType, Scoring } from '../api/types'
 import { extractParaPercentage } from './para'
 
 /**
@@ -45,8 +46,12 @@ export interface FinalEvent {
   gender: string
   genderRaw: string
   ageGroup: string
-  kind: EventKind
+  /** How Roster stores this event's marks — drives all result formatting. */
+  resultType: ResultType
+  /** Whether the best mark is the smallest (a time) or the largest. */
+  scoring: Scoring
   isCombined: boolean
+  isRelay: boolean
   hasLanes: boolean
   startDateTime?: string
   timePubliclyVisible: boolean
@@ -96,8 +101,12 @@ export function buildFinals(
         gender: genderLabel(me.gender),
         genderRaw: me.gender,
         ageGroup: ageGroupName(me.ageGroupIdFk, details.ageGroups),
-        kind: eventKind(se?.eventType, isCombined),
+        resultType: se?.resultType ?? inferResultType(se?.eventType, isCombined),
+        scoring:
+          se?.scoring ??
+          inferScoring(se?.resultType ?? inferResultType(se?.eventType, isCombined)),
         isCombined,
+        isRelay: Boolean(se?.relay),
         hasLanes: Boolean(se?.lanes),
         startDateTime: me.startDateTime,
         timePubliclyVisible: me.timePubliclyVisible ?? false,
@@ -148,12 +157,31 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
     resultsByMp.set(key, list)
   }
 
-  const rows = payload.mpList
+  const relayTeams = new Map(
+    (payload.relayList ?? []).map((r) => [r.relayTeamIdPk, r]),
+  )
+
+  const entrants = payload.mpList
     .filter((env) => env.op !== 'Delete')
     .map((env) => env.entityDto)
     .filter((mp) => mp.meetingEventIdFk === final.meId)
+
+  // A relay's competitors are the teams, not the runners: Roster lists
+  // "New South Wales", and the individual legs hang off the team row. Without
+  // this, every row of a relay final renders with a blank name.
+  const isRelayEntry = entrants.some(
+    (mp) => mp.relayTeamIdFk != null && mp.meetingParticipantRelayTeamIdFk == null,
+  )
+  const competitors = isRelayEntry
+    ? entrants.filter(
+        (mp) => mp.relayTeamIdFk != null && mp.meetingParticipantRelayTeamIdFk == null,
+      )
+    : entrants
+
+  const rows = competitors
     .map((mp) => {
       const athlete = mp.athleteIdFk ? athletes.get(mp.athleteIdFk) : undefined
+      const team = mp.relayTeamIdFk ? relayTeams.get(mp.relayTeamIdFk) : undefined
       const club = mp.clubIdFk ? clubs.get(mp.clubIdFk) : undefined
       const results = (resultsByMp.get(mp.meetingParticipantIdPk) ?? []).map(
         (e) => e.entityDto,
@@ -172,8 +200,10 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
           (r) => r.resultStatus === 'Ok' && r.result != null,
         )
         if (counting.length > 0) {
+          // Roster states whether the best mark is the lowest (a time) or the
+          // highest (a distance or score) — never inferred here.
           const best = counting.reduce((a, b) =>
-            final.kind === 'track'
+            final.scoring === 'Lowest'
               ? b.result! < a.result!
                 ? b
                 : a
@@ -189,7 +219,7 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
       const statusLabel = startStatusLabel(mp.startStatus)
       const result =
         resultRaw != null
-          ? formatMark(resultRaw, final.kind, decimalDigits)
+          ? formatMark(resultRaw, final.resultType, decimalDigits)
           : statusLabel
 
       // Notes: PB/SB record markers from the counting result(s).
@@ -206,15 +236,20 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
       // PB implies it is also an SB; Roster shows just "PB".
       if (recordTypes.has('PB')) recordTypes.delete('SB')
 
-      const isAus = athlete?.countryCode === 'AUS'
+      const country = athlete?.countryCode ?? team?.countryCode ?? ''
+      const isAus = country === 'AUS'
       return {
         participantId: mp.meetingParticipantIdPk,
-        name: participantDisplayName(
-          athlete?.firstName,
-          athlete?.lastName,
-          athlete?.athleteName,
-        ),
-        country: athlete?.countryCode ?? '',
+        // Roster shows a relay team by its long name ("New South Wales").
+        name:
+          team?.longName ??
+          team?.shortName ??
+          participantDisplayName(
+            athlete?.firstName,
+            athlete?.lastName,
+            athlete?.athleteName,
+          ),
+        country,
         club: isAus ? (club?.shortName ?? '') : '',
         clubLong: isAus ? (club?.longName ?? '') : '',
         lane: mp.lane,
@@ -224,8 +259,8 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
         resultRaw,
         notes: [...recordTypes].sort().join(' '),
         paraPercentage: extractParaPercentage(mp.notesPublic),
-        pb: formatMark(mp.initialPersonalBest, final.kind),
-        sb: formatMark(mp.initialSeasonBest, final.kind),
+        pb: formatMark(mp.initialPersonalBest, final.resultType),
+        sb: formatMark(mp.initialSeasonBest, final.resultType),
         startStatus: mp.startStatus ?? 'Ok',
         isFinisher: mp.place != null,
       } satisfies EventRow
