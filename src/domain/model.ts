@@ -123,7 +123,7 @@ export interface EventRow {
   participantId: number
   name: string
   country: string
-  /** Club/state short code — '' for internationals (Roster shows none). */
+  /** Club/state short code exactly as Roster lists it; '' when the entry has none. */
   club: string
   /** Full club/state name from Roster, e.g. "South Australia". */
   clubLong: string
@@ -236,8 +236,15 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
       // PB implies it is also an SB; Roster shows just "PB".
       if (recordTypes.has('PB')) recordTypes.delete('SB')
 
-      const country = athlete?.countryCode ?? team?.countryCode ?? ''
-      const isAus = country === 'AUS'
+      // Roster prints the athletics code ("RSA"), not the ISO one ("ZAF").
+      // Verified on Roster's own results page for 27550/337075, which reads
+      // "Aynslee VAN GRAAN 1995 · RSA".
+      const country =
+        athlete?.country ??
+        athlete?.countryCode ??
+        team?.country ??
+        team?.countryCode ??
+        ''
       return {
         participantId: mp.meetingParticipantIdPk,
         // Roster shows a relay team by its long name ("New South Wales").
@@ -248,10 +255,14 @@ export function buildEventRows(final: FinalEvent, payload: ResultsPayload): Even
             athlete?.firstName,
             athlete?.lastName,
             athlete?.athleteName,
+            athlete?.middleName,
           ),
         country,
-        club: isAus ? (club?.shortName ?? '') : '',
-        clubLong: isAus ? (club?.longName ?? '') : '',
+        // Roster shows whatever club the entry carries, regardless of the
+        // athlete's country: 27550/337075 lists Aynslee VAN GRAAN (RSA) under
+        // club NSW. An entry with no club simply shows nothing.
+        club: club?.shortName ?? '',
+        clubLong: club?.longName ?? '',
         lane: mp.lane,
         position: mp.position,
         place: mp.place,

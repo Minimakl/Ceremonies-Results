@@ -400,7 +400,9 @@ outright.
 ## 10. Data Facts Confirmed From Live Roster Data
 
 - Roster reliably shows a **country for every athlete**.
-- Roster shows a **club/state only for Australian athletes** (their state code); internationals show country only.
+- ~~Roster shows a **club/state only for Australian athletes** (their state code); internationals show country only.~~ **Corrected 2 Aug 2026.** Roster shows whatever club the *entry* carries, whatever the athlete's country: 27550/337075 lists Aynslee VAN GRAAN (RSA) under club NSW. An entry with no club shows nothing — which is the usual case for a visiting international, and is what produced the original reading.
+- **Country is the athletics code, not the ISO code (added 2 Aug 2026).** The athlete payload carries both `country` ("RSA") and `countryCode` ("ZAF"); Roster prints `country`. The dashboard does the same. `countryCode` is still what the competition search filters on, because that is what Roster's search posts.
+- **Roster prints the middle name (added 2 Aug 2026).** 27550/337075 reads "Helena Rose BUTLER", from firstName "Helena", middleName "Rose", lastName "Butler".
 - Roster's public site is a JavaScript single-page app; results pages live at `/public/competitions/details/results?id={compId}&meId={eventId}`.
 - Event statuses observed so far: "Finished." The full set of Roster status values needs mapping to the four automatic colours during build.
 

@@ -11,6 +11,7 @@ import sprint100m from '../fixtures/conformance/sprint-100m-337277.json'
 import longJump from '../fixtures/conformance/longjump-337387.json'
 import mid1500m from '../fixtures/conformance/mid-1500m-316510.json'
 import highJump from '../fixtures/conformance/highjump-336995.json'
+import dist5000m from '../fixtures/conformance/distance-5000m-337075.json'
 
 /**
  * Conformance suite.
@@ -139,6 +140,58 @@ describe('conformance with Roster — Duration events', () => {
     ])
     // Start-list bests use the same scale as results.
     expect(rows[0].sb).toBe('3:56.70')
+  })
+
+  /**
+   * The country column is the athletics code Roster prints, not the ISO one:
+   * Roster's page for this event reads "Aynslee VAN GRAAN 1995 · RSA" where
+   * the payload carries country "RSA" and countryCode "ZAF". The same row also
+   * shows club "NSW" for a South African athlete, so a club belongs to the
+   * entry, not to Australians only.
+   */
+  it('5000m Final Women Senior (27550/337075) matches Roster, RSA and club included', () => {
+    const ev = final({
+      meId: 337075,
+      meetingId: 27550,
+      eventIdFk: 22,
+      gender: 'Female',
+      se: {
+        eventName: '5000m',
+        eventType: 'Distance',
+        resultType: 'Duration',
+        scoring: 'Lowest',
+      },
+    })
+    const rows = buildEventRows(ev, dist5000m as ResultsPayload)
+    expect(readable(rows)).toEqual([
+      [1, 'Jessica HULL', 'AUS', 'NSW', '15:13.21'],
+      [2, 'Linden HALL', 'AUS', 'VIC', '15:15.33'],
+      [3, 'Maudie SKYRING', 'AUS', 'NSW', '15:18.27'],
+      [4, 'Rose DAVIES', 'AUS', 'NSW', '15:20.81'],
+      [5, 'Lauren RYAN', 'AUS', 'VIC', '15:32.76'],
+      [6, 'Georgia GRIFFITH', 'AUS', 'VIC', '15:35.02'],
+      [7, 'Holly CAMPBELL', 'AUS', 'NSW', '15:59.23'],
+      [8, 'Natalie RULE', 'AUS', 'VIC', '16:00.74'],
+      [9, 'Zoe MELHUISH', 'AUS', 'ACT', '16:15.77'],
+      [10, 'Ruby SMEE', 'AUS', 'TAS', '16:18.34'],
+      [11, 'Izzy THORNTON-BOTT', 'AUS', 'NSW', '16:24.57'],
+      [12, 'Helena Rose BUTLER', 'AUS', 'QLD', '16:24.98'],
+      [13, 'Aynslee VAN GRAAN', 'RSA', 'NSW', '16:25.26'],
+      [14, 'Stephanie KELLY', 'AUS', 'VIC', '16:28.97'],
+      [15, 'Katherine DOWIE', 'AUS', 'VIC', '16:44.15'],
+      [16, 'Emily BRADLEY', 'AUS', 'WA', '16:52.56'],
+      [17, 'Breanna GOLUB', 'AUS', 'NSW', '16:58.89'],
+      [18, 'Annabelle COLMAN', 'AUS', 'VIC', '17:02.28'],
+      [19, 'Saskia LLOYD', 'AUS', 'VIC', '17:12.17'],
+      [20, 'Kirsty BEATTIE', 'AUS', 'ACT', '17:18.22'],
+      [21, 'Charli-Rose CARLYON', 'AUS', 'WA', '17:29.14'],
+      [22, 'Kate HOLLAND-SMITH', 'AUS', 'SA', '17:40.07'],
+      [23, 'Olivia SIVILLS', 'AUS', 'NSW', '18:07.12'],
+      [24, 'Audrey HALL', 'AUS', 'QLD', '18:34.81'],
+      ['', 'Klara DESS', 'AUS', 'ACT', 'DNS'],
+    ])
+    expect(rows[0].notes).toBe('SB')
+    expect(rows[1].notes).toBe('')
   })
 
   it('4x400m MIXED TEAM Final (27550/337077) lists teams, not runners', () => {

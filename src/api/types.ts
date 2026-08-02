@@ -46,7 +46,16 @@ export interface AthleteDto {
   athleteIdPk: number
   athleteName?: string
   firstName?: string
+  /** Roster prints the middle name too: "Helena Rose BUTLER". */
+  middleName?: string
   lastName?: string
+  /**
+   * The athletics (World Athletics / IOC) code — "RSA", "GER", "SUI". This is
+   * the one Roster prints next to an athlete's name, and the two disagree
+   * wherever the athletics code differs from ISO 3166.
+   */
+  country?: string
+  /** ISO 3166-1 alpha-3 — "ZAF", "DEU", "CHE". Used for filtering, not display. */
   countryCode?: string
   yearOfBirth?: number
   paraClassTrack?: string
@@ -108,6 +117,8 @@ export interface RelayTeamDto {
   clubIdFk?: number
   longName?: string
   shortName?: string
+  /** Athletics code, as on AthleteDto. */
+  country?: string
   countryCode?: string
   gender?: string
   national?: boolean

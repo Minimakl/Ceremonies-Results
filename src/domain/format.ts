@@ -25,14 +25,22 @@ export function inferScoring(resultType: ResultType): Scoring {
   return resultType === 'Duration' ? 'Lowest' : 'Highest'
 }
 
-/** "Sam" + "Talbot" → "Sam TALBOT" (plan §7.3 wording). */
+/**
+ * "Sam" + "Talbot" → "Sam TALBOT" (plan §7.3 wording), which is also how
+ * Roster prints a name: given names as entered, surname in capitals. The
+ * middle name is part of it — Roster's page for 27550/337075 reads
+ * "Helena Rose BUTLER", not "Helena BUTLER".
+ */
 export function participantDisplayName(
   firstName: string | undefined,
   lastName: string | undefined,
   fallback: string | undefined,
+  middleName?: string,
 ): string {
-  if (firstName || lastName) {
-    return [firstName, lastName?.toUpperCase()].filter(Boolean).join(' ')
+  if (firstName || lastName || middleName) {
+    return [firstName, middleName, lastName?.toUpperCase()]
+      .filter(Boolean)
+      .join(' ')
   }
   if (fallback) {
     // "Sam Talbot" → "Sam TALBOT" (last word treated as surname)
