@@ -7,19 +7,20 @@ import {
   genderPronoun,
   ordinal,
   ordinalWord,
+  spokenDistance,
   spokenDuration,
 } from './format'
 
 /**
- * Read-aloud script (plan §9). Two templates are defined so far — combined
- * events (§9) and individual timed track events (§9.5). Field events and
- * relays still get a placeholder until their scripts are supplied.
+ * Read-aloud script (plan §9). Three templates are defined so far — combined
+ * events (§9), individual timed track events (§9.5) and individual field
+ * events (§9.6). Relays still get a placeholder until their script is
+ * supplied.
  */
 export const SCRIPT_PLACEHOLDER =
   'Script coming soon.\n\n' +
-  'Scripts for this event type (individual field events, relays) have not ' +
-  'been supplied yet. The Ceremonies tab has the full reading order in the ' +
-  'meantime.'
+  'The script for this event type (relays) has not been supplied yet. The ' +
+  'Ceremonies tab has the full reading order in the meantime.'
 
 /**
  * The individual timed events that use the track medallists script (§9.5).
@@ -51,6 +52,24 @@ export const TRACK_SCRIPT_EVENTS: ReadonlySet<string> = new Set([
   '800m Wheelchair',
 ])
 
+/**
+ * The individual field events that use the field medallists script (§9.6).
+ * Matched on Roster's exact event name, before the implement is appended —
+ * "Javelin Throw (600g)" is a Javelin Throw.
+ */
+export const FIELD_SCRIPT_EVENTS: ReadonlySet<string> = new Set([
+  'High Jump',
+  'Long Jump',
+  'Triple Jump',
+  'Pole Vault',
+  'Shot Put',
+  'Discus Throw',
+  'Javelin Throw',
+  'Hammer Throw',
+  'Seated Shot Put',
+  'Seated Javelin Throw',
+])
+
 /** Roster may append an implement to the name; match on the event itself. */
 function baseEventName(name: string): string {
   return name.replace(/\s*\(.*\)\s*$/, '').trim()
@@ -58,6 +77,10 @@ function baseEventName(name: string): string {
 
 export function usesTrackScript(event: FinalEvent): boolean {
   return !event.isCombined && TRACK_SCRIPT_EVENTS.has(baseEventName(event.name))
+}
+
+export function usesFieldScript(event: FinalEvent): boolean {
+  return !event.isCombined && FIELD_SCRIPT_EVENTS.has(baseEventName(event.name))
 }
 
 const MEDALLIST_LEAD: Record<number, string> = {
@@ -76,13 +99,20 @@ function scriptTitle(event: FinalEvent): string {
 }
 
 /**
- * Track medallists script (§9.5) — medallists only, read bronze → silver →
- * gold, with the time spoken in words. If an international athlete medalled,
- * a recognition line follows the gold medallist.
+ * The medallists script shared by individual track (§9.5) and field (§9.6)
+ * events: medallists only, read bronze → silver → gold, then any
+ * international who medalled, then the closing title. The two differ only in
+ * the opening line, the phrase introducing the mark, and how the mark is
+ * spoken.
  */
-function generateTrackScript(
+function generateMedallistScript(
   event: FinalEvent,
   ceremonies: CeremonyRow[],
+  template: {
+    opening: (title: string) => string
+    markLead: string
+    spoken: (display: string) => string
+  },
 ): string {
   const title = scriptTitle(event)
   const medallists = (
@@ -100,12 +130,12 @@ function generateTrackScript(
     .filter((c) => c.row.country !== 'AUS' && c.overallPosition <= 3)
     .sort((a, b) => a.overallPosition - b.overallPosition)
 
-  const blocks: string[] = [`Your medallists for the\n${title}\nChampionship`]
+  const blocks: string[] = [template.opening(title)]
 
   for (const c of medallists) {
     blocks.push(
-      `${MEDALLIST_LEAD[c.placeOrder]} with a time of\n` +
-        `${spokenDuration(c.row.result)}\n` +
+      `${MEDALLIST_LEAD[c.placeOrder]} ${template.markLead}\n` +
+        `${template.spoken(c.row.result)}\n` +
         `representing\n` +
         `${expandState(c.row.club, c.row.clubLong)}\n` +
         c.row.name,
@@ -117,7 +147,7 @@ function generateTrackScript(
     blocks.push(
       `We also recognise ${c.row.name} representing ${c.row.country} with a ` +
         `${MEDAL_NAME[c.overallPosition]} medal for ${pronoun} performance of ` +
-        spokenDuration(c.row.result),
+        template.spoken(c.row.result),
     )
   }
 
@@ -125,11 +155,34 @@ function generateTrackScript(
   return blocks.join('\n\n')
 }
 
+/** §9.5 — "with a time of / 4 minutes 12 point 45 seconds". */
+const TRACK_TEMPLATE = {
+  opening: (title: string) => `Your medallists for the\n${title}\nChampionship`,
+  markLead: 'with a time of',
+  spoken: spokenDuration,
+}
+
+/**
+ * §9.6 — "with a best of / 8 point 26 metres". The opening is a single
+ * sentence here, not the three lines the track script uses, because that is
+ * how the field template was supplied.
+ */
+const FIELD_TEMPLATE = {
+  opening: (title: string) => `Your medallists for the ${title} Championship.`,
+  markLead: 'with a best of',
+  spoken: spokenDistance,
+}
+
 export function generateScript(
   event: FinalEvent,
   ceremonies: CeremonyRow[],
 ): string | null {
-  if (usesTrackScript(event)) return generateTrackScript(event, ceremonies)
+  if (usesTrackScript(event)) {
+    return generateMedallistScript(event, ceremonies, TRACK_TEMPLATE)
+  }
+  if (usesFieldScript(event)) {
+    return generateMedallistScript(event, ceremonies, FIELD_TEMPLATE)
+  }
   if (!event.isCombined) return null
 
   const title = scriptTitle(event)

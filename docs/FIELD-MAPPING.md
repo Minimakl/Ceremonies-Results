@@ -124,6 +124,7 @@ recomputed from the raw value.
 - Club — the club's `longName`, with an Australian state code expanded from our
   own table (NSW → New South Wales)
 - Time — e.g. `4:12.45` → "4 minutes 12 point 45 seconds"
+- Distance — e.g. `8.26` → "8 point 26 metres"
 
 ## 9. Open items
 

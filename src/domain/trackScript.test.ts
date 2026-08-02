@@ -102,10 +102,14 @@ describe('track medallists script (§9.5)', () => {
     ]) {
       expect(usesTrackScript(final(name))).toBe(true)
     }
-    // Relays and field events are not on the list — they keep the placeholder.
-    for (const name of ['4x100m', '4x400m MIXED TEAM', 'Long Jump', 'Shot Put']) {
+    // Relays are not on the list and have no script of their own yet.
+    for (const name of ['4x100m', '4x400m MIXED TEAM']) {
       expect(usesTrackScript(final(name))).toBe(false)
       expect(generateScript(final(name), [])).toBeNull()
+    }
+    // Field events are not on this list either — they use the §9.6 script.
+    for (const name of ['Long Jump', 'Shot Put']) {
+      expect(usesTrackScript(final(name))).toBe(false)
     }
   })
 

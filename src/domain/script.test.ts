@@ -91,7 +91,23 @@ describe('script generator (plan §9)', () => {
     expect(script).toBe(EXPECTED_DECATHLON_SCRIPT)
   })
 
-  it('returns null (placeholder) for non-combined events — plan §9.4', () => {
+  /**
+   * Discus Throw (2kg) Final Men Senior at the 2026 Maurie Plant Meet
+   * (27236/371113) — the field script (§9.6) on a real event with two
+   * international medallists. Roster's page reads:
+   *
+   *   1 Matthew DENNY · AUS · QLD · 67.51
+   *   2 Lawrence OKOYE · GBR · 65.09
+   *   3 Roje STONA · JAM · 64.60
+   *   4 Claudio ROMERO · CHI · 62.31
+   *   5 Darcy MILLER · AUS · SA · 57.66
+   *   6 Darcy GIDDINGS · AUS · VIC · 51.87
+   *
+   * So the national medals go to Denny, Miller and Giddings; Okoye and Stona
+   * are recognised with the silver and bronze they won outright; and Romero,
+   * an international outside the top 3, is not read at all (§7.1).
+   */
+  it('produces the field script, recognising both international medallists', () => {
     const finals = buildFinals(
       schedule27236 as SchedulePayload,
       details27236 as MeetingDetailsDto,
@@ -99,6 +115,32 @@ describe('script generator (plan §9)', () => {
     )
     const final = finals.find((f) => f.meId === 371113)!
     const rows = buildEventRows(final, results371113 as ResultsPayload)
-    expect(generateScript(final, buildCeremoniesList(rows, false))).toBeNull()
+    expect(generateScript(final, buildCeremoniesList(rows, false)))
+      .toBe(`Your medallists for the Men's Open Discus Throw Championship.
+
+Third place and bronze medallist with a best of
+51 point 87 metres
+representing
+Victoria
+Darcy GIDDINGS
+
+Second place and silver medallist with a best of
+57 point 66 metres
+representing
+South Australia
+Darcy MILLER
+
+First place and gold medallist with a best of
+67 point 51 metres
+representing
+Queensland
+Matthew DENNY
+
+We also recognise Lawrence OKOYE representing GBR with a silver medal for his performance of 65 point 09 metres
+
+We also recognise Roje STONA representing JAM with a bronze medal for his performance of 64 point 60 metres
+
+Your medallists for the
+Men's Open Discus Throw`)
   })
 })

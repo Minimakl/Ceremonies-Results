@@ -333,7 +333,7 @@ Senior".
 
 ### 9.4 Other event types
 
-**PLACEHOLDER.** Scripts for individual field events and relays will be provided later. The Script tab for those events shows a "script coming soon" placeholder until then. Individual timed track events are now specified — see §9.5.
+**PLACEHOLDER.** The relay script will be provided later; relay finals show a "script coming soon" placeholder until then. Individual timed track events are specified in §9.5 and individual field events in §9.6.
 
 ### 9.5 Individual timed track events (revised 2 Aug 2026)
 
@@ -396,6 +396,57 @@ Verified end to end against two live payloads: the all-Australian 1500m Final
 Men U18 (27351/316510) and the 100m Final Women PA Senior at the 2026
 Australian Championships (27550/337273), where Danielle Aitchison (NZL) won
 outright.
+
+### 9.6 Individual field events (revised 2 Aug 2026)
+
+Applies when Roster's event name, before any implement is appended, is one of:
+
+High Jump · Long Jump · Triple Jump · Pole Vault · Shot Put · Discus Throw ·
+Javelin Throw · Hammer Throw · Seated Shot Put · Seated Javelin Throw
+
+Same structure as §9.5 — medallists only, bronze → silver → gold, then any
+international medallist — with three differences:
+
+```
+Your medallists for the {Sex} {Age group} {Event} Championship.
+
+Third place and bronze medallist with a best of
+{xx} point {xx} metres
+representing
+{Club/team}
+{Name}
+
+… silver, then gold …
+
+[if an international medalled]
+We also recognise {Name} representing {Country code} with a {gold/silver/bronze} medal for {his/her} performance of {xx} point {xx} metres
+
+Your medallists for the
+{Sex} {Age group} {Event}
+```
+
+1. The opening is **one sentence ending in a full stop**, where the track
+   opening is three lines with none. That is how the two templates were
+   supplied — see the flag below.
+2. "with a **best** of", not "with a time of" — the mark is the best of the
+   athlete's counting attempts, which is what the Results tab already shows.
+3. The mark is spoken in metres: "8.26" → "8 point 26 metres", read from the
+   displayed mark so it cannot differ from the Results tab. Roster prints two
+   decimals always, so a whole-metre throw reads "15 point 00 metres".
+
+Two points resolved by judgement, flagged for confirmation:
+
+1. **The opening line differs in shape from the track script's** (one sentence
+   with a full stop vs three lines without). Both are as supplied; say the word
+   and they can be made to match.
+2. **"15 point 00 metres"** is read literally from Roster's two decimals rather
+   than shortened to "15 metres".
+
+Verified end to end against three live payloads: Long Jump Final Men Senior
+(27550/337387), High Jump Final Men Senior (27550/336995), and Discus Throw
+(2kg) Final Men Senior at the 2026 Maurie Plant Meet (27236/371113), where
+Lawrence Okoye (GBR) and Roje Stona (JAM) took silver and bronze outright and
+Claudio Romero (CHI), fourth, is correctly not read at all.
 
 ## 10. Data Facts Confirmed From Live Roster Data
 

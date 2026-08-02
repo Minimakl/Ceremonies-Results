@@ -143,6 +143,19 @@ export function spokenDuration(display: string): string {
   return said.join(' ')
 }
 
+/**
+ * Turn a displayed distance into the words a ceremonies manager says aloud:
+ * "8.26" → "8 point 26 metres". Like spokenDuration, this reads the displayed
+ * string rather than the raw value, so the script cannot state a different
+ * mark from the one on the Results tab.
+ */
+export function spokenDistance(display: string): string {
+  const [whole, fraction] = display.trim().split('.')
+  return fraction != null
+    ? `${Number(whole)} point ${fraction} metres`
+    : `${Number(whole)} metres`
+}
+
 /** Format a raw Roster integer mark for display, on the scale Roster stores it. */
 export function formatMark(
   raw: number | undefined,
