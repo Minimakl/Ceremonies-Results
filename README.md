@@ -30,3 +30,15 @@ The app always reads live data from Roster through the `/roster-api` proxy —
 provided by the Vite dev server locally, and by a `vercel.json` rewrite in
 production. The snapshots under `src/fixtures/` are test data only; see
 `src/fixtures/README.md`.
+
+## Deployment
+
+Deployed to Vercel. `vercel.json` rewrites `/roster-api/*` to
+`api.meets.rosterathletics.com/*`, which is what lets the browser read Roster
+data without depending on Roster's CORS headers — the same rewrite the Vite
+dev server provides locally.
+
+Vercel projects in this team have **Vercel Authentication** enabled by
+default, so deployment URLs return 403 to anyone not logged into the team.
+Turn it off under Project Settings → Deployment Protection if the ceremonies
+manager needs to open the dashboard without a Vercel login.
