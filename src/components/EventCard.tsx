@@ -31,7 +31,7 @@ export function EventCard({ event, colour, onPromote, onDemote }: Props) {
         }
       }}
     >
-      <div className="card__name">{event.name} · Final</div>
+      <div className="card__name">{event.name} · {event.stageLabel}</div>
       <div className="card__meta">
         {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
       </div>

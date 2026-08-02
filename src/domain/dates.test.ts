@@ -16,6 +16,7 @@ function final(id: number, startDateTime: string): FinalEvent {
     isCombined: false,
     isRelay: false,
     hasLanes: true,
+    stageLabel: 'Final',
     startDateTime,
     timePubliclyVisible: true,
     hasResults: false,

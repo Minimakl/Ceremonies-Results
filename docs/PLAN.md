@@ -52,6 +52,37 @@ Times are shown as Roster stores them — venue-local wall time, with the zone
 named beside them — so the dashboard never disagrees with the competition's own
 Roster page.
 
+### 3.2 Finals summaries (revised 2 Aug 2026)
+
+When a final is too big for one section, Roster splits it into **group finals**
+and publishes a **Finals Summary** ranking everyone together. All of them are
+stored as `eventStage: "Final"`, distinguished only by `stageGroup`: 0 is the
+summary, 1, 2, … are the groups.
+
+**Medals are presented on the summary, so the dashboard shows the summary and
+hides the group finals behind it.** Reading from a group final would crown the
+wrong athlete — this is not a tidiness issue:
+
+| Case | What the group finals say | What the summary says |
+|---|---|---|
+| Shot Put, Men PA Senior (27550/337021) | Todd HODGETTS throws 13.36, further than Ryan BLAIR's 13.35 | HODGETTS is 5th, BLAIR 3rd — ranking is on percentage |
+| 1500m, Women U14 (27545/353923) | Layla DENT wins group A | DENT is 3rd; Viktorie TREBULOVA won group B and the title |
+
+Detection: group the finals by event, age group and gender; where a group holds
+more than one final and one of them has `stageGroup` 0, that one is the summary
+and the rest are dropped. If no `stageGroup` 0 exists there is no summary to
+present from, so every final in the group is kept rather than guessed at.
+Verified across two meets — 4 split events at the 2026 Australian
+Championships, 16 at the 2026 Junior Championships, every one matching.
+
+The header and card read Roster's own wording, "Shot Put · Finals Summary"
+rather than "· Final". Note this is **not** a para-only feature: the U14 1500m
+above is an able-bodied event split for track capacity.
+
+The script is unchanged for these events — a para summary is ranked on
+percentage but still announces the athlete's mark, per §9.6. Revisit if the
+client asks for the percentage to be read.
+
 ## 4. The Five Status Colours
 
 | Colour | Meaning | Set by |

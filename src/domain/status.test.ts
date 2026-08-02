@@ -17,6 +17,7 @@ function ev(partial: Partial<FinalEvent>): FinalEvent {
     isCombined: false,
     isRelay: false,
     hasLanes: true,
+    stageLabel: 'Final',
     startDateTime: '2026-04-09 01:05:00',
     timePubliclyVisible: true,
     hasResults: false,

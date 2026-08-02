@@ -121,7 +121,7 @@ export function EventScreen() {
           <ArrowLeftIcon />
         </button>
         <div className="event__title">
-          <h1 className="event__name">{event.name} · Final</h1>
+          <h1 className="event__name">{event.name} · {event.stageLabel}</h1>
           <span className="event__meta">
             {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
           </span>

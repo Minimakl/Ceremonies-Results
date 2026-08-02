@@ -29,6 +29,10 @@ A card is created for a schedule record where **all** of these hold
 - `combinedMeetingEventIdFk` is absent — this excludes the child events of a
   combined event, e.g. the decathlon's own 100m
 - `visibility` is neither `None` nor `Hidden`
+- it is not a **group final** behind a Finals Summary. Where an event, age
+  group and gender has several finals and one has `stageGroup` 0, that one is
+  Roster's Finals Summary — medals are presented on it — and the others are
+  dropped (plan §3.2)
 
 Cards are ordered by `startDateTime` and grouped into days using the
 **venue's** timezone from `details.tz`.
@@ -39,7 +43,7 @@ Cards are ordered by `startDateTime` and grouped into days using the
 |---|---|---|
 | Event name | `details.sportEvents[eventIdFk].eventName` | verbatim |
 | Implement | `se-implements[seImplementIdFk].implement` + `implementUnit` | value ÷ 100; `Kilogram` → kg, `Gram` → g. **See open item 3.** |
-| "· Final" | `eventStage` | fixed text |
+| "· Final" / "· Finals Summary" | `eventStage`, `stageGroup` | Roster's own wording — a summary is titled "Finals Summary" |
 | Gender | schedule `gender` | Roster's own transform: Male → Men, Female → Women, Mixed → Mixed |
 | Age group | `details.ageGroups[ageGroupIdFk].name` | `Meeting_18` → `U18`, `PA_Senior` → `PA Senior`, underscores → spaces |
 | Status colour | `resultsComplete`, `hasResults`, `startDateTime` | green / orange / red; orange → yellow once every athlete has settled |

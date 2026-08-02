@@ -53,6 +53,11 @@ export interface FinalEvent {
   isCombined: boolean
   isRelay: boolean
   hasLanes: boolean
+  /**
+   * Roster's own stage wording — "Final", or "Finals Summary" when this event
+   * combines several group finals. Shown verbatim on the card and header.
+   */
+  stageLabel: string
   startDateTime?: string
   timePubliclyVisible: boolean
   hasResults: boolean
@@ -61,9 +66,47 @@ export interface FinalEvent {
 }
 
 /**
+ * A final split across several groups is published by Roster as one **Finals
+ * Summary** (`stageGroup` 0) plus the group finals (`stageGroup` 1, 2, …), all
+ * of them stored as `eventStage: 'Final'`. Medals are presented on the
+ * summary, and only the summary carries the medal order: at 27550/337021 Todd
+ * HODGETTS out-throws Ryan BLAIR yet places below him on percentage, and at
+ * 27545/353923 Layla DENT wins group A but finishes 3rd overall.
+ *
+ * The group finals are therefore dropped (plan §3.2) — presenting off one
+ * would crown the wrong athlete. Returns the meIds to drop, and the summaries.
+ */
+function splitFinals(events: MeetingEventDto[]): {
+  drop: Set<number>
+  summaries: Set<number>
+} {
+  const byEvent = new Map<string, MeetingEventDto[]>()
+  for (const me of events) {
+    const key = `${me.eventIdFk}|${me.ageGroupIdFk}|${me.gender}`
+    byEvent.set(key, [...(byEvent.get(key) ?? []), me])
+  }
+
+  const drop = new Set<number>()
+  const summaries = new Set<number>()
+  for (const siblings of byEvent.values()) {
+    if (siblings.length < 2) continue
+    const summary = siblings.find((me) => (me.stageGroup ?? 0) === 0)
+    // With no stage-group 0 there is no summary to present from, so every
+    // final in the group is kept rather than guessed at.
+    if (!summary) continue
+    summaries.add(summary.meetingEventIdPk)
+    for (const me of siblings) {
+      if (me !== summary) drop.add(me.meetingEventIdPk)
+    }
+  }
+  return { drop, summaries }
+}
+
+/**
  * Finals only (plan §3): eventStage === 'Final', excluding the child events
  * of combined events (each decathlon discipline is itself stored as a
- * "Final") and events Roster hides from the public schedule.
+ * "Final"), the group finals behind a Finals Summary (§3.2), and events Roster
+ * hides from the public schedule.
  */
 export function buildFinals(
   schedule: SchedulePayload,
@@ -77,7 +120,7 @@ export function buildFinals(
     implementList.map((im) => [im.seImplementIdPk, im]),
   )
 
-  return schedule.data
+  const finals = schedule.data
     .filter((env) => env.op !== 'Delete')
     .map((env) => env.entityDto)
     .filter(
@@ -87,6 +130,11 @@ export function buildFinals(
         me.visibility !== 'None' &&
         me.visibility !== 'Hidden',
     )
+
+  const { drop, summaries } = splitFinals(finals)
+
+  return finals
+    .filter((me) => !drop.has(me.meetingEventIdPk))
     .map((me) => {
       const se = sportEvents.get(me.eventIdFk)
       const isCombined = Boolean(se?.combined) || me.combinedSportEventIdFk != null
@@ -108,6 +156,9 @@ export function buildFinals(
         isCombined,
         isRelay: Boolean(se?.relay),
         hasLanes: Boolean(se?.lanes),
+        stageLabel: summaries.has(me.meetingEventIdPk)
+          ? 'Finals Summary'
+          : 'Final',
         startDateTime: me.startDateTime,
         timePubliclyVisible: me.timePubliclyVisible ?? false,
         hasResults: me.hasResults ?? false,

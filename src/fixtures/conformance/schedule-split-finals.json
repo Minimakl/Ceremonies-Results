@@ -1,0 +1,138 @@
+{
+ "type": "Full",
+ "data": [
+  {
+   "op": "Create",
+   "entityIdPk": 337065,
+   "entityDto": {
+    "meetingEventIdPk": 337065,
+    "meetingIdFk": 27550,
+    "eventIdFk": 50,
+    "seImplementIdFk": 190,
+    "ageGroupIdFk": 245,
+    "startDateTime": "2026-04-11 09:30:00",
+    "eventStage": "Final",
+    "stageGroup": 0,
+    "gender": "Female",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 397062,
+   "entityDto": {
+    "meetingEventIdPk": 397062,
+    "meetingIdFk": 27550,
+    "eventIdFk": 50,
+    "seImplementIdFk": 919,
+    "ageGroupIdFk": 1651,
+    "startDateTime": "2026-04-09 01:00:00",
+    "eventStage": "Final",
+    "stageGroup": 2,
+    "gender": "Male",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 397061,
+   "entityDto": {
+    "meetingEventIdPk": 397061,
+    "meetingIdFk": 27550,
+    "eventIdFk": 50,
+    "seImplementIdFk": 919,
+    "ageGroupIdFk": 1651,
+    "startDateTime": "2026-04-11 08:00:00",
+    "eventStage": "Final",
+    "stageGroup": 1,
+    "gender": "Male",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 337021,
+   "entityDto": {
+    "meetingEventIdPk": 337021,
+    "meetingIdFk": 27550,
+    "eventIdFk": 50,
+    "seImplementIdFk": 919,
+    "ageGroupIdFk": 1651,
+    "startDateTime": "2026-04-11 08:00:00",
+    "eventStage": "Final",
+    "stageGroup": 0,
+    "gender": "Male",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 402643,
+   "entityDto": {
+    "meetingEventIdPk": 402643,
+    "meetingIdFk": 27545,
+    "eventIdFk": 21,
+    "seImplementIdFk": 174,
+    "ageGroupIdFk": 240,
+    "startDateTime": "2026-04-17 04:10:00",
+    "eventStage": "Final",
+    "stageGroup": 2,
+    "gender": "Female",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 353923,
+   "entityDto": {
+    "meetingEventIdPk": 353923,
+    "meetingIdFk": 27545,
+    "eventIdFk": 21,
+    "seImplementIdFk": 174,
+    "ageGroupIdFk": 240,
+    "startDateTime": "2026-04-17 04:10:00",
+    "eventStage": "Final",
+    "stageGroup": 0,
+    "gender": "Female",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 402642,
+   "entityDto": {
+    "meetingEventIdPk": 402642,
+    "meetingIdFk": 27545,
+    "eventIdFk": 21,
+    "seImplementIdFk": 174,
+    "ageGroupIdFk": 240,
+    "startDateTime": "2026-04-17 04:10:00",
+    "eventStage": "Final",
+    "stageGroup": 1,
+    "gender": "Female",
+    "visibility": "Full",
+    "timePubliclyVisible": true,
+    "hasResults": true,
+    "resultsComplete": true
+   }
+  }
+ ]
+}
