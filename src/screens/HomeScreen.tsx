@@ -1,24 +1,16 @@
 import { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { EventCard } from '../components/EventCard'
 import { LiveIndicator } from '../components/LiveIndicator'
-import { SidebarToggleIcon } from '../components/SidebarToggleIcon'
+import { SidebarToggleIcon } from '../components/icons'
 import { useCompetitionContext } from '../state/competitionContext'
 import type { StatusColour } from '../domain/status'
 import type { FinalEvent } from '../domain/model'
 
-const REFERENCE_COMPETITIONS = [
-  { id: 27550, name: '2026 Australian Athletics Championships' },
-  { id: 27236, name: '2026 Maurie Plant Meet Melbourne' },
-  { id: 27351, name: '2025 WA All Schools Championships' },
-]
-
 /**
- * Home screen (plan §5): red header strip with the not-started finals and the
- * sidebar button, then four quadrants — PINK | GREEN over ORANGE | YELLOW.
+ * Home screen (plan §5): the not-started rail across the top, then the four
+ * sections — PINK | GREEN over ORANGE | YELLOW.
  */
 export function HomeScreen() {
-  const navigate = useNavigate()
   const { competition, meetingId, sidebarOpen, setSidebarOpen } =
     useCompetitionContext()
   const { finals, colours, loading, stale, lastUpdated, details, promote, demote } =
@@ -38,130 +30,109 @@ export function HomeScreen() {
     return groups
   }, [finals, colours])
 
-  const openCompetition = (id: number) => {
-    navigate(`/c/${id}`)
-    setSidebarOpen(false)
-  }
-
   return (
-    <div className="home">
-      <header className="home__header">
-        <div className="home__header-bar">
-          <button
-            className="sidebar-button"
-            aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
-            aria-expanded={sidebarOpen}
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <SidebarToggleIcon />
-          </button>
-          <h1>{details?.meetingName ?? `Competition ${meetingId}`}</h1>
-          <span className="home__header-count">
+    <div className="main">
+      <header className="topbar">
+        <button
+          className="icon-button"
+          aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+          aria-expanded={sidebarOpen}
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          <SidebarToggleIcon />
+        </button>
+        <h1 className="topbar__title">
+          {details?.meetingName ?? `Competition ${meetingId}`}
+        </h1>
+        <div className="topbar__right">
+          <span className="pill num">
             {loading ? 'Loading…' : `${finals.length} finals`}
-            <LiveIndicator lastUpdated={lastUpdated} stale={stale} />
           </span>
+          <LiveIndicator lastUpdated={lastUpdated} stale={stale} />
         </div>
-        <div className="home__header-strip">
-          <span className="home__strip-label">🔴 Not started</span>
-          <div className="home__strip-cards">
-            {byColour.red.length === 0 && !loading && (
-              <span className="home__empty">No finals waiting to start</span>
-            )}
+      </header>
+
+      <section className="rail">
+        <div className="rail__head">
+          <span className="sect__dot" />
+          <h2 className="sect__title">Not started</h2>
+          <span className="sect__count">{byColour.red.length}</span>
+        </div>
+        {byColour.red.length === 0 ? (
+          <p className="rail__empty">
+            {loading ? 'Loading finals…' : 'No finals waiting to start'}
+          </p>
+        ) : (
+          <div className="rail__cards">
             {byColour.red.map((f) => (
               <EventCard key={f.meId} event={f} colour="red" />
             ))}
           </div>
-        </div>
-      </header>
-
-      <div className="home__body">
-        {sidebarOpen && (
-          <aside className="sidebar">
-            <h2>Competitions</h2>
-            {REFERENCE_COMPETITIONS.map((c) => (
-              <button
-                key={c.id}
-                className={
-                  c.id === meetingId
-                    ? 'sidebar__item sidebar__item--active'
-                    : 'sidebar__item'
-                }
-                onClick={() => openCompetition(c.id)}
-              >
-                {c.name}
-              </button>
-            ))}
-            <form
-              className="sidebar__custom"
-              onSubmit={(e) => {
-                e.preventDefault()
-                const id = Number(new FormData(e.currentTarget).get('comp'))
-                if (Number.isFinite(id) && id > 0) openCompetition(id)
-              }}
-            >
-              <input
-                name="comp"
-                inputMode="numeric"
-                placeholder="Roster competition id"
-              />
-              <button type="submit">Open</button>
-            </form>
-          </aside>
         )}
+      </section>
 
-        <main className="home__quadrants">
-          <Quadrant
-            title="🩷 In ceremonies"
-            className="quadrant--pink"
-            events={byColour.pink}
-            colours={colours}
-            onDemote={demote}
-          />
-          <Quadrant
-            title="🟢 Ready to present"
-            className="quadrant--green"
-            events={byColour.green}
-            colours={colours}
-            onPromote={promote}
-          />
-          <Quadrant
-            title="🟠 In progress"
-            className="quadrant--orange"
-            events={byColour.orange}
-            colours={colours}
-          />
-          <Quadrant
-            title="🟡 Awaiting final results"
-            className="quadrant--yellow"
-            events={byColour.yellow}
-            colours={colours}
-          />
-        </main>
-      </div>
+      <main className="board">
+        <Panel
+          title="In ceremonies"
+          tone="pink"
+          events={byColour.pink}
+          colours={colours}
+          onDemote={demote}
+          emptyText="Events you send from Ready to present appear here"
+        />
+        <Panel
+          title="Ready to present"
+          tone="green"
+          events={byColour.green}
+          colours={colours}
+          onPromote={promote}
+          emptyText="No finals are finalised yet"
+        />
+        <Panel
+          title="In progress"
+          tone="orange"
+          events={byColour.orange}
+          colours={colours}
+          emptyText="Nothing under way"
+        />
+        <Panel
+          title="Awaiting final results"
+          tone="yellow"
+          events={byColour.yellow}
+          colours={colours}
+          emptyText="Nothing waiting on official results"
+        />
+      </main>
     </div>
   )
 }
 
-function Quadrant({
+function Panel({
   title,
-  className,
+  tone,
   events,
   colours,
   onPromote,
   onDemote,
+  emptyText,
 }: {
   title: string
-  className: string
+  tone: StatusColour
   events: FinalEvent[]
   colours: Map<number, StatusColour>
   onPromote?: (meId: number) => void
   onDemote?: (meId: number) => void
+  emptyText: string
 }) {
   return (
-    <section className={`quadrant ${className}`}>
-      <h2>{title}</h2>
-      <div className="quadrant__cards">
-        {events.length === 0 && <span className="home__empty">No events</span>}
+    <section className={`panel panel--${tone}`}>
+      <div className="panel__head">
+        <span className="sect__dot" />
+        <h2 className="sect__title">{title}</h2>
+        <span className="sect__count">{events.length}</span>
+      </div>
+      <div className="panel__body">
+        {events.length === 0 && <div className="empty">{emptyText}</div>}
         {events.map((f) => (
           <EventCard
             key={f.meId}

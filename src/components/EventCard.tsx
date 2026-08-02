@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import type { FinalEvent } from '../domain/model'
 import type { StatusColour } from '../domain/status'
+import { ArrowLeftIcon, ArrowRightIcon } from './icons'
 
 interface Props {
   event: FinalEvent
@@ -11,44 +12,51 @@ interface Props {
 
 /**
  * Event card (plan §5): the event name worded as Roster words it, with the
- * gender and age group underneath. The quadrant already carries the colour,
- * so the card doesn't repeat it.
+ * gender and age group underneath. The panel already carries the colour, so
+ * the card states it only as an accent rail.
  */
 export function EventCard({ event, colour, onPromote, onDemote }: Props) {
   const navigate = useNavigate()
   const open = () => navigate(`/c/${event.meetingId}/event/${event.meId}`)
   return (
     <div
-      className={`event-card event-card--${colour}`}
+      className={`card card--${colour}`}
       role="button"
       tabIndex={0}
       onClick={open}
-      onKeyDown={(e) => e.key === 'Enter' && open()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          open()
+        }
+      }}
     >
-      <div className="event-card__name">{event.name} · Final</div>
-      <div className="event-card__meta">
+      <div className="card__name">{event.name} · Final</div>
+      <div className="card__meta">
         {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
       </div>
       {colour === 'green' && onPromote && (
         <button
-          className="event-card__action"
+          className="card__action"
           onClick={(e) => {
             e.stopPropagation()
             onPromote()
           }}
         >
-          Send to ceremonies →
+          Send to ceremonies
+          <ArrowRightIcon size={14} />
         </button>
       )}
       {colour === 'pink' && onDemote && (
         <button
-          className="event-card__action event-card__action--undo"
+          className="card__action card__action--ghost"
           onClick={(e) => {
             e.stopPropagation()
             onDemote()
           }}
         >
-          ← Return to ready
+          <ArrowLeftIcon size={14} />
+          Return to ready
         </button>
       )}
     </div>

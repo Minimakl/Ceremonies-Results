@@ -3,9 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useCompetitionContext } from '../state/competitionContext'
 import { usePoll } from '../state/usePoll'
 import { LiveIndicator } from '../components/LiveIndicator'
+import { ArrowLeftIcon, SidebarToggleIcon } from '../components/icons'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
-import { buildCeremoniesList } from '../domain/ceremonies'
+import { buildCeremoniesList, type CeremonyRow } from '../domain/ceremonies'
 import { generateScript, SCRIPT_PLACEHOLDER } from '../domain/script'
+import type { StatusColour } from '../domain/status'
 
 /**
  * Results are polled harder than the schedule: this is the screen the operator
@@ -22,13 +24,22 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'script', label: 'Script' },
 ]
 
+const STATUS_TEXT: Record<StatusColour, string> = {
+  red: 'Not started',
+  orange: 'In progress',
+  yellow: 'Awaiting final results',
+  green: 'Ready to present',
+  pink: 'In ceremonies',
+}
+
 /**
  * Event screen (plan §6): Back button in the header, then Start List /
  * Results / Ceremonies / Script tabs.
  */
 export function EventScreen() {
   const navigate = useNavigate()
-  const { competition, meetingId } = useCompetitionContext()
+  const { competition, meetingId, sidebarOpen, setSidebarOpen } =
+    useCompetitionContext()
   const { meId: meIdParam } = useParams()
   const meId = Number(meIdParam)
   const { finals, colours, resultsCache, loadResults } = competition
@@ -71,21 +82,24 @@ export function EventScreen() {
     [event, ceremonies],
   )
   const hasPara = rows.some((r) => r.paraPercentage != null)
+  const back = () => navigate(`/c/${meetingId}`)
 
   if (!event) {
     return (
-      <div className="event">
-        <header className="event__header">
-          <button className="back-button" onClick={() => navigate(`/c/${meetingId}`)}>
-            ← Back
+      <div className="main">
+        <header className="topbar">
+          <button className="icon-button" aria-label="Back" onClick={back}>
+            <ArrowLeftIcon />
           </button>
-          <h1>{competition.loading ? 'Loading…' : 'Event not found'}</h1>
+          <h1 className="topbar__title">
+            {competition.loading ? 'Loading…' : 'Event not found'}
+          </h1>
         </header>
-        <p className="event__loading">
+        <div className="notice">
           {competition.loading
             ? 'Loading competition…'
             : `No final with id ${meIdParam} in this competition.`}
-        </p>
+        </div>
       </div>
     )
   }
@@ -93,21 +107,35 @@ export function EventScreen() {
   const colour = colours.get(meId) ?? 'red'
 
   return (
-    <div className="event">
-      <header className={`event__header event__header--${colour}`}>
-        <button className="back-button" onClick={() => navigate(-1)}>
-          ← Back
+    <div className="main">
+      <header className="topbar">
+        <button
+          className="icon-button"
+          aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+          aria-expanded={sidebarOpen}
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          <SidebarToggleIcon />
         </button>
-        <div>
-          <h1>{event.name} · Final</h1>
-          <div className="event__meta">
+        <button className="icon-button" aria-label="Back to all finals" onClick={back}>
+          <ArrowLeftIcon />
+        </button>
+        <div className="event__title">
+          <h1 className="event__name">{event.name} · Final</h1>
+          <span className="event__meta">
             {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
-            <LiveIndicator lastUpdated={resultsUpdated} stale={resultsStale} />
-          </div>
+          </span>
+        </div>
+        <div className="topbar__right">
+          <span className={`status-pill status-pill--${colour}`}>
+            <span className="sect__dot" style={{ background: 'currentColor' }} />
+            {STATUS_TEXT[colour]}
+          </span>
+          <LiveIndicator lastUpdated={resultsUpdated} stale={resultsStale} />
         </div>
       </header>
 
-      <nav className="event__tabs">
+      <nav className="tabs">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -119,20 +147,28 @@ export function EventScreen() {
         ))}
       </nav>
 
+      {!payload && !loadError && <div className="notice">Loading…</div>}
       {loadError && rows.length === 0 && (
-        <p className="event__loading">Could not load results: {loadError}</p>
+        <div className="notice">Could not load results: {loadError}</div>
       )}
-      {!payload && !loadError && <p className="event__loading">Loading…</p>}
 
-      {tab === 'start-list' && payload && (
-        <StartListTab rows={startListRows(rows)} track={event.hasLanes} />
+      {payload && tab === 'start-list' && (
+        <div className="sheet">
+          <StartListTab rows={startListRows(rows)} track={event.hasLanes} />
+        </div>
       )}
-      {tab === 'results' && payload && <ResultsTab rows={rows} hasPara={hasPara} />}
-      {tab === 'ceremonies' && payload && (
-        <CeremoniesTab ceremonies={ceremonies} hasPara={hasPara} />
+      {payload && tab === 'results' && (
+        <div className="sheet">
+          <ResultsTab rows={rows} hasPara={hasPara} />
+        </div>
       )}
-      {tab === 'script' && payload && (
-        <pre className="event__script">{script ?? SCRIPT_PLACEHOLDER}</pre>
+      {payload && tab === 'ceremonies' && (
+        <div className="sheet">
+          <CeremoniesTab ceremonies={ceremonies} hasPara={hasPara} />
+        </div>
+      )}
+      {payload && tab === 'script' && (
+        <pre className="script">{script ?? SCRIPT_PLACEHOLDER}</pre>
       )}
     </div>
   )
@@ -145,7 +181,7 @@ export function EventScreen() {
  */
 function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
   return (
-    <table className="data-table">
+    <table className="table">
       <thead>
         <tr>
           {track && <th>Lane</th>}
@@ -158,11 +194,11 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
       <tbody>
         {rows.map((r) => (
           <tr key={r.participantId}>
-            {track && <td>{r.lane ?? ''}</td>}
-            <td>{r.name}</td>
-            {track ? <td>{r.country}</td> : <td>{r.club}</td>}
-            <td>{r.pb}</td>
-            <td>{r.sb}</td>
+            {track && <td className="num">{r.lane ?? ''}</td>}
+            <td className="cell-name">{r.name}</td>
+            <td>{track ? r.country : r.club}</td>
+            <td className="num">{r.pb}</td>
+            <td className="num">{r.sb}</td>
           </tr>
         ))}
       </tbody>
@@ -173,10 +209,10 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
 /** Results (plan §6.2): exactly as Roster shows them; everyone appears. */
 function ResultsTab({ rows, hasPara }: { rows: EventRow[]; hasPara: boolean }) {
   return (
-    <table className="data-table">
+    <table className="table">
       <thead>
         <tr>
-          <th>Position</th>
+          <th>Pos</th>
           <th>Participant</th>
           <th>Country</th>
           <th>Club</th>
@@ -188,12 +224,14 @@ function ResultsTab({ rows, hasPara }: { rows: EventRow[]; hasPara: boolean }) {
       <tbody>
         {rows.map((r) => (
           <tr key={r.participantId}>
-            <td>{r.place ?? ''}</td>
-            <td>{r.name}</td>
+            <td className="num">{r.place ?? ''}</td>
+            <td className="cell-name">{r.name}</td>
             <td>{r.country}</td>
             <td>{r.club}</td>
-            <td>{r.result}</td>
-            {hasPara && <td>{r.paraPercentage ?? ''}</td>}
+            <td className="cell-result">
+              {r.isFinisher ? r.result : <span className="dnf">{r.result}</span>}
+            </td>
+            {hasPara && <td className="num">{r.paraPercentage ?? ''}</td>}
             <td>{r.notes}</td>
           </tr>
         ))}
@@ -207,15 +245,15 @@ function CeremoniesTab({
   ceremonies,
   hasPara,
 }: {
-  ceremonies: ReturnType<typeof buildCeremoniesList>
+  ceremonies: CeremonyRow[]
   hasPara: boolean
 }) {
   return (
-    <table className="data-table">
+    <table className="table">
       <thead>
         <tr>
-          <th>Place order</th>
-          <th>Overall Position</th>
+          <th>Place</th>
+          <th>Overall</th>
           <th>Participant</th>
           <th>Country</th>
           <th>Club</th>
@@ -224,26 +262,36 @@ function CeremoniesTab({
         </tr>
       </thead>
       <tbody>
-        {ceremonies.map((c, i) => (
-          <tr
-            key={c.row.participantId}
-            className={
-              i > 0 &&
-              ceremonies[i - 1].row.country === 'AUS' &&
-              c.row.country !== 'AUS'
-                ? 'data-table__divider'
-                : undefined
-            }
-          >
-            <td className="data-table__place">{c.placeOrder}</td>
-            <td>{c.overallPosition}</td>
-            <td>{c.row.name}</td>
-            <td>{c.row.country}</td>
-            <td>{c.row.club}</td>
-            <td>{c.row.result}</td>
-            {hasPara && <td>{c.row.paraPercentage ?? ''}</td>}
-          </tr>
-        ))}
+        {ceremonies.map((c, i) => {
+          const startsInternational =
+            i > 0 &&
+            ceremonies[i - 1].row.country === 'AUS' &&
+            c.row.country !== 'AUS'
+          return [
+            startsInternational && (
+              <tr className="table__band" key={`band-${c.row.participantId}`}>
+                <td colSpan={hasPara ? 7 : 6}>International athletes</td>
+              </tr>
+            ),
+            <tr key={c.row.participantId}>
+              <td>
+                {typeof c.placeOrder === 'number' ? (
+                  <span className={`medal medal--${c.placeOrder}`}>
+                    {c.placeOrder}
+                  </span>
+                ) : (
+                  <span className="medal">–</span>
+                )}
+              </td>
+              <td className="num">{c.overallPosition}</td>
+              <td className="cell-name">{c.row.name}</td>
+              <td>{c.row.country}</td>
+              <td>{c.row.club}</td>
+              <td className="cell-result">{c.row.result}</td>
+              {hasPara && <td className="num">{c.row.paraPercentage ?? ''}</td>}
+            </tr>,
+          ]
+        })}
       </tbody>
     </table>
   )
