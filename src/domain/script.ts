@@ -4,6 +4,7 @@ import {
   ageGroupScriptLabel,
   expandState,
   genderPossessive,
+  genderPronoun,
   ordinal,
   ordinalWord,
   spokenDuration,
@@ -65,6 +66,8 @@ const MEDALLIST_LEAD: Record<number, string> = {
   1: 'First place and gold medallist',
 }
 
+const MEDAL_NAME: Record<number, string> = { 1: 'gold', 2: 'silver', 3: 'bronze' }
+
 /** "Men's Open Decathlon", "Men's U18 1500m". */
 function scriptTitle(event: FinalEvent): string {
   return `${genderPossessive(event.genderRaw)} ${ageGroupScriptLabel(
@@ -74,7 +77,8 @@ function scriptTitle(event: FinalEvent): string {
 
 /**
  * Track medallists script (§9.5) — medallists only, read bronze → silver →
- * gold, with the time spoken in words.
+ * gold, with the time spoken in words. If an international athlete medalled,
+ * a recognition line follows the gold medallist.
  */
 function generateTrackScript(
   event: FinalEvent,
@@ -89,6 +93,13 @@ function generateTrackScript(
     .filter((c) => c.placeOrder <= 3)
     .sort((a, b) => b.placeOrder - a.placeOrder) // 3rd → 2nd → 1st
 
+  // An international only reaches the ceremonies list for an individual event
+  // when they finished in the top 3 overall, so reaching here *is* medalling.
+  // Read gold first, matching how the Australian medallists finish.
+  const internationals = ceremonies
+    .filter((c) => c.row.country !== 'AUS' && c.overallPosition <= 3)
+    .sort((a, b) => a.overallPosition - b.overallPosition)
+
   const blocks: string[] = [`Your medallists for the\n${title}\nChampionship`]
 
   for (const c of medallists) {
@@ -98,6 +109,15 @@ function generateTrackScript(
         `representing\n` +
         `${expandState(c.row.club, c.row.clubLong)}\n` +
         c.row.name,
+    )
+  }
+
+  const pronoun = genderPronoun(event.genderRaw)
+  for (const c of internationals) {
+    blocks.push(
+      `We also recognise ${c.row.name} representing ${c.row.country} with a ` +
+        `${MEDAL_NAME[c.overallPosition]} medal for ${pronoun} performance of ` +
+        spokenDuration(c.row.result),
     )
   }
 

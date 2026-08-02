@@ -250,6 +250,23 @@ export function genderPossessive(
   return label.endsWith('s') ? `${label}'` : `${label}'s`
 }
 
+/**
+ * Possessive pronoun for the "his/her performance" line (§9.5). Taken from the
+ * event's gender, which is the only gender Roster states — it carries no
+ * per-athlete pronoun. A mixed event reads "their", which is also the safe
+ * reading if an event's gender is ever something this doesn't know.
+ */
+export function genderPronoun(gender: string): string {
+  switch (gender) {
+    case 'Male':
+      return 'his'
+    case 'Female':
+      return 'her'
+    default:
+      return 'their'
+  }
+}
+
 /** Plan §9.3: Senior → Open; other groups read as-is. */
 export function ageGroupScriptLabel(ageGroup: string): string {
   return ageGroup === 'Senior' ? 'Open' : ageGroup

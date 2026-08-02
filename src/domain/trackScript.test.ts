@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type {
+  Gender,
   MeetingDetailsDto,
   ResultsPayload,
   SchedulePayload,
@@ -9,8 +10,14 @@ import { buildCeremoniesList } from './ceremonies'
 import { generateScript, usesTrackScript } from './script'
 import { spokenDuration } from './format'
 import mid1500m from '../fixtures/conformance/mid-1500m-316510.json'
+import pa100m from '../fixtures/conformance/sprint-100m-pa-337273.json'
 
-function final(name: string, ageGroupName = 'Meeting_18') {
+function final(
+  name: string,
+  ageGroupName = 'Meeting_18',
+  gender: Gender = 'Male',
+  meId = 316510,
+) {
   const details: MeetingDetailsDto = {
     meetingId: 27351,
     meetingName: '2025 WA All Schools Championships',
@@ -31,14 +38,14 @@ function final(name: string, ageGroupName = 'Meeting_18') {
     data: [
       {
         op: 'Create',
-        entityIdPk: 316510,
+        entityIdPk: meId,
         entityDto: {
-          meetingEventIdPk: 316510,
+          meetingEventIdPk: meId,
           meetingIdFk: 27351,
           eventIdFk: 21,
           ageGroupIdFk: 242,
           eventStage: 'Final',
-          gender: 'Male',
+          gender,
           visibility: 'Full',
           hasResults: true,
           resultsComplete: true,
@@ -104,6 +111,51 @@ describe('track medallists script (§9.5)', () => {
 
   it('matches an event whose Roster name carries an implement', () => {
     expect(usesTrackScript(final('110m Hurdles'))).toBe(true)
+  })
+
+  // 2026 Australian Athletics Championships, 100m Final Women PA Senior
+  // (meId 337273): Danielle Aitchison (NZL) won outright, so the national
+  // medals shift up a place and she is recognised separately. Every name,
+  // club, country and time below is verbatim from Roster.
+  it('recognises an international who medals, after the gold medallist', () => {
+    const ev = final('100m', 'PA_Senior', 'Female', 337273)
+    const rows = buildEventRows(ev, pa100m as ResultsPayload)
+    expect(generateScript(ev, buildCeremoniesList(rows, false))).toBe(
+      `Your medallists for the
+Women's PA Senior 100m
+Championship
+
+Third place and bronze medallist with a time of
+13 point 15 seconds
+representing
+Western Australia
+Rhiannon CLARKE
+
+Second place and silver medallist with a time of
+14 point 47 seconds
+representing
+New South Wales
+Mali LOVELL
+
+First place and gold medallist with a time of
+12 point 32 seconds
+representing
+New South Wales
+Telaya BLACKSMITH
+
+We also recognise Danielle AITCHISON representing NZL with a gold medal for her performance of 13 point 23 seconds
+
+Your medallists for the
+Women's PA Senior 100m`,
+    )
+  })
+
+  // The all-Australian 1500m above is the control: no recognition line at all.
+  it('says nothing about internationals when every medallist is Australian', () => {
+    const ev = final('1500m')
+    const rows = buildEventRows(ev, mid1500m as ResultsPayload)
+    const script = generateScript(ev, buildCeremoniesList(rows, false))
+    expect(script).not.toContain('We also recognise')
   })
 })
 

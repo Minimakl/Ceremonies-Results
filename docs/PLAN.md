@@ -365,9 +365,21 @@ Second place and silver medallist with a time of
 First place and gold medallist with a time of
 …
 
+[if an international medalled]
+We also recognise {Name} representing {Country code} with a {gold/silver/bronze} medal for {his/her} performance of {spoken time}
+
 Your medallists for the
 {Sex} {Age group} {Event}
 ```
+
+**International medallists.** In an individual event an international only
+reaches the ceremonies list by finishing in the top 3 overall (§7.1), so
+reaching this block *is* medalling. The medal word comes from their **overall**
+finishing position — the same number the ceremonies table shows — which is why
+an international who wins outright is recognised with a gold medal even though
+the national gold goes to the leading Australian. One line per international,
+read gold first. The pronoun comes from the event's gender, the only gender
+Roster states; a mixed event reads "their".
 
 **Spoken time.** Derived from the *displayed* time, never re-derived from the
 raw value, so the script can never state a time that differs from the Results
@@ -375,13 +387,15 @@ tab. "4:12.45" → "4 minutes 12 point 45 seconds". A thousandths tie-break
 ("10.34 (.334)") is spoken as the official time — the finer reading separates
 places on paper and is not read aloud. Units are singular at 1 ("1 minute").
 
-Two points resolved by judgement, flagged for confirmation:
+One point resolved by judgement, flagged for confirmation:
 
 1. **Sub-minute races have no minutes segment.** A 10.34 is spoken
    "10 point 34 seconds", not "0 minutes 10 point 34 seconds".
-2. **No international section.** Unlike the combined-events script, the
-   supplied template has no international-athletes block, so international
-   athletes are not read aloud even when they hold a medal place.
+
+Verified end to end against two live payloads: the all-Australian 1500m Final
+Men U18 (27351/316510) and the 100m Final Women PA Senior at the 2026
+Australian Championships (27550/337273), where Danielle Aitchison (NZL) won
+outright.
 
 ## 10. Data Facts Confirmed From Live Roster Data
 

@@ -1,0 +1,370 @@
+{
+ "type": "Full",
+ "athleteList": [
+  {
+   "athleteIdPk": 113524,
+   "athleteName": "Rhiannon Clarke",
+   "firstName": "Rhiannon",
+   "lastName": "Clarke",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 113525,
+   "athleteName": "Ella Azura Pardy",
+   "firstName": "Ella Azura",
+   "lastName": "Pardy",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 113528,
+   "athleteName": "Mali Lovell",
+   "firstName": "Mali",
+   "lastName": "Lovell",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178353,
+   "athleteName": "Akeesha Snowden",
+   "firstName": "Akeesha",
+   "lastName": "Snowden",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178386,
+   "athleteName": "Kirra Wright",
+   "firstName": "Kirra",
+   "lastName": "Wright",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178392,
+   "athleteName": "Maria Strong",
+   "firstName": "Maria",
+   "lastName": "Strong",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 178420,
+   "athleteName": "Sybella Warton",
+   "firstName": "Sybella",
+   "lastName": "Warton",
+   "countryCode": "AUS"
+  },
+  {
+   "athleteIdPk": 185652,
+   "athleteName": "Danielle Aitchison",
+   "firstName": "Danielle",
+   "lastName": "Aitchison",
+   "countryCode": "NZL"
+  },
+  {
+   "athleteIdPk": 283017,
+   "athleteName": "Telaya Blacksmith",
+   "firstName": "Telaya",
+   "lastName": "Blacksmith",
+   "countryCode": "AUS"
+  }
+ ],
+ "clubList": [
+  {
+   "clubIdPk": 16416,
+   "shortName": "NSW",
+   "longName": "New South Wales",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16418,
+   "shortName": "VIC",
+   "longName": "Victoria",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16420,
+   "shortName": "SA",
+   "longName": "South Australia",
+   "countryCode": "AUS"
+  },
+  {
+   "clubIdPk": 16427,
+   "shortName": "WA",
+   "longName": "Western Australia",
+   "countryCode": "AUS"
+  }
+ ],
+ "relayList": [],
+ "mpList": [
+  {
+   "op": "Create",
+   "entityIdPk": 2917435,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917435,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 113525,
+    "clubIdFk": 16427,
+    "position": 8,
+    "place": 5,
+    "lane": 8,
+    "startStatus": "Ok",
+    "notesPublic": "92.11",
+    "initialPersonalBest": 129600,
+    "initialSeasonBest": 129600
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917434,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917434,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 113524,
+    "clubIdFk": 16427,
+    "position": 3,
+    "place": 4,
+    "lane": 3,
+    "startStatus": "Ok",
+    "notesPublic": "94.14",
+    "initialPersonalBest": 127200,
+    "initialSeasonBest": 127200
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917433,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917433,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 283017,
+    "clubIdFk": 16416,
+    "position": 6,
+    "place": 2,
+    "lane": 6,
+    "startStatus": "Ok",
+    "notesPublic": "96.67",
+    "initialPersonalBest": 122400,
+    "initialSeasonBest": 122400
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917432,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917432,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 178353,
+    "clubIdFk": 16420,
+    "position": 2,
+    "place": 7,
+    "lane": 2,
+    "startStatus": "Ok",
+    "notesPublic": "91.09",
+    "initialPersonalBest": 137700,
+    "initialSeasonBest": 143100
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917431,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917431,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 178392,
+    "clubIdFk": 16418,
+    "position": 1,
+    "place": 9,
+    "lane": 1,
+    "startStatus": "Ok",
+    "notesPublic": "87.67",
+    "initialPersonalBest": 170700,
+    "initialSeasonBest": 177300
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917430,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917430,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 178420,
+    "clubIdFk": 16416,
+    "position": 9,
+    "place": 8,
+    "lane": 9,
+    "startStatus": "Ok",
+    "notesPublic": "90.09",
+    "initialPersonalBest": 143500,
+    "initialSeasonBest": 145200
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917429,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917429,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 178386,
+    "clubIdFk": 16418,
+    "position": 7,
+    "place": 6,
+    "lane": 7,
+    "startStatus": "Ok",
+    "notesPublic": "91.99",
+    "initialPersonalBest": 148900,
+    "initialSeasonBest": 148900
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917428,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917428,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 113528,
+    "clubIdFk": 16416,
+    "position": 4,
+    "place": 3,
+    "lane": 4,
+    "startStatus": "Ok",
+    "notesPublic": "94.54",
+    "initialPersonalBest": 142400,
+    "initialSeasonBest": 143600
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 2917427,
+   "entityDto": {
+    "meetingParticipantIdPk": 2917427,
+    "meetingEventIdFk": 337273,
+    "athleteIdFk": 185652,
+    "position": 5,
+    "place": 1,
+    "lane": 5,
+    "startStatus": "Ok",
+    "notesPublic": "103.40",
+    "initialPersonalBest": 134100,
+    "initialSeasonBest": 134500
+   }
+  }
+ ],
+ "resultList": [
+  {
+   "op": "Create",
+   "entityIdPk": 22880518,
+   "entityDto": {
+    "resultIdPk": 22880518,
+    "meetingParticipantIdFk": 2917433,
+    "attempt": 0,
+    "result": 123200,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880519,
+   "entityDto": {
+    "resultIdPk": 22880519,
+    "meetingParticipantIdFk": 2917434,
+    "attempt": 0,
+    "result": 131500,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880520,
+   "entityDto": {
+    "resultIdPk": 22880520,
+    "meetingParticipantIdFk": 2917427,
+    "attempt": 0,
+    "result": 132300,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880521,
+   "entityDto": {
+    "resultIdPk": 22880521,
+    "meetingParticipantIdFk": 2917435,
+    "attempt": 0,
+    "result": 134400,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880522,
+   "entityDto": {
+    "resultIdPk": 22880522,
+    "meetingParticipantIdFk": 2917432,
+    "attempt": 0,
+    "result": 143800,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880523,
+   "entityDto": {
+    "resultIdPk": 22880523,
+    "meetingParticipantIdFk": 2917428,
+    "attempt": 0,
+    "result": 144700,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880524,
+   "entityDto": {
+    "resultIdPk": 22880524,
+    "meetingParticipantIdFk": 2917430,
+    "attempt": 0,
+    "result": 145400,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880525,
+   "entityDto": {
+    "resultIdPk": 22880525,
+    "meetingParticipantIdFk": 2917429,
+    "attempt": 0,
+    "result": 148700,
+    "resultStatus": "Ok",
+    "record": "PersonalBest",
+    "decimalDigits": 2
+   }
+  },
+  {
+   "op": "Create",
+   "entityIdPk": 22880526,
+   "entityDto": {
+    "resultIdPk": 22880526,
+    "meetingParticipantIdFk": 2917431,
+    "attempt": 0,
+    "result": 194700,
+    "resultStatus": "Ok",
+    "record": "None",
+    "decimalDigits": 2
+   }
+  }
+ ],
+ "athleteExtraList": [],
+ "relayExtraList": []
+}
