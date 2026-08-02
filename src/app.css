@@ -303,43 +303,6 @@ input {
 }
 
 /* ============================================================
-   Not-started rail
-   ============================================================ */
-
-.rail {
-  --dot: var(--red);
-  padding: 14px 20px 16px;
-  background: var(--red-tint);
-  border-bottom: 1px solid #f2ddda;
-}
-
-.rail__head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.rail__empty {
-  margin: 0;
-  padding: 2px 0 4px;
-  font-size: 13px;
-  color: var(--ink-3);
-}
-
-.rail__cards {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-  scrollbar-width: thin;
-}
-
-.rail__cards .card {
-  flex: 0 0 258px;
-}
-
-/* ============================================================
    Section heads (shared by rail + panels)
    ============================================================ */
 
@@ -841,10 +804,14 @@ input {
     box-shadow: var(--shadow-md);
   }
 
-  .board,
-  .rail {
+  .board {
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  .topbar {
+    gap: 8px;
+    padding: 0 12px;
   }
 
   .sheet {
@@ -864,5 +831,168 @@ input {
 @media (min-width: 861px) {
   .scrim {
     display: none;
+  }
+}
+
+/* ============================================================
+   Header chips and the date filter
+   ============================================================ */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.chip:hover {
+  background: var(--bg);
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.chip--red {
+  color: var(--red);
+  background: var(--red-tint);
+  border-color: #f0d5d2;
+}
+
+.chip--red:hover {
+  color: var(--red);
+  background: #fbe6e4;
+  border-color: #e8c4c0;
+}
+
+.chip--on {
+  color: var(--accent);
+  background: var(--accent-tint);
+  border-color: #cfe0db;
+}
+
+.chip__count {
+  font-weight: 700;
+  padding: 0 5px;
+  border-radius: 5px;
+  background: rgba(191, 64, 56, 0.12);
+}
+
+.datefilter {
+  position: relative;
+}
+
+.datefilter__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  min-width: 190px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.datefilter__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.datefilter__row:last-child {
+  border-bottom: none;
+}
+
+.datefilter__row:hover {
+  background: var(--surface-2);
+}
+
+.datefilter__row--all {
+  color: var(--ink-2);
+}
+
+.box {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  position: relative;
+}
+
+.box[data-checked='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.box[data-checked='true']::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1.5px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* ============================================================
+   Not-started page
+   ============================================================ */
+
+.page {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.daygroup {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.daygroup__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 15px;
+  background: var(--red-tint);
+  border-bottom: 1px solid var(--border);
+}
+
+.daygroup__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+  gap: 10px;
+  padding: 12px;
+}
+
+@media (max-width: 860px) {
+  .page {
+    padding: 14px;
   }
 }

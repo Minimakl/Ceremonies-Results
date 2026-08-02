@@ -67,3 +67,11 @@ export function PlusIcon({ size = 15 }: IconProps = {}) {
     </svg>
   )
 }
+
+export function ChevronDownIcon({ size = 14 }: IconProps = {}) {
+  return (
+    <svg {...base(size)}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  )
+}

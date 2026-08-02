@@ -39,7 +39,9 @@ A dashboard that shows **finals only**, colour-coded by readiness, with a per-ev
 
 ## 5. Home Screen Layout
 
-- A **header strip across the top**, in the red colour. This holds the events that have not started. A **sidebar button** sits at the top of this header.
+*Revised 2 Aug 2026: the not-started events moved off the board (see 5.1).*
+
+- A **header across the top** holding the competition name, a **sidebar button**, a **Not started button**, and a **date filter**.
 - Below the header, the screen is divided into **four quadrant sections**:
 
 | | Left | Right |
@@ -52,6 +54,27 @@ A dashboard that shows **finals only**, colour-coded by readiness, with a per-ev
 
   > Discus Throw (2kg) · Final
   > 🟡 Gold · Men · Senior
+
+### 5.1 Not started — its own page (revised)
+
+The red not-started strip originally sat across the top of the board. It made
+the board feel clunky and took space from the sections the operator actually
+works in, so it is now a **red "Not started" button in the header** carrying a
+live count. Pressing it opens a dedicated page listing every final that has not
+started, grouped by competition day, with a **Back button** like the other
+pages.
+
+### 5.2 Date filter (new)
+
+A **date toggle in the header** lets the operator show only the days they are
+presenting on. It lists every day the competition's finals fall on, as
+checkboxes; selecting none means all days. Days are computed in the **venue's
+timezone**, not the viewer's — the 2026 Aus Champs first session is 2026-04-08
+23:00 UTC, which is the morning of 9 April in Sydney, and grouping in the wrong
+zone would put a whole session on the wrong day.
+
+The selection applies to the board and to the Not started page, and is shared
+across them.
 
 ## 6. Event Screen
 
@@ -240,6 +263,25 @@ Congratulations to all of the finalists for the
 4. **Internationals in the top 3** get the "In {place} place" line. **Internationals outside the top 3 get no place line at all.** This mirrors the ceremonies table (number vs hyphen).
 5. **"Championship"** is fixed text. It appears after the title in the **first two** title mentions only (the finalists intro and the medallists intro). The last two mentions omit it.
 6. Medallist lead lines ("Third place and bronze medallist", "Second place and silver medallist", "First place and gold medallist") are fixed text.
+
+### 9.1a Wording taken from Roster (revised 2 Aug 2026)
+
+Gender and age group are rendered **exactly as Roster renders them**, by
+reproducing Roster's own `gender | header` transform and its age-group naming.
+Verified against live Roster pages:
+
+| Roster page | Renders |
+|---|---|
+| Aus Champs decathlon U20 (meId 336984) | Men · U20 |
+| Aus Champs seated shot put (meId 337046) | Women · PA Senior |
+| WA All Schools triple jump (meId 334388) | Women · U18 |
+
+Roster's gender transform takes a profile — Senior gives Men / Women / Mixed,
+Youth gives Boys / Girls / Mixed Youth, Both gives Men & Boys / Women & Girls.
+Roster's event header uses the **Senior** profile, which is why a U18 girls'
+final reads "Women · U18" on Roster itself. Age groups map `Meeting_N` → `UN`
+and underscores → spaces, so `PA_Senior` reads "PA Senior" — **not** "Para
+Senior".
 
 ### 9.2 Script variables
 

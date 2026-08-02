@@ -117,28 +117,49 @@ export function expandState(code: string | undefined, fallback?: string): string
   return STATE_NAMES[code] ?? fallback ?? code
 }
 
-/** Roster gender → card wording. */
-export function genderLabel(gender: string): string {
+/**
+ * Roster's own gender profiles. Its event header renders with the "Senior"
+ * profile, which is why a U18 girls' final reads "Women · U18" on Roster.
+ */
+export type GenderProfile = 'Senior' | 'Youth' | 'Both'
+
+/**
+ * Gender wording, reproducing Roster's `gender | header` transform verbatim so
+ * the dashboard never words an event differently from the screen the operator
+ * cross-checks against.
+ */
+export function genderLabel(
+  gender: string,
+  profile: GenderProfile = 'Senior',
+): string {
   switch (gender) {
     case 'Male':
-      return 'Men'
+      return profile === 'Youth' ? 'Boys' : profile === 'Both' ? 'Men & Boys' : 'Men'
     case 'Female':
-      return 'Women'
+      return profile === 'Youth'
+        ? 'Girls'
+        : profile === 'Both'
+          ? 'Women & Girls'
+          : 'Women'
+    case 'Mixed':
+      return profile === 'Youth'
+        ? 'Mixed Youth'
+        : profile === 'Both'
+          ? 'Mixed Adults & Youth'
+          : 'Mixed'
     default:
       return gender
   }
 }
 
-/** Roster gender → script possessive ("Men's"). */
-export function genderPossessive(gender: string): string {
-  switch (gender) {
-    case 'Male':
-      return "Men's"
-    case 'Female':
-      return "Women's"
-    default:
-      return `${gender}'s`
-  }
+/** Roster gender → script possessive ("Men's", "Boys'"). */
+export function genderPossessive(
+  gender: string,
+  profile: GenderProfile = 'Senior',
+): string {
+  const label = genderLabel(gender, profile)
+  if (label === 'Mixed' || label.includes('&')) return label
+  return label.endsWith('s') ? `${label}'` : `${label}'s`
 }
 
 /** Plan §9.3: Senior → Open; other groups read as-is. */
@@ -147,23 +168,19 @@ export function ageGroupScriptLabel(ageGroup: string): string {
 }
 
 /**
- * Roster stores age-group names in an internal form. Turn them into the
- * wording a ceremonies manager expects:
+ * Roster stores age-group names in an internal form and renders them by
+ * turning `Meeting_N` into `UN` and underscores into spaces. Verified against
+ * live Roster pages:
  *
- *   Senior      → Senior          Meeting_20  → U20
- *   PA_Senior   → Para Senior     PA_U17      → Para U17
- *   Master_35   → Masters 35      School_12   → School 12
+ *   Senior     → Senior      Meeting_20 → U20        Meeting_18 → U18
+ *   PA_Senior  → PA Senior   Master_35  → Master 35  School_12  → School 12
+ *
+ * Note "PA" is left as Roster writes it — Roster shows "Women · PA Senior",
+ * not "Para Senior".
  */
 export function formatAgeGroupName(raw: string | undefined): string {
   if (!raw) return ''
-  const isPara = raw.startsWith('PA_')
-  const base = isPara ? raw.slice(3) : raw
-  let label: string
-  if (base.startsWith('Meeting_')) label = `U${base.slice('Meeting_'.length)}`
-  else if (base.startsWith('Master_')) label = `Masters ${base.slice('Master_'.length)}`
-  else if (base.startsWith('School_')) label = `School ${base.slice('School_'.length)}`
-  else label = base.replace(/_/g, ' ')
-  return isPara ? `Para ${label}` : label
+  return raw.replace(/Meeting_/g, 'U').replace(/_/g, ' ')
 }
 
 function trimZeros(value: number): string {

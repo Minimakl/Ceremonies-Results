@@ -1,19 +1,32 @@
 import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { EventCard } from '../components/EventCard'
+import { DateFilter } from '../components/DateFilter'
 import { LiveIndicator } from '../components/LiveIndicator'
-import { SidebarToggleIcon } from '../components/icons'
+import { ChevronRightIcon, SidebarToggleIcon } from '../components/icons'
 import { useCompetitionContext } from '../state/competitionContext'
 import type { StatusColour } from '../domain/status'
 import type { FinalEvent } from '../domain/model'
 
 /**
- * Home screen (plan §5): the not-started rail across the top, then the four
- * sections — PINK | GREEN over ORANGE | YELLOW.
+ * Home screen (plan §5): the four sections — PINK | GREEN over ORANGE |
+ * YELLOW. Not-started finals live behind a header button on their own page
+ * so the board only carries what the operator is actively working through.
  */
 export function HomeScreen() {
-  const { competition, meetingId, sidebarOpen, setSidebarOpen } =
-    useCompetitionContext()
-  const { finals, colours, loading, stale, lastUpdated, details, promote, demote } =
+  const navigate = useNavigate()
+  const {
+    competition,
+    meetingId,
+    sidebarOpen,
+    setSidebarOpen,
+    days,
+    selectedDays,
+    toggleDay,
+    clearDays,
+    visibleFinals,
+  } = useCompetitionContext()
+  const { colours, loading, stale, lastUpdated, details, promote, demote } =
     competition
 
   const byColour = useMemo(() => {
@@ -24,11 +37,11 @@ export function HomeScreen() {
       green: [],
       pink: [],
     }
-    for (const f of finals) {
+    for (const f of visibleFinals) {
       groups[colours.get(f.meId) ?? 'red'].push(f)
     }
     return groups
-  }, [finals, colours])
+  }, [visibleFinals, colours])
 
   return (
     <div className="main">
@@ -45,31 +58,26 @@ export function HomeScreen() {
           {details?.meetingName ?? `Competition ${meetingId}`}
         </h1>
         <div className="topbar__right">
-          <span className="pill num">
-            {loading ? 'Loading…' : `${finals.length} finals`}
-          </span>
+          <button
+            className="chip chip--red"
+            onClick={() => navigate(`/c/${meetingId}/not-started`)}
+          >
+            <span className="sect__dot" style={{ background: 'currentColor' }} />
+            Not started
+            <span className="chip__count num">{byColour.red.length}</span>
+            <ChevronRightIcon size={14} />
+          </button>
+          <DateFilter
+            days={days}
+            selected={selectedDays}
+            onToggle={toggleDay}
+            onClear={clearDays}
+          />
           <LiveIndicator lastUpdated={lastUpdated} stale={stale} />
         </div>
       </header>
 
-      <section className="rail">
-        <div className="rail__head">
-          <span className="sect__dot" />
-          <h2 className="sect__title">Not started</h2>
-          <span className="sect__count">{byColour.red.length}</span>
-        </div>
-        {byColour.red.length === 0 ? (
-          <p className="rail__empty">
-            {loading ? 'Loading finals…' : 'No finals waiting to start'}
-          </p>
-        ) : (
-          <div className="rail__cards">
-            {byColour.red.map((f) => (
-              <EventCard key={f.meId} event={f} colour="red" />
-            ))}
-          </div>
-        )}
-      </section>
+      {loading && <div className="notice">Loading finals…</div>}
 
       <main className="board">
         <Panel

@@ -3,18 +3,20 @@ import { formatAgeGroupName } from './format'
 import { ageGroupName } from './model'
 
 describe('age group names', () => {
-  it('formats the Roster internal names seen in live data', () => {
+  // Verified against live Roster pages: meId 336984 renders "Men · U20",
+  // meId 337046 renders "Women · PA Senior", All Schools 334388 "Women · U18".
+  it('formats the Roster internal names exactly as Roster renders them', () => {
     // 2026 Aus Champs
     expect(formatAgeGroupName('Senior')).toBe('Senior')
     expect(formatAgeGroupName('Meeting_20')).toBe('U20')
-    expect(formatAgeGroupName('PA_Senior')).toBe('Para Senior')
+    expect(formatAgeGroupName('PA_Senior')).toBe('PA Senior')
     // 2025 WA All Schools
     expect(formatAgeGroupName('Meeting_14')).toBe('U14')
     expect(formatAgeGroupName('Meeting_15')).toBe('U15')
     expect(formatAgeGroupName('Meeting_18')).toBe('U18')
-    expect(formatAgeGroupName('PA_U17')).toBe('Para U17')
+    expect(formatAgeGroupName('PA_U17')).toBe('PA U17')
     // other categories in the AUS age-group set
-    expect(formatAgeGroupName('Master_35')).toBe('Masters 35')
+    expect(formatAgeGroupName('Master_35')).toBe('Master 35')
     expect(formatAgeGroupName('School_12')).toBe('School 12')
   })
 
