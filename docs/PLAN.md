@@ -67,9 +67,9 @@ Same columns as Roster Athletics, **plus a Country column, minus date of birth**
 | Event type | Columns (in order) |
 |---|---|
 | Track events | Lane, Participant, Country, PB, SB |
-| Other (field) events | Participant, Club, PB, SB |
+| Other (field) events | Participant, Country, Club, PB, SB |
 
-*(Open item: whether Country is also added to field-event start lists. See Section 12.)*
+*(Resolved: Country appears on every start list — see Section 12, decision 2.)*
 
 ### 6.2 Results tab
 
@@ -286,7 +286,7 @@ Congratulations to all of the finalists for the
 ## 12. Open Decisions (Blocking None, Needed Before Ship)
 
 1. **"Championship" at non-championship meets.** It's hardcoded, so a Maurie Plant script would read "...Discus Throw Championship." Proposed: a per-competition toggle, defaulting on when the competition name contains "Championships."
-2. **Country column on field-event start lists.** Stated rule "add Country to every start list" vs the field column list given without Country. One answer needed.
+2. ~~**Country column on field-event start lists.**~~ **Resolved 2 Aug 2026:** Country appears on every start list. Without it a field-event start list showed only the club, leaving the operator unable to tell an athlete's country. Field order is Participant, Country, Club, PB, SB — Country before Club, matching the Results and Ceremonies tabs.
 3. **Back button from a pink event.** Confirm it returns to the home screen (the "previous screen" rule implies yes).
 4. **Scripts for non-combined events.** To be supplied. Placeholders ship in the meantime.
 5. **Roster status mapping.** Confirm the exact Roster status values that map to red / orange / yellow / green once we can observe a live in-progress meet.

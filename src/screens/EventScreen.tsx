@@ -176,8 +176,10 @@ export function EventScreen() {
 
 /**
  * Start List (plan §6.1): Roster's columns plus Country, minus date of birth.
- * Track: Lane, Participant, Country, PB, SB. Field: Participant, Club, PB, SB
- * (Country on field lists is open decision §12.2).
+ * Country appears on every start list — decision §12.2 — so the operator can
+ * always tell where an athlete is from and not just which club they run for.
+ * Track: Lane, Participant, Country, PB, SB.
+ * Field: Participant, Country, Club, PB, SB.
  */
 function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
   return (
@@ -186,7 +188,8 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
         <tr>
           {track && <th>Lane</th>}
           <th>Participant</th>
-          {track ? <th>Country</th> : <th>Club</th>}
+          <th>Country</th>
+          {!track && <th>Club</th>}
           <th>PB</th>
           <th>SB</th>
         </tr>
@@ -196,7 +199,8 @@ function StartListTab({ rows, track }: { rows: EventRow[]; track: boolean }) {
           <tr key={r.participantId}>
             {track && <td className="num">{r.lane ?? ''}</td>}
             <td className="cell-name">{r.name}</td>
-            <td>{track ? r.country : r.club}</td>
+            <td>{r.country}</td>
+            {!track && <td>{r.club}</td>}
             <td className="num">{r.pb}</td>
             <td className="num">{r.sb}</td>
           </tr>
