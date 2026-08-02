@@ -1,0 +1,164 @@
+// Text and value formatting shared across the app and the script generator.
+
+export type EventKind = 'track' | 'field' | 'combined'
+
+/** Classify a Roster eventType (from the sport-event catalogue). */
+export function eventKind(eventType: string | undefined, combined: boolean): EventKind {
+  if (combined || eventType === 'Combined') return 'combined'
+  if (
+    eventType === 'Throw' ||
+    eventType === 'Jump' ||
+    eventType === 'HorizontalJump' ||
+    eventType === 'VerticalJump'
+  ) {
+    return 'field'
+  }
+  return 'track'
+}
+
+/** "Sam" + "Talbot" → "Sam TALBOT" (plan §7.3 wording). */
+export function participantDisplayName(
+  firstName: string | undefined,
+  lastName: string | undefined,
+  fallback: string | undefined,
+): string {
+  if (firstName || lastName) {
+    return [firstName, lastName?.toUpperCase()].filter(Boolean).join(' ')
+  }
+  if (fallback) {
+    // "Sam Talbot" → "Sam TALBOT" (last word treated as surname)
+    const parts = fallback.split(' ')
+    if (parts.length > 1) {
+      const last = parts.pop()!
+      return `${parts.join(' ')} ${last.toUpperCase()}`
+    }
+    return fallback
+  }
+  return ''
+}
+
+/**
+ * Format a raw Roster integer mark for display.
+ * Field events store centimetres (6751 → "67.51"); combined events store
+ * points (6959 → "6959"); track events store centiseconds
+ * (4571 → "45.71", 24571 → "4:05.71").
+ */
+export function formatMark(raw: number | undefined, kind: EventKind): string {
+  if (raw == null) return ''
+  switch (kind) {
+    case 'combined':
+      return String(raw)
+    case 'field':
+      return (raw / 100).toFixed(2)
+    case 'track': {
+      const totalSeconds = raw / 100
+      if (totalSeconds < 60) return totalSeconds.toFixed(2)
+      const minutes = Math.floor(totalSeconds / 60)
+      const seconds = totalSeconds - minutes * 60
+      if (minutes < 60) return `${minutes}:${seconds.toFixed(2).padStart(5, '0')}`
+      const hours = Math.floor(minutes / 60)
+      return `${hours}:${String(minutes % 60).padStart(2, '0')}:${seconds
+        .toFixed(2)
+        .padStart(5, '0')}`
+    }
+  }
+}
+
+const START_STATUS_LABELS: Record<string, string> = {
+  DidNotFinish: 'DNF',
+  DidNotStart: 'DNS',
+  Disqualified: 'DQ',
+  NoMark: 'NM',
+}
+
+/** "DidNotFinish" → "DNF"; Ok / unknown → '' */
+export function startStatusLabel(startStatus: string | undefined): string {
+  if (!startStatus || startStatus === 'Ok') return ''
+  return START_STATUS_LABELS[startStatus] ?? startStatus
+}
+
+/** 1 → "1st", 2 → "2nd", 3 → "3rd", 11 → "11th", 22 → "22nd" */
+export function ordinal(n: number): string {
+  const rem100 = n % 100
+  if (rem100 >= 11 && rem100 <= 13) return `${n}th`
+  switch (n % 10) {
+    case 1:
+      return `${n}st`
+    case 2:
+      return `${n}nd`
+    case 3:
+      return `${n}rd`
+    default:
+      return `${n}th`
+  }
+}
+
+const ORDINAL_WORDS = ['first', 'second', 'third'] as const
+
+/** 1 → "first" (used for international medallists in the script). */
+export function ordinalWord(n: number): string {
+  return ORDINAL_WORDS[n - 1] ?? ordinal(n)
+}
+
+/** Plan §9.3 state expansion. */
+export const STATE_NAMES: Record<string, string> = {
+  SA: 'South Australia',
+  NSW: 'New South Wales',
+  VIC: 'Victoria',
+  QLD: 'Queensland',
+  WA: 'Western Australia',
+  TAS: 'Tasmania',
+  NT: 'Northern Territory',
+  ACT: 'Australian Capital Territory',
+}
+
+export function expandState(code: string | undefined, fallback?: string): string {
+  if (!code) return fallback ?? ''
+  return STATE_NAMES[code] ?? fallback ?? code
+}
+
+/** Roster gender → card wording. */
+export function genderLabel(gender: string): string {
+  switch (gender) {
+    case 'Male':
+      return 'Men'
+    case 'Female':
+      return 'Women'
+    default:
+      return gender
+  }
+}
+
+/** Roster gender → script possessive ("Men's"). */
+export function genderPossessive(gender: string): string {
+  switch (gender) {
+    case 'Male':
+      return "Men's"
+    case 'Female':
+      return "Women's"
+    default:
+      return `${gender}'s`
+  }
+}
+
+/** Plan §9.3: Senior → Open; other groups read as-is. */
+export function ageGroupScriptLabel(ageGroup: string): string {
+  return ageGroup === 'Senior' ? 'Open' : ageGroup
+}
+
+/**
+ * Implement label: Kilogram stores hundredths of a kg (200 → "2kg",
+ * 60 → "0.6kg"); Gram stores grams (700 → "700g").
+ */
+export function implementLabel(
+  implement: number | undefined,
+  unit: string | undefined,
+): string {
+  if (!implement || !unit) return ''
+  if (unit === 'Kilogram') {
+    const kg = implement / 100
+    return `${Number.isInteger(kg) ? kg : kg.toFixed(2).replace(/0+$/, '')}kg`
+  }
+  if (unit === 'Gram') return `${implement}g`
+  return ''
+}
