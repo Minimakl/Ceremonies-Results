@@ -146,7 +146,23 @@ Australia venue filter), and the `sportEvents` catalogue
   allows arbitrary origins is unverified. The app routes API calls through a
   dev-server proxy (`vite.config.ts`) so the browser never needs Roster CORS;
   production hosting should provide the same rewrite (e.g. a Vercel rewrite).
-- Some global lists (`age-group-list/{x}/v1`) take a parameter we haven't
-  mapped (400 on ISO3). Age-group names are currently resolved from a small
-  built-in map (id 245 = Senior observed) and fall back to the raw id.
+- `age-group-list/{x}/v1` takes an **age-group set id**, not an ISO3 country
+  code (which is what returns 400). Set ids come from
+  `/api/public/age-group-set-list/v1` — 8 is the AUS set.
+- In practice that endpoint is not needed: **`/details` already embeds an
+  `ageGroups` array** naming exactly the groups the meeting uses, plus the
+  `ageGroupSet` it belongs to. That is what this app reads.
+- Age-group names are internal forms that need transforming for display:
+  `Senior` → Senior, `Meeting_20` → U20, `PA_Senior` → Para Senior,
+  `PA_U17` → Para U17, `Master_35` → Masters 35, `School_12` → School 12.
+  (`Meeting_20` carries `rangeStart` 18 / `rangeEnd` 19, i.e. under-20.)
+- `label` on a meeting event is free text whose meaning varies by meet: at the
+  Aus Champs it is a medal division ("Gold"), at the 2025 WA All Schools it is
+  the venue ("Site 1", "Site  2", "Site 2 - Ambulant", "McGillivray Oval").
+  Not shown on cards for that reason.
+- Implement weights are **not** resolvable from `/api/public/se-implements/v1`:
+  it returns only 416 entries and omits the ids meets actually use (63 = 2 kg
+  discus, 986 = decathlon), and `se-implement-mapping-list/{meetingId}/v1`
+  comes back empty for those meets. Event names therefore lose their "(2kg)"
+  suffix until the right source is found.
 - `label` on schedule events carries Roster wording like "Gold" seen on cards.

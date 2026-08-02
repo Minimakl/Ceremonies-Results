@@ -1,16 +1,10 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EventCard } from '../components/EventCard'
-import type { CompetitionState } from '../state/useCompetition'
+import { SidebarToggleIcon } from '../components/SidebarToggleIcon'
+import { useCompetitionContext } from '../state/competitionContext'
 import type { StatusColour } from '../domain/status'
 import type { FinalEvent } from '../domain/model'
-
-interface Props {
-  competition: CompetitionState
-  sidebarOpen: boolean
-  setSidebarOpen: (open: boolean) => void
-  meetingId: number
-}
 
 const REFERENCE_COMPETITIONS = [
   { id: 27550, name: '2026 Australian Athletics Championships' },
@@ -22,13 +16,10 @@ const REFERENCE_COMPETITIONS = [
  * Home screen (plan §5): red header strip with the not-started finals and the
  * sidebar button, then four quadrants — PINK | GREEN over ORANGE | YELLOW.
  */
-export function HomeScreen({
-  competition,
-  sidebarOpen,
-  setSidebarOpen,
-  meetingId,
-}: Props) {
+export function HomeScreen() {
   const navigate = useNavigate()
+  const { competition, meetingId, sidebarOpen, setSidebarOpen } =
+    useCompetitionContext()
   const { finals, colours, loading, error, details, promote, demote } = competition
 
   const byColour = useMemo(() => {
@@ -45,16 +36,22 @@ export function HomeScreen({
     return groups
   }, [finals, colours])
 
+  const openCompetition = (id: number) => {
+    navigate(`/c/${id}`)
+    setSidebarOpen(false)
+  }
+
   return (
     <div className="home">
       <header className="home__header">
         <div className="home__header-bar">
           <button
             className="sidebar-button"
-            aria-label="Open sidebar"
+            aria-label={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
+            aria-expanded={sidebarOpen}
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            ☰
+            <SidebarToggleIcon />
           </button>
           <h1>{details?.meetingName ?? `Competition ${meetingId}`}</h1>
           <span className="home__header-count">
@@ -74,72 +71,72 @@ export function HomeScreen({
         </div>
       </header>
 
-      {sidebarOpen && (
-        <aside className="sidebar">
-          <h2>Competitions</h2>
-          {REFERENCE_COMPETITIONS.map((c) => (
-            <button
-              key={c.id}
-              className={c.id === meetingId ? 'sidebar__item sidebar__item--active' : 'sidebar__item'}
-              onClick={() => {
-                navigate(`/?comp=${c.id}`)
-                setSidebarOpen(false)
-              }}
-            >
-              {c.name}
-            </button>
-          ))}
-          <form
-            className="sidebar__custom"
-            onSubmit={(e) => {
-              e.preventDefault()
-              const input = new FormData(e.currentTarget).get('comp')
-              const id = Number(input)
-              if (Number.isFinite(id) && id > 0) {
-                navigate(`/?comp=${id}`)
-                setSidebarOpen(false)
-              }
-            }}
-          >
-            <input name="comp" inputMode="numeric" placeholder="Roster competition id" />
-            <button type="submit">Open</button>
-          </form>
-          <button className="sidebar__close" onClick={() => setSidebarOpen(false)}>
-            Close
-          </button>
-        </aside>
-      )}
-
       {error && <div className="home__error">Failed to load: {error}</div>}
 
-      <main className="home__quadrants">
-        <Quadrant
-          title="🩷 In ceremonies"
-          className="quadrant--pink"
-          events={byColour.pink}
-          colours={colours}
-          onDemote={demote}
-        />
-        <Quadrant
-          title="🟢 Ready to present"
-          className="quadrant--green"
-          events={byColour.green}
-          colours={colours}
-          onPromote={promote}
-        />
-        <Quadrant
-          title="🟠 In progress"
-          className="quadrant--orange"
-          events={byColour.orange}
-          colours={colours}
-        />
-        <Quadrant
-          title="🟡 Awaiting final results"
-          className="quadrant--yellow"
-          events={byColour.yellow}
-          colours={colours}
-        />
-      </main>
+      <div className="home__body">
+        {sidebarOpen && (
+          <aside className="sidebar">
+            <h2>Competitions</h2>
+            {REFERENCE_COMPETITIONS.map((c) => (
+              <button
+                key={c.id}
+                className={
+                  c.id === meetingId
+                    ? 'sidebar__item sidebar__item--active'
+                    : 'sidebar__item'
+                }
+                onClick={() => openCompetition(c.id)}
+              >
+                {c.name}
+              </button>
+            ))}
+            <form
+              className="sidebar__custom"
+              onSubmit={(e) => {
+                e.preventDefault()
+                const id = Number(new FormData(e.currentTarget).get('comp'))
+                if (Number.isFinite(id) && id > 0) openCompetition(id)
+              }}
+            >
+              <input
+                name="comp"
+                inputMode="numeric"
+                placeholder="Roster competition id"
+              />
+              <button type="submit">Open</button>
+            </form>
+          </aside>
+        )}
+
+        <main className="home__quadrants">
+          <Quadrant
+            title="🩷 In ceremonies"
+            className="quadrant--pink"
+            events={byColour.pink}
+            colours={colours}
+            onDemote={demote}
+          />
+          <Quadrant
+            title="🟢 Ready to present"
+            className="quadrant--green"
+            events={byColour.green}
+            colours={colours}
+            onPromote={promote}
+          />
+          <Quadrant
+            title="🟠 In progress"
+            className="quadrant--orange"
+            events={byColour.orange}
+            colours={colours}
+          />
+          <Quadrant
+            title="🟡 Awaiting final results"
+            className="quadrant--yellow"
+            events={byColour.yellow}
+            colours={colours}
+          />
+        </main>
+      </div>
     </div>
   )
 }

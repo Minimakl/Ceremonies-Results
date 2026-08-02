@@ -111,6 +111,14 @@ export interface SportEventDto {
   hasImplements?: boolean
 }
 
+export interface AgeGroupDto {
+  ageGroupIdPk: number
+  ageGroupSetIdFk?: number
+  /** Roster's internal name, e.g. "Senior", "Meeting_20", "PA_U17". */
+  name?: string
+  category?: string
+}
+
 export interface MeetingDetailsDto {
   meetingId: number
   meetingName: string
@@ -120,6 +128,8 @@ export interface MeetingDetailsDto {
   meetingStatus?: string
   address?: { city?: string; country?: string }
   sportEvents?: SportEventDto[]
+  /** The age groups this meeting actually uses, with their names. */
+  ageGroups?: AgeGroupDto[]
 }
 
 export interface SeImplementDto {

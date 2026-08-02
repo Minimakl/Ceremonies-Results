@@ -2,14 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import type { FinalEvent } from '../domain/model'
 import type { StatusColour } from '../domain/status'
 
-const DOTS: Record<StatusColour, string> = {
-  red: '🔴',
-  orange: '🟠',
-  yellow: '🟡',
-  green: '🟢',
-  pink: '🩷',
-}
-
 interface Props {
   event: FinalEvent
   colour: StatusColour
@@ -18,25 +10,24 @@ interface Props {
 }
 
 /**
- * Event card (plan §5): the event name worded exactly as Roster words it —
- * "Discus Throw (2kg) · Final" with the label/gender/age-group line under it.
+ * Event card (plan §5): the event name worded as Roster words it, with the
+ * gender and age group underneath. The quadrant already carries the colour,
+ * so the card doesn't repeat it.
  */
 export function EventCard({ event, colour, onPromote, onDemote }: Props) {
   const navigate = useNavigate()
+  const open = () => navigate(`/c/${event.meetingId}/event/${event.meId}`)
   return (
     <div
       className={`event-card event-card--${colour}`}
       role="button"
       tabIndex={0}
-      onClick={() => navigate(`/event/${event.meId}`)}
-      onKeyDown={(e) => e.key === 'Enter' && navigate(`/event/${event.meId}`)}
+      onClick={open}
+      onKeyDown={(e) => e.key === 'Enter' && open()}
     >
-      <div className="event-card__name">
-        {event.name} · Final
-      </div>
+      <div className="event-card__name">{event.name} · Final</div>
       <div className="event-card__meta">
-        {DOTS[colour]}{' '}
-        {[event.label, event.gender, event.ageGroup].filter(Boolean).join(' · ')}
+        {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
       </div>
       {colour === 'green' && onPromote && (
         <button

@@ -147,6 +147,26 @@ export function ageGroupScriptLabel(ageGroup: string): string {
 }
 
 /**
+ * Roster stores age-group names in an internal form. Turn them into the
+ * wording a ceremonies manager expects:
+ *
+ *   Senior      → Senior          Meeting_20  → U20
+ *   PA_Senior   → Para Senior     PA_U17      → Para U17
+ *   Master_35   → Masters 35      School_12   → School 12
+ */
+export function formatAgeGroupName(raw: string | undefined): string {
+  if (!raw) return ''
+  const isPara = raw.startsWith('PA_')
+  const base = isPara ? raw.slice(3) : raw
+  let label: string
+  if (base.startsWith('Meeting_')) label = `U${base.slice('Meeting_'.length)}`
+  else if (base.startsWith('Master_')) label = `Masters ${base.slice('Master_'.length)}`
+  else if (base.startsWith('School_')) label = `School ${base.slice('School_'.length)}`
+  else label = base.replace(/_/g, ' ')
+  return isPara ? `Para ${label}` : label
+}
+
+/**
  * Implement label: Kilogram stores hundredths of a kg (200 → "2kg",
  * 60 → "0.6kg"); Gram stores grams (700 → "700g").
  */

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import type { CompetitionState } from '../state/useCompetition'
+import { useCompetitionContext } from '../state/competitionContext'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
 import { buildCeremoniesList } from '../domain/ceremonies'
 import { generateScript, SCRIPT_PLACEHOLDER } from '../domain/script'
@@ -20,8 +20,9 @@ const TABS: { id: Tab; label: string }[] = [
  * Event screen (plan §6): Back button in the header, then Start List /
  * Results / Ceremonies / Script tabs.
  */
-export function EventScreen({ competition }: { competition: CompetitionState }) {
+export function EventScreen() {
   const navigate = useNavigate()
+  const { competition, meetingId } = useCompetitionContext()
   const { meId: meIdParam } = useParams()
   const meId = Number(meIdParam)
   const { finals, colours, resultsCache, loadResults } = competition
@@ -63,13 +64,15 @@ export function EventScreen({ competition }: { competition: CompetitionState }) 
     return (
       <div className="event">
         <header className="event__header">
-          <button className="back-button" onClick={() => navigate(-1)}>
+          <button className="back-button" onClick={() => navigate(`/c/${meetingId}`)}>
             ← Back
           </button>
-          <h1>Event not found</h1>
+          <h1>{competition.loading ? 'Loading…' : 'Event not found'}</h1>
         </header>
         <p className="event__loading">
-          {competition.loading ? 'Loading competition…' : `No final with id ${meIdParam}.`}
+          {competition.loading
+            ? 'Loading competition…'
+            : `No final with id ${meIdParam} in this competition.`}
         </p>
       </div>
     )
@@ -86,7 +89,7 @@ export function EventScreen({ competition }: { competition: CompetitionState }) 
         <div>
           <h1>{event.name} · Final</h1>
           <div className="event__meta">
-            {[event.label, event.gender, event.ageGroup].filter(Boolean).join(' · ')}
+            {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
           </div>
         </div>
       </header>

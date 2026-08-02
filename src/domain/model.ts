@@ -1,4 +1,5 @@
 import type {
+  AgeGroupDto,
   MeetingDetailsDto,
   MeetingEventDto,
   ResultsPayload,
@@ -8,6 +9,7 @@ import type {
 } from '../api/types'
 import {
   eventKind,
+  formatAgeGroupName,
   formatMark,
   genderLabel,
   implementLabel,
@@ -18,17 +20,18 @@ import {
 import { extractParaPercentage } from './para'
 
 /**
- * Age-group names. Roster's global age-group list endpoint takes a per-country
- * set id we haven't fully mapped (docs/ROSTER-API.md); until then known ids are
- * resolved from this map and unknown ids fall back to "Age group {id}".
+ * Age-group names come from the meeting's own `ageGroups` list, which the
+ * /details payload carries for exactly the groups that meeting uses — no
+ * extra request needed. An id we can't resolve renders as nothing rather
+ * than as a bare number.
  */
-const AGE_GROUP_NAMES: Record<number, string> = {
-  245: 'Senior',
-}
-
-export function ageGroupName(ageGroupId: number | undefined): string {
+export function ageGroupName(
+  ageGroupId: number | undefined,
+  ageGroups: AgeGroupDto[] | undefined,
+): string {
   if (ageGroupId == null) return ''
-  return AGE_GROUP_NAMES[ageGroupId] ?? `Age group ${ageGroupId}`
+  const match = ageGroups?.find((ag) => ag.ageGroupIdPk === ageGroupId)
+  return formatAgeGroupName(match?.name)
 }
 
 /** One final on the home screen — a card. */
@@ -92,7 +95,7 @@ export function buildFinals(
         label: me.label ?? '',
         gender: genderLabel(me.gender),
         genderRaw: me.gender,
-        ageGroup: ageGroupName(me.ageGroupIdFk),
+        ageGroup: ageGroupName(me.ageGroupIdFk, details.ageGroups),
         kind: eventKind(se?.eventType, isCombined),
         isCombined,
         hasLanes: Boolean(se?.lanes),
