@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import type { MeetingDetailsDto, ResultsPayload, SeImplementDto } from '../api/types'
+import type {
+  MeetingDetailsDto,
+  ResultsPayload,
+  SchedulePayload,
+  SeImplementDto,
+} from '../api/types'
 import {
   getEventResults,
   getImplements,
@@ -13,12 +18,25 @@ import {
   refineWithRows,
   type StatusColour,
 } from '../domain/status'
+import { usePoll } from './usePoll'
 
-const SCHEDULE_REFRESH_MS = 30_000
+/**
+ * Live cadence. The schedule carries the flags that drive the status colours
+ * (hasResults / resultsComplete), so polling it is what makes the home screen
+ * move on its own as Roster is updated.
+ */
+export const SCHEDULE_POLL_MS = 10_000
+/** Age groups and the event catalogue barely change during a meet. */
+const DETAILS_POLL_MS = 120_000
 
 export interface CompetitionState {
+  /** True only until the first successful load; refreshes are silent. */
   loading: boolean
+  /** Set when the most recent poll failed. Last-good data stays on screen. */
+  stale: boolean
   error?: string
+  /** Epoch ms of the last successful schedule read. */
+  lastUpdated: number | null
   details?: MeetingDetailsDto
   finals: FinalEvent[]
   colours: Map<number, StatusColour>
@@ -52,23 +70,31 @@ function savePromoted(meetingId: number, promoted: Set<number>) {
 }
 
 export function useCompetition(meetingId: number): CompetitionState {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string>()
   const [details, setDetails] = useState<MeetingDetailsDto>()
-  const [finals, setFinals] = useState<FinalEvent[]>([])
+  const [schedule, setSchedule] = useState<SchedulePayload>()
   const [implementList, setImplementList] = useState<SeImplementDto[]>([])
   const [resultsCache, setResultsCache] = useState<Map<number, ResultsPayload>>(
     () => new Map(),
   )
   const [promoted, setPromoted] = useState<Set<number>>(() => loadPromoted(meetingId))
-  const [tick, setTick] = useState(0)
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null)
+  const [stale, setStale] = useState(false)
+  const [error, setError] = useState<string>()
+  const [nudge, setNudge] = useState(0)
 
+  // Switching competition clears everything the previous one populated, so a
+  // stale schedule can never be shown under a new competition's name.
   useEffect(() => {
     setPromoted(loadPromoted(meetingId))
     setResultsCache(new Map())
+    setDetails(undefined)
+    setSchedule(undefined)
+    setLastUpdated(null)
+    setStale(false)
+    setError(undefined)
   }, [meetingId])
 
-  // Implements catalogue is global; fetch once.
+  // The implement catalogue is global and static.
   useEffect(() => {
     let cancelled = false
     getImplements()
@@ -79,37 +105,45 @@ export function useCompetition(meetingId: number): CompetitionState {
     }
   }, [])
 
-  useEffect(() => {
-    let cancelled = false
-    setLoading(true)
-    setError(undefined)
-    Promise.all([getMeetingDetails(meetingId), getSchedule(meetingId)])
-      .then(([det, sched]) => {
-        if (cancelled) return
-        setDetails(det)
-        setFinals(buildFinals(sched, det, implementList))
-        setLoading(false)
-      })
-      .catch((err) => {
-        if (cancelled) return
-        setError(String(err))
-        setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [meetingId, implementList, tick])
+  usePoll(
+    async () => {
+      try {
+        setDetails(await getMeetingDetails(meetingId))
+      } catch {
+        // a failed details read is not fatal — the schedule drives the screen
+      }
+    },
+    DETAILS_POLL_MS,
+    [meetingId, nudge],
+  )
 
-  // Live refresh cadence for the schedule.
-  useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), SCHEDULE_REFRESH_MS)
-    return () => clearInterval(id)
-  }, [])
+  usePoll(
+    async () => {
+      try {
+        const next = await getSchedule(meetingId)
+        setSchedule(next)
+        setLastUpdated(Date.now())
+        setStale(false)
+        setError(undefined)
+      } catch (err) {
+        // Keep the last good schedule on screen and flag the staleness rather
+        // than blanking the dashboard mid-ceremony.
+        setStale(true)
+        setError(String(err))
+      }
+    },
+    SCHEDULE_POLL_MS,
+    [meetingId, nudge],
+  )
+
+  const finals = useMemo(
+    () => (schedule && details ? buildFinals(schedule, details, implementList) : []),
+    [schedule, details, implementList],
+  )
 
   const loadResults = useCallback(
     async (meId: number) => {
       const payload = await getEventResults(meetingId, meId)
-      if (payload === undefined) throw new Error(`No results for ${meId}`)
       setResultsCache((prev) => {
         const next = new Map(prev)
         next.set(meId, payload)
@@ -136,8 +170,8 @@ export function useCompetition(meetingId: number): CompetitionState {
 
   const promote = useCallback(
     (meId: number) => {
+      if (colours.get(meId) !== 'green') return // hard rule: green only
       setPromoted((prev) => {
-        if (colours.get(meId) !== 'green') return prev // hard rule: green only
         const next = new Set(prev)
         next.add(meId)
         savePromoted(meetingId, next)
@@ -159,11 +193,13 @@ export function useCompetition(meetingId: number): CompetitionState {
     [meetingId],
   )
 
-  const refresh = useCallback(() => setTick((t) => t + 1), [])
+  const refresh = useCallback(() => setNudge((n) => n + 1), [])
 
   return {
-    loading,
+    loading: schedule == null && details == null,
+    stale,
     error,
+    lastUpdated,
     details,
     finals,
     colours,

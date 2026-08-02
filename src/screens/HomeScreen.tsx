@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EventCard } from '../components/EventCard'
+import { LiveIndicator } from '../components/LiveIndicator'
 import { SidebarToggleIcon } from '../components/SidebarToggleIcon'
 import { useCompetitionContext } from '../state/competitionContext'
 import type { StatusColour } from '../domain/status'
@@ -20,7 +21,8 @@ export function HomeScreen() {
   const navigate = useNavigate()
   const { competition, meetingId, sidebarOpen, setSidebarOpen } =
     useCompetitionContext()
-  const { finals, colours, loading, error, details, promote, demote } = competition
+  const { finals, colours, loading, stale, lastUpdated, details, promote, demote } =
+    competition
 
   const byColour = useMemo(() => {
     const groups: Record<StatusColour, FinalEvent[]> = {
@@ -56,6 +58,7 @@ export function HomeScreen() {
           <h1>{details?.meetingName ?? `Competition ${meetingId}`}</h1>
           <span className="home__header-count">
             {loading ? 'Loading…' : `${finals.length} finals`}
+            <LiveIndicator lastUpdated={lastUpdated} stale={stale} />
           </span>
         </div>
         <div className="home__header-strip">
@@ -70,8 +73,6 @@ export function HomeScreen() {
           </div>
         </div>
       </header>
-
-      {error && <div className="home__error">Failed to load: {error}</div>}
 
       <div className="home__body">
         {sidebarOpen && (

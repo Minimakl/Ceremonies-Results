@@ -1,11 +1,17 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useCompetitionContext } from '../state/competitionContext'
+import { usePoll } from '../state/usePoll'
+import { LiveIndicator } from '../components/LiveIndicator'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
 import { buildCeremoniesList } from '../domain/ceremonies'
 import { generateScript, SCRIPT_PLACEHOLDER } from '../domain/script'
 
-const RESULTS_REFRESH_MS = 15_000
+/**
+ * Results are polled harder than the schedule: this is the screen the operator
+ * reads from while an event is being finalised.
+ */
+const RESULTS_POLL_MS = 5_000
 
 type Tab = 'start-list' | 'results' | 'ceremonies' | 'script'
 
@@ -29,22 +35,28 @@ export function EventScreen() {
   const event = finals.find((f) => f.meId === meId)
   const [tab, setTab] = useState<Tab>('start-list')
   const [loadError, setLoadError] = useState<string>()
+  const [resultsUpdated, setResultsUpdated] = useState<number | null>(null)
+  const [resultsStale, setResultsStale] = useState(false)
 
   const payload = resultsCache.get(meId)
 
-  useEffect(() => {
-    if (!event) return
-    let cancelled = false
-    const load = () =>
-      loadResults(meId).catch((err) => !cancelled && setLoadError(String(err)))
-    if (!payload) void load()
-    const id = setInterval(load, RESULTS_REFRESH_MS)
-    return () => {
-      cancelled = true
-      clearInterval(id)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meId, event != null])
+  usePoll(
+    async () => {
+      if (!Number.isFinite(meId)) return
+      try {
+        await loadResults(meId)
+        setResultsUpdated(Date.now())
+        setResultsStale(false)
+        setLoadError(undefined)
+      } catch (err) {
+        // Leave the last good results on screen; flag that they may have moved.
+        setResultsStale(true)
+        setLoadError(String(err))
+      }
+    },
+    RESULTS_POLL_MS,
+    [meId],
+  )
 
   const rows = useMemo(
     () => (event && payload ? buildEventRows(event, payload) : []),
@@ -90,6 +102,7 @@ export function EventScreen() {
           <h1>{event.name} · Final</h1>
           <div className="event__meta">
             {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
+            <LiveIndicator lastUpdated={resultsUpdated} stale={resultsStale} />
           </div>
         </div>
       </header>

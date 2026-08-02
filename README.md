@@ -31,6 +31,24 @@ provided by the Vite dev server locally, and by a `vercel.json` rewrite in
 production. The snapshots under `src/fixtures/` are test data only; see
 `src/fixtures/README.md`.
 
+## Live updating
+
+The dashboard keeps reading Roster on its own for as long as it is open — no
+refresh, no manual action:
+
+| What | Cadence |
+|---|---|
+| Competition schedule (drives every status colour) | every 10s |
+| Open event's start list and results | every 5s |
+| Meeting details (age groups, event catalogue) | every 2 minutes |
+
+Polling pauses while the browser tab is hidden and fires immediately when it
+becomes visible again or the network comes back, so a dashboard left open
+overnight is current the moment it is looked at. A failed read never blanks the
+screen: the last good data stays up and the header switches from
+"Live · updated Ns ago" to "Reconnecting", so a stall is always visible rather
+than silent.
+
 ## Deployment
 
 Deployed to Vercel. `vercel.json` rewrites `/roster-api/*` to

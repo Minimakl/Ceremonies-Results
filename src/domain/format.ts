@@ -166,19 +166,37 @@ export function formatAgeGroupName(raw: string | undefined): string {
   return isPara ? `Para ${label}` : label
 }
 
+function trimZeros(value: number): string {
+  return Number.isInteger(value)
+    ? String(value)
+    : value.toFixed(2).replace(/\.?0+$/, '')
+}
+
 /**
- * Implement label: Kilogram stores hundredths of a kg (200 → "2kg",
- * 60 → "0.6kg"); Gram stores grams (700 → "700g").
+ * Implement label. Roster stores the weight in **hundredths of the unit**, for
+ * both units: 200 Kilogram → "2kg", 60 Kilogram → "0.6kg",
+ * 50000 Gram → "500g", 80000 Gram → "800g".
+ *
+ * A ceremonies manager reads this off the screen to announce an event, so a
+ * wrong weight is worse than no weight: anything outside the range of a real
+ * athletics implement is treated as unresolvable and omitted rather than
+ * guessed at.
  */
+const IMPLEMENT_RANGES: Record<string, { min: number; max: number; suffix: string }> = {
+  // 0.1 kg through 30 kg covers junior throws up to the 56 lb weight throw.
+  Kilogram: { min: 0.1, max: 30, suffix: 'kg' },
+  // 50 g through 2000 g covers junior javelins through heavy training spec.
+  Gram: { min: 50, max: 2000, suffix: 'g' },
+}
+
 export function implementLabel(
   implement: number | undefined,
   unit: string | undefined,
 ): string {
   if (!implement || !unit) return ''
-  if (unit === 'Kilogram') {
-    const kg = implement / 100
-    return `${Number.isInteger(kg) ? kg : kg.toFixed(2).replace(/0+$/, '')}kg`
-  }
-  if (unit === 'Gram') return `${implement}g`
-  return ''
+  const range = IMPLEMENT_RANGES[unit]
+  if (!range) return ''
+  const value = implement / 100
+  if (!Number.isFinite(value) || value < range.min || value > range.max) return ''
+  return `${trimZeros(value)}${range.suffix}`
 }

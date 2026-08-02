@@ -160,9 +160,21 @@ Australia venue filter), and the `sportEvents` catalogue
   Aus Champs it is a medal division ("Gold"), at the 2025 WA All Schools it is
   the venue ("Site 1", "Site  2", "Site 2 - Ambulant", "McGillivray Oval").
   Not shown on cards for that reason.
-- Implement weights are **not** resolvable from `/api/public/se-implements/v1`:
-  it returns only 416 entries and omits the ids meets actually use (63 = 2 kg
-  discus, 986 = decathlon), and `se-implement-mapping-list/{meetingId}/v1`
-  comes back empty for those meets. Event names therefore lose their "(2kg)"
-  suffix until the right source is found.
+- **Implement weights are stored in hundredths of the unit, for both units.**
+  `implement: 200, implementUnit: "Kilogram"` → 2 kg;
+  `implement: 50000, implementUnit: "Gram"` → 500 g. Dividing only the
+  kilogram values produced "Javelin Throw (50000g)" against Roster's
+  "(500g)". Verified against live `se-implements/v1` javelin records
+  (40000/50000/60000/70000/80000 Gram → 400–800 g).
+- `/api/public/se-implements/v1` covers only part of the catalogue: 416 entries
+  which omit most ids that real meets reference. Of the 76 parent finals at the
+  2026 Aus Champs, only 18 resolve and 17 of those carry
+  `implementUnit: "None"` — i.e. **no throwing event at that meet resolves its
+  weight**. `se-implement-mapping-list/{meetingId}/v1` returns an empty list for
+  both 27236 and 27550, and `sport-events/v1` carries no implement records, so
+  the source Roster itself uses is still unidentified.
+- Because of that gap, `implementLabel` treats anything outside the range of a
+  real athletics implement (0.1–30 kg, 50–2000 g) as unresolvable and prints
+  nothing. An event with no weight shown is still uniquely identified on screen
+  by its name, gender and age group; a *wrong* weight would not be.
 - `label` on schedule events carries Roster wording like "Gold" seen on cards.
