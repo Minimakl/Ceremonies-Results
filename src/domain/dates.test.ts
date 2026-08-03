@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { competitionDays, eventDayKey, eventWallTime, filterByDays, formatDayLabel } from './dates'
+import {
+  competitionDays,
+  dayHeading,
+  eventDayKey,
+  eventWallTime,
+  filterByDays,
+  formatDayLabel,
+  groupByDay,
+} from './dates'
 import type { FinalEvent } from './model'
 
 function final(id: number, startDateTime: string): FinalEvent {
@@ -76,5 +84,40 @@ describe('card start times (venue wall clock)', () => {
   it('shows nothing rather than a wrong time', () => {
     expect(eventWallTime(undefined, 'Australia/Sydney')).toBe('')
     expect(eventWallTime('', 'Australia/Sydney')).toBe('')
+  })
+})
+
+describe('day grouping for the board and the list pages', () => {
+  // 2026 Aus Champs: the first session is stored 2026-04-08 23:00 UTC, which
+  // is the morning of 9 April in Sydney. Grouping in the wrong zone would put
+  // a whole session under the wrong heading.
+  it('groups by the venue day, earliest first', () => {
+    const events = [
+      final(1, '2026-04-08 23:00:00'),
+      final(2, '2026-04-09 05:00:00'),
+      final(3, '2026-04-11 02:30:00'),
+    ]
+    expect(
+      groupByDay(events, 'Australia/Sydney').map(([day, es]) => [
+        day,
+        es.map((e) => e.meId),
+      ]),
+    ).toEqual([
+      ['2026-04-09', [1, 2]],
+      ['2026-04-11', [3]],
+    ])
+  })
+
+  it('keeps each day in the order given, and puts undated events last', () => {
+    const events = [final(1, ''), final(2, '2026-04-09 05:00:00')]
+    expect(groupByDay(events, 'Australia/Sydney').map(([day]) => day)).toEqual([
+      '2026-04-09',
+      'unscheduled',
+    ])
+  })
+
+  it('heads each day the way Roster does', () => {
+    expect(dayHeading('2025-12-06')).toBe('06/12/2025')
+    expect(dayHeading('unscheduled')).toBe('Time to be confirmed')
   })
 })

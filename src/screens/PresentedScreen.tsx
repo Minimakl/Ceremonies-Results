@@ -5,8 +5,7 @@ import { DateFilter } from '../components/DateFilter'
 import { LiveIndicator } from '../components/LiveIndicator'
 import { ArrowLeftIcon, SidebarToggleIcon } from '../components/icons'
 import { useCompetitionContext } from '../state/competitionContext'
-import { eventDayKey, formatDayLabel } from '../domain/dates'
-import type { FinalEvent } from '../domain/model'
+import { dayHeading, groupByDay } from '../domain/dates'
 
 /**
  * The finals whose medals have been handed out (plan §5.3). They are off the
@@ -36,16 +35,10 @@ export function PresentedScreen() {
   )
 
   // Grouped by competition day, as the Not started page is.
-  const byDay = useMemo(() => {
-    const groups = new Map<string, FinalEvent[]>()
-    for (const f of presented) {
-      const key = eventDayKey(f.startDateTime, details?.tz) ?? 'unscheduled'
-      const list = groups.get(key) ?? []
-      list.push(f)
-      groups.set(key, list)
-    }
-    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))
-  }, [presented, details?.tz])
+  const byDay = useMemo(
+    () => groupByDay(presented, details?.tz),
+    [presented, details?.tz],
+  )
 
   return (
     <div className="main">
@@ -99,7 +92,7 @@ export function PresentedScreen() {
             <div className="daygroup__head">
               <span className="sect__dot" />
               <h2 className="sect__title num">
-                {day === 'unscheduled' ? 'Time to be confirmed' : formatDayLabel(day)}
+                {dayHeading(day)}
               </h2>
               <span className="sect__count">{events.length}</span>
             </div>

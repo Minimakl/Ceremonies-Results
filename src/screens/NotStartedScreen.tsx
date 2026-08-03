@@ -5,8 +5,7 @@ import { DateFilter } from '../components/DateFilter'
 import { LiveIndicator } from '../components/LiveIndicator'
 import { ArrowLeftIcon, SidebarToggleIcon } from '../components/icons'
 import { useCompetitionContext } from '../state/competitionContext'
-import { eventDayKey, formatDayLabel } from '../domain/dates'
-import type { FinalEvent } from '../domain/model'
+import { dayHeading, groupByDay } from '../domain/dates'
 
 /**
  * The finals that have not started yet, on their own page rather than as a
@@ -34,16 +33,10 @@ export function NotStartedScreen() {
   )
 
   // Grouped by competition day so a multi-day meet reads as a running order.
-  const byDay = useMemo(() => {
-    const groups = new Map<string, FinalEvent[]>()
-    for (const f of notStarted) {
-      const key = eventDayKey(f.startDateTime, details?.tz) ?? 'unscheduled'
-      const list = groups.get(key) ?? []
-      list.push(f)
-      groups.set(key, list)
-    }
-    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))
-  }, [notStarted, details?.tz])
+  const byDay = useMemo(
+    () => groupByDay(notStarted, details?.tz),
+    [notStarted, details?.tz],
+  )
 
   return (
     <div className="main">
@@ -97,7 +90,7 @@ export function NotStartedScreen() {
             <div className="daygroup__head">
               <span className="sect__dot" style={{ background: 'var(--red)' }} />
               <h2 className="sect__title num">
-                {day === 'unscheduled' ? 'Time to be confirmed' : formatDayLabel(day)}
+                {dayHeading(day)}
               </h2>
               <span className="sect__count">{events.length}</span>
             </div>

@@ -5,6 +5,7 @@ import { DateFilter } from '../components/DateFilter'
 import { LiveIndicator } from '../components/LiveIndicator'
 import { ChevronRightIcon, SidebarToggleIcon } from '../components/icons'
 import { useCompetitionContext } from '../state/competitionContext'
+import { dayHeading, groupByDay } from '../domain/dates'
 import type { StatusColour } from '../domain/status'
 import type { FinalEvent } from '../domain/model'
 
@@ -158,15 +159,26 @@ function Panel({
       </div>
       <div className="panel__body">
         {events.length === 0 && <div className="empty">{emptyText}</div>}
-        {events.map((f) => (
-          <EventCard
-            tz={tz}
-            key={f.meId}
-            event={f}
-            colour={colours.get(f.meId) ?? 'red'}
-            onPromote={onPromote ? () => onPromote(f.meId) : undefined}
-            onDemote={onDemote ? () => onDemote(f.meId) : undefined}
-          />
+        {/*
+          A day heading above each day's cards, sticking to the top of the
+          panel as that day scrolls past — the same shape Roster's schedule
+          uses. Without it a board holding several days runs 7pm then 10am
+          with nothing on screen to say why.
+        */}
+        {groupByDay(events, tz).map(([day, dayEvents]) => (
+          <section className="panel__day" key={day}>
+            <h3 className="panel__date num">{dayHeading(day)}</h3>
+            {dayEvents.map((f) => (
+              <EventCard
+                tz={tz}
+                key={f.meId}
+                event={f}
+                colour={colours.get(f.meId) ?? 'red'}
+                onPromote={onPromote ? () => onPromote(f.meId) : undefined}
+                onDemote={onDemote ? () => onDemote(f.meId) : undefined}
+              />
+            ))}
+          </section>
         ))}
       </div>
     </section>

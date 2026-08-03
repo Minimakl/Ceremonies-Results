@@ -43,6 +43,36 @@ export function formatDayLabel(dayKey: string): string {
   return `${day}/${month}/${year}`
 }
 
+/**
+ * Split events into their competition days, earliest day first, keeping each
+ * day's events in the order they were given (buildFinals sorts by start time).
+ *
+ * Every screen that lists finals groups them this way, because a board holding
+ * several days runs 7pm then 10am with nothing to say why — the day heading is
+ * what makes that legible.
+ */
+export const UNSCHEDULED_DAY = 'unscheduled'
+
+export function groupByDay(
+  events: FinalEvent[],
+  timeZone: string | undefined,
+): [string, FinalEvent[]][] {
+  const groups = new Map<string, FinalEvent[]>()
+  for (const event of events) {
+    const key = eventDayKey(event.startDateTime, timeZone) ?? UNSCHEDULED_DAY
+    groups.set(key, [...(groups.get(key) ?? []), event])
+  }
+  // Unscheduled events sort last: 'unscheduled' > any 'YYYY-MM-DD'.
+  return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))
+}
+
+/** The day heading Roster puts above each day of its schedule. */
+export function dayHeading(dayKey: string): string {
+  return dayKey === UNSCHEDULED_DAY
+    ? 'Time to be confirmed'
+    : formatDayLabel(dayKey)
+}
+
 /** The distinct days a competition's finals fall on, earliest first. */
 export function competitionDays(
   finals: FinalEvent[],

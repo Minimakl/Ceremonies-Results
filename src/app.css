@@ -379,9 +379,34 @@ input {
   display: flex;
   flex-direction: column;
   gap: 9px;
-  padding: 12px;
+  /* No top padding: the day heading provides it, and a sticky element cannot
+     sit under the scrollport's own padding. */
+  padding: 0 12px 12px;
   overflow-y: auto;
   max-height: 400px;
+}
+
+/* One day's cards. The heading sticks to the top of the panel for as long as
+   this day is on screen, then the next day's heading pushes it out. */
+.panel__day {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.panel__date {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  /* Span the panel's full width, under the 12px body padding. */
+  margin: 0 -12px;
+  padding: 9px 12px 8px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
 }
 
 .panel--pink {

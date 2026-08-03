@@ -35,7 +35,9 @@ A card is created for a schedule record where **all** of these hold
   dropped (plan §3.2)
 
 Cards are ordered by `startDateTime` and grouped into days using the
-**venue's** timezone from `details.tz`.
+**venue's** timezone from `details.tz`. Every screen that lists finals — the
+four board sections, Not started and Presented — puts a sticky day heading
+above each day's cards, reading the date as Roster writes it (`09/04/2026`).
 
 ## 3. Event header
 

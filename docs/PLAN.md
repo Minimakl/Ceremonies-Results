@@ -118,6 +118,7 @@ tab writes the place within the group beside it, "A (1)".
 | **Bottom** | 🟠 ORANGE — in progress | 🟡 YELLOW — finished, results not finalised |
 
 - Each section contains **event cards** for the events currently in that state. The pink section is populated only by events promoted from the green section.
+- **Day headings inside each section (added 3 Aug 2026):** cards are grouped by competition day under a heading reading the date as Roster writes it, e.g. `09/04/2026`, and that heading **sticks to the top of the section while its day scrolls past**, swapping as the next day arrives. Without it a section holding four days runs 1:48 PM then 10:45 AM with nothing on screen to say why — the times look wrong rather than simply belonging to the next day. Days are computed in the venue timezone (§5.2); an event whose time Roster hides is grouped last under "Time to be confirmed". The same grouping is used by the Not started and Presented pages.
 - Each card shows **just the event name**, worded exactly as Roster Athletics words it. Example:
 
   > Discus Throw (2kg) · Final
