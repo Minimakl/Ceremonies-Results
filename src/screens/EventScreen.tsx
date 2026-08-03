@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useCompetitionContext } from '../state/competitionContext'
 import { usePoll } from '../state/usePoll'
 import { LiveIndicator } from '../components/LiveIndicator'
+import { GenderMeta } from '../components/GenderMeta'
 import { ArrowLeftIcon, CheckIcon, SidebarToggleIcon } from '../components/icons'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
 import { groupLabel } from '../domain/format'
@@ -136,7 +137,7 @@ export function EventScreen() {
         <div className="event__title">
           <h1 className="event__name">{event.name} · {event.stageLabel}</h1>
           <span className="event__meta">
-            {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
+            <GenderMeta event={event} />
           </span>
         </div>
         <div className="topbar__right">

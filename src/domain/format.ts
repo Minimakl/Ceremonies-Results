@@ -271,6 +271,24 @@ export function genderLabel(
   }
 }
 
+/**
+ * Roster colours the gender on its schedule — Women in pink, Men in blue,
+ * and everything else in the ordinary text colour. Sampled from Roster's own
+ * schedule for meet 27550: #D870AD and #2980B9.
+ */
+export type GenderTone = 'female' | 'male' | 'neutral'
+
+export function genderTone(gender: string): GenderTone {
+  switch (gender) {
+    case 'Female':
+      return 'female'
+    case 'Male':
+      return 'male'
+    default:
+      return 'neutral'
+  }
+}
+
 /** Roster gender → script possessive ("Men's", "Boys'"). */
 export function genderPossessive(
   gender: string,

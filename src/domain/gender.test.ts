@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { genderLabel, genderPossessive } from './format'
+import { genderLabel, genderPossessive, genderTone } from './format'
 
 /**
  * Reproduces Roster's `gender | header` transform. Roster's event header uses
@@ -32,5 +32,15 @@ describe('gender wording matches Roster', () => {
     expect(genderPossessive('Male', 'Youth')).toBe("Boys'")
     expect(genderPossessive('Female', 'Youth')).toBe("Girls'")
     expect(genderPossessive('Mixed')).toBe('Mixed')
+  })
+})
+
+describe('gender colouring (as Roster colours its schedule)', () => {
+  it('pink for Female, blue for Male, plain for anything else', () => {
+    expect(genderTone('Female')).toBe('female')
+    expect(genderTone('Male')).toBe('male')
+    // Roster's schedule carries only the two colours; Mixed stays plain.
+    expect(genderTone('Mixed')).toBe('neutral')
+    expect(genderTone('')).toBe('neutral')
   })
 })

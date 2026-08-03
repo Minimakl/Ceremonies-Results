@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import type { FinalEvent } from '../domain/model'
 import type { StatusColour } from '../domain/status'
 import { ArrowLeftIcon, ArrowRightIcon } from './icons'
+import { GenderMeta } from './GenderMeta'
 
 interface Props {
   event: FinalEvent
@@ -40,7 +41,7 @@ export function EventCard({
     >
       <div className="card__name">{event.name} · {event.stageLabel}</div>
       <div className="card__meta">
-        {[event.gender, event.ageGroup].filter(Boolean).join(' · ')}
+        <GenderMeta event={event} />
       </div>
       {colour === 'green' && onPromote && (
         <button

@@ -36,6 +36,10 @@
   --blue: #2e5fa3;
   --blue-tint: #eef3fb;
 
+  /* Gender, sampled from Roster's own schedule so the two screens agree. */
+  --gender-female: #d870ad;
+  --gender-male: #2980b9;
+
   --radius: 14px;
   --radius-sm: 10px;
   --radius-xs: 8px;
@@ -1322,4 +1326,18 @@ input {
     padding: 5px 10px;
     font-size: 12px;
   }
+}
+
+/* Gender, coloured as Roster colours it. Mixed keeps the ordinary text
+   colour — Roster's schedule carries only these two. */
+.gender {
+  font-weight: 600;
+}
+
+.gender--female {
+  color: var(--gender-female);
+}
+
+.gender--male {
+  color: var(--gender-male);
 }

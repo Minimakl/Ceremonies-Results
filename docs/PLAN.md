@@ -425,6 +425,14 @@ final reads "Women · U18" on Roster itself. Age groups map `Meeting_N` → `UN`
 and underscores → spaces, so `PA_Senior` reads "PA Senior" — **not** "Para
 Senior".
 
+### 9.1a-bis Gender colouring (added 3 Aug 2026)
+
+Wherever the gender appears under an event name — cards and the event header —
+it is coloured the way Roster colours its own schedule: **Women/Girls in pink
+(#D870AD), Men/Boys in blue (#2980B9)**, both sampled from Roster's schedule
+for meet 27550 rather than chosen. Mixed and anything else stay in the
+ordinary text colour, because Roster's schedule carries only the two colours.
+
 ### 9.1b Section rules (revised 2 Aug 2026)
 
 The operator reads a long script live, and the boundaries that matter are where
