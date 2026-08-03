@@ -236,11 +236,13 @@ export function generateScript(
   if (internationals.length > 0) {
     blocks.push('We also recognise the following international athletes.')
     for (const c of internationals) {
-      const lines = [`With a total of ${c.row.result} points`]
+      const lines = ['With a total of', `${c.row.result} points`]
+      // §9.1 rule 4: only an international who placed in the top 3 is given a
+      // place line — the rest are recognised without one.
       if (typeof c.placeOrder === 'number') {
         lines.push(`In ${ordinalWord(c.placeOrder)} place`)
       }
-      lines.push(`Representing ${c.row.country}`, c.row.name)
+      lines.push('Representing', c.row.country, c.row.name)
       blocks.push(lines.join('\n'))
     }
   }

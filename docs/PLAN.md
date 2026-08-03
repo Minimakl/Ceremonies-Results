@@ -339,13 +339,17 @@ Your medallists for the
 
 We also recognise the following international athletes.
 
-With a total of {6959} points
+With a total of
+{6959} points
 In {first} place
-Representing {GBR}
+Representing
+{GBR}
 {Sam TALBOT}
 
-With a total of {5968} points
-Representing {COK}
+With a total of
+{5968} points
+Representing
+{COK}
 {Max TEURUAA}
 
 Congratulations to all of the finalists for the
