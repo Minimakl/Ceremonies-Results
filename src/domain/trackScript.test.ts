@@ -153,6 +153,8 @@ representing
 New South Wales
 Telaya BLACKSMITH
 
+~~~~~~~~~~~~~~~~
+
 We also recognise
 Danielle AITCHISON
 representing
@@ -172,6 +174,8 @@ Women's PA Senior 100m`,
     const rows = buildEventRows(ev, mid1500m as ResultsPayload)
     const script = generateScript(ev, buildCeremoniesList(rows, false))
     expect(script).not.toContain('We also recognise')
+    // …and no rule announcing a section that is not there.
+    expect(script).not.toContain('~')
   })
 })
 

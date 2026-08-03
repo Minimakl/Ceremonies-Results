@@ -785,6 +785,15 @@ input {
   line-height: 1.72;
   color: var(--ink);
   white-space: pre-wrap;
+  /* The section rules are unbroken runs of one character, so they cannot wrap;
+     scroll rather than let one push the card wider than the screen. */
+  overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+  .script {
+    padding: 24px 20px;
+  }
 }
 
 /* ============================================================

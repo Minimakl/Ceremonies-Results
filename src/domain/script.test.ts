@@ -55,6 +55,8 @@ representing
 Queensland
 Connor DUGGAN
 
+────────────────
+
 And now, your medallists for the
 Men's Open Decathlon
 Championship
@@ -80,8 +82,12 @@ representing
 South Australia
 Logoh TLIGI
 
+────────────────
+
 Your medallists for the
 Men's Open Decathlon
+
+~~~~~~~~~~~~~~~~
 
 We also recognise the following international athletes.
 
@@ -160,6 +166,8 @@ with a best of
 representing
 Queensland
 Matthew DENNY
+
+~~~~~~~~~~~~~~~~
 
 We also recognise
 Lawrence OKOYE

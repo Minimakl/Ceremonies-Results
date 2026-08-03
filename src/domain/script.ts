@@ -91,6 +91,18 @@ const MEDALLIST_LEAD: Record<number, string> = {
 
 const MEDAL_NAME: Record<number, string> = { 1: 'gold', 2: 'silver', 3: 'bronze' }
 
+/**
+ * Reading cues (plan §9.7). The operator is reading down a long script live,
+ * and the moment that matters most is where the medallists begin and end — a
+ * paragraph break alone is too easy to run past.
+ *
+ * Two shapes, so a glance tells them apart: a solid rule around the medallist
+ * section, a wavy one before the international athletes. They are plain text,
+ * so they survive being copied or printed.
+ */
+const MEDALLIST_BREAK = '─'.repeat(16)
+const INTERNATIONAL_BREAK = '~'.repeat(16)
+
 /** "Men's Open Decathlon", "Men's U18 1500m". */
 function scriptTitle(event: FinalEvent): string {
   return `${genderPossessive(event.genderRaw)} ${ageGroupScriptLabel(
@@ -144,6 +156,7 @@ function generateMedallistScript(
   }
 
   const pronoun = genderPronoun(event.genderRaw)
+  if (internationals.length > 0) blocks.push(INTERNATIONAL_BREAK)
   for (const c of internationals) {
     blocks.push(
       `We also recognise\n` +
@@ -218,6 +231,9 @@ export function generateScript(
     )
   }
 
+  // The medallist section opens here. Nothing to separate if the field held
+  // no one outside the medals.
+  if (nonMedallists.length > 0) blocks.push(MEDALLIST_BREAK)
   blocks.push(`And now, your medallists for the\n${title}\nChampionship`)
 
   for (const c of medallists) {
@@ -231,9 +247,12 @@ export function generateScript(
     )
   }
 
+  // …and closes here, after the gold medallist.
+  blocks.push(MEDALLIST_BREAK)
   blocks.push(`Your medallists for the\n${title}`)
 
   if (internationals.length > 0) {
+    blocks.push(INTERNATIONAL_BREAK)
     blocks.push('We also recognise the following international athletes.')
     for (const c of internationals) {
       const lines = ['With a total of', `${c.row.result} points`]

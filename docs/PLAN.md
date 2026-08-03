@@ -309,6 +309,8 @@ representing
 
 …(continues in descending place order down to 4th)…
 
+────────────────
+
 And now, your medallists for the
 {Men's} {Open} {Decathlon}
 Championship
@@ -334,8 +336,12 @@ representing
 {South Australia}
 {Logoh TLIGI}
 
+────────────────
+
 Your medallists for the
 {Men's} {Open} {Decathlon}
+
+~~~~~~~~~~~~~~~~
 
 We also recognise the following international athletes.
 
@@ -383,6 +389,24 @@ Roster's event header uses the **Senior** profile, which is why a U18 girls'
 final reads "Women · U18" on Roster itself. Age groups map `Meeting_N` → `UN`
 and underscores → spaces, so `PA_Senior` reads "PA Senior" — **not** "Para
 Senior".
+
+### 9.1b Section rules (revised 2 Aug 2026)
+
+The operator reads a long script live, and the boundaries that matter are where
+the medallists start and stop — a paragraph break alone is too easy to run
+past. Two rules mark them, different shapes so a glance tells them apart:
+
+| Rule | Where |
+|---|---|
+| `────────────────` | Around the medallist section: after the 4th-place finalist, before "And now, your medallists…", and after the gold medallist, before the closing "Your medallists for the…" |
+| `~~~~~~~~~~~~~~~~` | Before the international athletes, in every script that has them — combined, track and field |
+
+The solid rule is combined-events only, since that is the script with
+non-medallists to separate from. The wavy rule appears wherever internationals
+do. Both are plain text, so they survive being copied or printed, and neither
+is emitted when the section it announces is absent — a field with no
+non-medallists gets no opening rule, and an all-Australian final gets no wavy
+one.
 
 ### 9.2 Script variables
 
@@ -443,6 +467,8 @@ with a time of
 …
 
 [if an international medalled]
+~~~~~~~~~~~~~~~~
+
 We also recognise
 {Name}
 representing
@@ -503,6 +529,8 @@ representing
 … silver, then gold …
 
 [if an international medalled]
+~~~~~~~~~~~~~~~~
+
 We also recognise
 {Name}
 representing
