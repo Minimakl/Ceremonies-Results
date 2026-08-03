@@ -11,7 +11,7 @@ import {
   formatAgeGroupName,
   formatMark,
   genderLabel,
-  genderProfileForAgeGroup,
+  meGenderProfile,
   implementLabel,
   inferResultType,
   inferScoring,
@@ -44,10 +44,19 @@ export interface FinalEvent {
   name: string
   /** Roster's extra label, e.g. "Gold". */
   label: string
+  /**
+   * The wording of Roster's **schedule** page — "Girls", "Boys", "Women",
+   * "Men" — from Roster's own meGender pipe, ported verbatim. Shown on cards.
+   */
   gender: string
+  /**
+   * The wording of Roster's **event page header**, which always uses the
+   * Senior profile — the same U18 final reads "Girls" on the schedule and
+   * "Women" here, and Roster's own site does exactly that. Shown on the event
+   * screen and used by the scripts.
+   */
+  genderHeader: string
   genderRaw: string
-  /** Which wording profile this event renders with — Youth gives Girls/Boys. */
-  genderProfile: import('./format').GenderProfile
   ageGroup: string
   /** How Roster stores this event's marks — drives all result formatting. */
   resultType: ResultType
@@ -147,17 +156,21 @@ export function buildFinals(
       const ageGroupRec = (details.ageGroups ?? []).find(
         (ag) => ag.ageGroupIdPk === me.ageGroupIdFk,
       )
-      // Roster's schedule words a youth group Girls/Boys; reproduce that,
-      // not the results-header wording (see genderProfileForAgeGroup).
-      const genderProfile = genderProfileForAgeGroup(me.gender, ageGroupRec)
+      // Roster's own meGender pipe reads the event's local date for the
+      // birth-year branch of isYouth; the date part of the raw string is
+      // exactly its startDateTime.toLocalDate().
+      const eventYear = me.startDateTime
+        ? Number(me.startDateTime.slice(0, 4))
+        : undefined
+      const scheduleProfile = meGenderProfile(me, ageGroupRec, eventYear)
       return {
         meId: me.meetingEventIdPk,
         meetingId: me.meetingIdFk,
         name: implement ? `${baseName} (${implement})` : baseName,
         label: me.label ?? '',
-        gender: genderLabel(me.gender, genderProfile),
+        gender: genderLabel(me.gender, scheduleProfile),
+        genderHeader: genderLabel(me.gender, 'Senior'),
         genderRaw: me.gender,
-        genderProfile,
         ageGroup: ageGroupName(me.ageGroupIdFk, details.ageGroups),
         resultType: se?.resultType ?? inferResultType(se?.eventType, isCombined),
         scoring:

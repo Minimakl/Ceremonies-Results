@@ -2,20 +2,27 @@ import { genderTone } from '../domain/format'
 import type { FinalEvent } from '../domain/model'
 
 /**
- * The "Women · U18" line under an event name, with the gender coloured the
- * way Roster colours it on its own schedule — pink for Women and Girls, blue
- * for Men and Boys. It gives the operator something to aim at when scanning a
- * board of otherwise identical cards.
+ * The "Women · U18" line under an event name, coloured as Roster colours it —
+ * pink for Women/Girls, blue for Men/Boys, plain for Mixed.
  *
- * Mixed events stay in the ordinary text colour, because that is what Roster
- * does: its schedule carries only the two colours.
+ * Roster words the same event differently on its two surfaces (verified on
+ * 27351/334388: "Girls · U18" on the schedule, "Women · U18" on the event
+ * header), and the dashboard keeps that split: cards show the schedule
+ * wording, the event screen shows the header wording.
  */
-export function GenderMeta({ event }: { event: FinalEvent }) {
-  if (!event.gender) return <>{event.ageGroup}</>
+export function GenderMeta({
+  event,
+  wording = 'schedule',
+}: {
+  event: FinalEvent
+  wording?: 'schedule' | 'header'
+}) {
+  const text = wording === 'header' ? event.genderHeader : event.gender
+  if (!text) return <>{event.ageGroup}</>
   return (
     <>
       <span className={`gender gender--${genderTone(event.genderRaw)}`}>
-        {event.gender}
+        {text}
       </span>
       {event.ageGroup ? ` · ${event.ageGroup}` : ''}
     </>

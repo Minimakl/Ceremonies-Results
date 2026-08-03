@@ -44,7 +44,8 @@ Cards are ordered by `startDateTime` and grouped into days using the
 | Event name | `details.sportEvents[eventIdFk].eventName` | verbatim |
 | Implement | `se-implements[seImplementIdFk].implement` + `implementUnit` | value ÷ 100; `Kilogram` → kg, `Gram` → g. **See open item 3.** |
 | "· Final" / "· Finals Summary" | `eventStage`, `stageGroup` | Roster's own wording — a summary is titled "Finals Summary" |
-| Gender | schedule `gender` + age group range | Roster's schedule wording: Girls/Boys when the group's oldest athlete is under 18 (`rangeEnd < 18`), Women/Men otherwise. Note Roster's own results header says Women/Men regardless — the schedule wording is used. |
+| Gender (cards) | schedule `gender`, `multiAgeGroup` + age group `rangeType`/`rangeEnd` | Roster's own `meGender` pipe and `isYouth`, ported verbatim from its bundle — Girls/Boys for youth groups |
+| Gender (event header, scripts) | schedule `gender` | Roster's event-page wording — always the Senior profile (Women/Men), matching Roster's own per-page split |
 | Start time | schedule `startDateTime` (UTC) + `details.tz` | venue wall time, "2:00 PM"; hidden when `timePubliclyVisible` is false |
 | Age group | `details.ageGroups[ageGroupIdFk].name` | `Meeting_18` → `U18`, `PA_Senior` → `PA Senior`, underscores → spaces |
 | Status colour | `resultsComplete`, `hasResults`, `startDateTime` | green / orange / red; orange → yellow once every athlete has settled |

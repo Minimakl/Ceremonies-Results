@@ -23,6 +23,8 @@ export interface MeetingEventDto {
   eventStage: EventStage
   stageGroup?: number
   gender: Gender
+  /** True when the event pools several age groups; Roster then words it Senior. */
+  multiAgeGroup?: boolean
   label?: string
   timePubliclyVisible?: boolean
   visibility?: string
@@ -159,9 +161,13 @@ export interface AgeGroupDto {
   name?: string
   category?: string
   /**
-   * Age band, in years relative to the reference year: U18 is 16–17, U20 is
-   * 18–19, Senior 23–29. Drives Roster's schedule gender wording — a group
-   * whose oldest athlete is under 18 reads Girls/Boys, not Women/Men.
+   * How rangeStart/rangeEnd are expressed: "Age" (years, the only value seen
+   * on live meets) or a birth-year form. Roster's own isYouth branches on it.
+   */
+  rangeType?: string
+  /**
+   * Age band: U18 is 16–17, U20 is 18–19, Senior 23–29. Drives Roster's
+   * schedule gender wording via its isYouth function.
    */
   rangeStart?: number
   rangeEnd?: number

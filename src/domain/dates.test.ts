@@ -17,7 +17,7 @@ function final(id: number, startDateTime: string): FinalEvent {
     isRelay: false,
     hasLanes: true,
     stageLabel: 'Final',
-    genderProfile: 'Senior',
+    genderHeader: 'Men',
     startDateTime,
     timePubliclyVisible: true,
     hasResults: false,

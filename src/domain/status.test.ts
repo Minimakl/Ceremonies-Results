@@ -24,7 +24,7 @@ function ev(partial: Partial<FinalEvent>): FinalEvent {
     isRelay: false,
     hasLanes: true,
     stageLabel: 'Final',
-    genderProfile: 'Senior',
+    genderHeader: 'Men',
     startDateTime: '2026-04-09 01:05:00',
     timePubliclyVisible: true,
     hasResults: false,

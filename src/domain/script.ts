@@ -103,9 +103,13 @@ const MEDAL_NAME: Record<number, string> = { 1: 'gold', 2: 'silver', 3: 'bronze'
 const MEDALLIST_BREAK = '─'.repeat(16)
 const INTERNATIONAL_BREAK = '~'.repeat(16)
 
-/** "Men's Open Decathlon", "Men's U18 1500m", "Girls' U15 200m Hurdles". */
+/**
+ * "Men's Open Decathlon", "Men's U18 1500m". The Script tab lives on the
+ * event page, so it follows Roster's event-header wording (Senior profile) —
+ * a U18 girls' final is titled "Women's U18 …", matching the header above it.
+ */
 function scriptTitle(event: FinalEvent): string {
-  return `${genderPossessive(event.genderRaw, event.genderProfile)} ${ageGroupScriptLabel(
+  return `${genderPossessive(event.genderRaw)} ${ageGroupScriptLabel(
     event.ageGroup,
   )} ${baseEventName(event.name)}`
 }

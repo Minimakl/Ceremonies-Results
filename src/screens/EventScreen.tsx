@@ -137,7 +137,7 @@ export function EventScreen() {
         <div className="event__title">
           <h1 className="event__name">{event.name} · {event.stageLabel}</h1>
           <span className="event__meta">
-            <GenderMeta event={event} />
+            <GenderMeta event={event} wording="header" />
           </span>
         </div>
         <div className="topbar__right">

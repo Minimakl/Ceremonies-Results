@@ -431,18 +431,31 @@ dashboard uses the schedule wording everywhere — cards, event header and
 scripts — because it is the wording that distinguishes a youth final, and
 because differing wording between our own screens would read as a bug.
 
-The schedule wording is derived from the age group's **age range**: **Youth
-(Girls/Boys) when the oldest athlete in the group is under 18**, Senior
-(Women/Men) otherwise. Verified against live schedules spanning the boundary:
-27809 U7–U8 → Boys/Girls; 28662 U10–U18 → Boys/Girls but U20 (18–19) and
-Senior → Men/Women; 27351 U18 → Girls but PA U20 → Women; 27550 U20, Senior
-and PA Senior → Men/Women. Neither the age-group `profiles` field nor its
-category predicts this (28662's U11–U18 are "Professional" yet read Girls;
-PA_Senior is "Extended" yet reads Women); only the range separates every
-observed case. A group with no range on record falls back to adult wording —
-never guessed younger. There is no per-athlete wording field in any payload:
-athletes carry `gender: Male/Female`, and the words are Roster's client-side
-transform, reproduced here.
+**Revised again 3 Aug 2026 — the wording logic is now Roster's own code, not
+a derived rule.** No payload carries the words (athletes and events carry only
+`gender: Male/Female/Mixed`); Roster's web app computes them. Its `meGender`
+pipe and `MeetingUtil.isYouth` were extracted from its app bundle (chunks
+PNYPKSGU and JFIG74JM) and ported line for line:
+
+```
+meGender:  multiAgeGroup ? profile "Senior"
+                         : isYouth(ageGroup, startDate) ? "Youth" : "Senior"
+isYouth:   (rangeType === "Age" ? rangeEnd
+                                : yearsFrom(1 Jan rangeEnd, eventDate)) < 18
+```
+
+So an "Age" group reads Girls/Boys when `rangeEnd < 18`; a birth-year group
+ages from 1 January; a multi-age-group event always words Senior. One guard is
+ours: a group with no `rangeEnd` reads as adult, where Roster's code would
+throw. Conformance evidence, all read off live schedules: 27809 U7–U8 →
+Boys/Girls; 28662 U10–U18 → Boys/Girls, U20 and Senior → Men/Women; 27351
+U18 → Girls, PA U20 → Women; 27550 U20/Senior/PA Senior → Men/Women.
+
+**Roster's per-page split is kept** (decision, 3 Aug 2026): cards show the
+schedule wording (`meGender` — "Girls · U18"); the event screen header and the
+scripts show the event-page wording, which always uses the Senior profile
+("Women · U18", "Women's U18 1500m"). This mirrors Roster's own two pages
+exactly.
 
 ### 9.1a-bis Gender colouring (added 3 Aug 2026)
 

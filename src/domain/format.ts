@@ -250,43 +250,53 @@ export function expandState(code: string | undefined, fallback?: string): string
 export type GenderProfile = 'Senior' | 'Youth' | 'Both'
 
 /**
- * Which profile an age group renders with on Roster's schedule: **Youth when
- * the oldest athlete in the group is under 18**, Senior otherwise. Verified
- * against three live meets spanning the boundary:
+ * Roster's own `MeetingUtil.isYouth`, ported line for line from its app
+ * bundle (chunk-JFIG74JM):
  *
- *   27809  U7 (5–6), U8 (6–7)          → Boys / Girls
- *   28662  U10–U18 (8–17)              → Boys / Girls
- *   28662  U20 (18–19), Senior (23–29) → Men / Women
- *   27351  U18 → Girls; PA U20 → Women
- *   27550  U20, Senior, PA Senior      → Men / Women
+ *   static isYouth(e, i) {
+ *     let r = LocalDate.of(e.rangeEnd, JANUARY, 1);
+ *     return (e.rangeType === "Age" ? e.rangeEnd
+ *                                   : r.until(i, YEARS)) < 18;
+ *   }
  *
- * Neither the age-group `profiles` field nor its category predicts this — the
- * U11–U18 groups at 28662 are "Professional" yet read Girls, and PA_Senior is
- * "Extended" yet reads Women. Only the age range separates every observed
- * case. A group with no range falls back to Senior, never guessed younger.
- *
- * The female range is used for Female events where Roster states one; ranges
- * are identical in every payload seen, so this is symmetry, not divination.
+ * With "Age" ranges (every live meet seen) it is simply rangeEnd < 18. The
+ * other branch treats rangeEnd as a birth year, counted from 1 January — so
+ * whole years to the event date is exactly eventYear − rangeEnd. A group with
+ * no rangeEnd cannot be judged and reads as adult; Roster's code would throw
+ * on it, so the guard is ours.
  */
-export function genderProfileForAgeGroup(
-  gender: string,
-  ageGroup:
-    | { rangeEnd?: number; rangeEndFemale?: number }
-    | undefined,
-): GenderProfile {
-  if (!ageGroup) return 'Senior'
-  const end =
-    gender === 'Female'
-      ? (ageGroup.rangeEndFemale ?? ageGroup.rangeEnd)
-      : (ageGroup.rangeEnd ?? ageGroup.rangeEndFemale)
-  if (end == null) return 'Senior'
-  return end < 18 ? 'Youth' : 'Senior'
+export function isYouthAgeGroup(
+  ageGroup: { rangeEnd?: number; rangeType?: string } | undefined,
+  eventYear: number | undefined,
+): boolean {
+  if (!ageGroup || ageGroup.rangeEnd == null) return false
+  if (ageGroup.rangeType === 'Age') return ageGroup.rangeEnd < 18
+  if (eventYear == null) return false
+  return eventYear - ageGroup.rangeEnd < 18
 }
 
 /**
- * Gender wording, reproducing Roster's `gender | header` transform verbatim so
- * the dashboard never words an event differently from the screen the operator
- * cross-checks against.
+ * Roster's `meGender` pipe (chunk-PNYPKSGU), which words the schedule's
+ * gender column:
+ *
+ *   r.multiAgeGroup
+ *     ? genderPipe.transform(r.gender, t, p)            // default "Senior"
+ *     : isYouth(ageGroup, r.startDateTime.toLocalDate())
+ *         ? ... "Youth" : ... "Senior"
+ */
+export function meGenderProfile(
+  me: { multiAgeGroup?: boolean },
+  ageGroup: { rangeEnd?: number; rangeType?: string } | undefined,
+  eventYear: number | undefined,
+): GenderProfile {
+  if (me.multiAgeGroup) return 'Senior'
+  return isYouthAgeGroup(ageGroup, eventYear) ? 'Youth' : 'Senior'
+}
+
+/**
+ * Gender wording, reproducing Roster's `gender | header` transform verbatim
+ * (extracted from its bundle, chunk-JFIG74JM) so the dashboard never words an
+ * event differently from Roster's own screens.
  */
 export function genderLabel(
   gender: string,
