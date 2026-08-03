@@ -3,10 +3,13 @@ import type { FinalEvent } from '../domain/model'
 import type { StatusColour } from '../domain/status'
 import { ArrowLeftIcon, ArrowRightIcon } from './icons'
 import { GenderMeta } from './GenderMeta'
+import { eventWallTime } from '../domain/dates'
 
 interface Props {
   event: FinalEvent
   colour: StatusColour
+  /** Venue timezone, for the scheduled start time on the card's left. */
+  tz?: string
   onPromote?: () => void
   onDemote?: () => void
   onReturnToCeremonies?: () => void
@@ -20,6 +23,7 @@ interface Props {
 export function EventCard({
   event,
   colour,
+  tz,
   onPromote,
   onDemote,
   onReturnToCeremonies,
@@ -39,10 +43,19 @@ export function EventCard({
         }
       }}
     >
-      <div className="card__name">{event.name} · {event.stageLabel}</div>
-      <div className="card__meta">
-        <GenderMeta event={event} />
-      </div>
+      {/* Scheduled start, venue time, as Roster's schedule shows it. Hidden
+          when Roster hides the time rather than showing a wrong one. */}
+      {event.timePubliclyVisible && (
+        <div className="card__time num">
+          {eventWallTime(event.startDateTime, tz)}
+        </div>
+      )}
+      <div className="card__body">
+        <div className="card__name">{event.name} · {event.stageLabel}</div>
+        <div className="card__meta">
+          <GenderMeta event={event} />
+        </div>
+
       {colour === 'green' && onPromote && (
         <button
           className="card__action"
@@ -79,6 +92,7 @@ export function EventCard({
           Return to ceremonies
         </button>
       )}
+      </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { competitionDays, eventDayKey, filterByDays, formatDayLabel } from './dates'
+import { competitionDays, eventDayKey, eventWallTime, filterByDays, formatDayLabel } from './dates'
 import type { FinalEvent } from './model'
 
 function final(id: number, startDateTime: string): FinalEvent {
@@ -17,6 +17,7 @@ function final(id: number, startDateTime: string): FinalEvent {
     isRelay: false,
     hasLanes: true,
     stageLabel: 'Final',
+    genderProfile: 'Senior',
     startDateTime,
     timePubliclyVisible: true,
     hasResults: false,
@@ -60,5 +61,20 @@ describe('competition days (plan §3 — venue timezone)', () => {
     const finals = [final(1, '2026-04-08 23:00:00'), final(2, '2026-04-10 01:00:00')]
     const only = filterByDays(finals, new Set(['2026-04-09']), 'Australia/Sydney')
     expect(only.map((f) => f.meId)).toEqual([1])
+  })
+})
+
+describe('card start times (venue wall clock)', () => {
+  it('formats the UTC schedule time in the venue timezone, as Roster shows it', () => {
+    // 2026 Aus Champs first session: stored 2026-04-08 23:00 UTC, and
+    // Roster's page reads "04/09/2026, 9:00 AM AEST".
+    expect(eventWallTime('2026-04-08 23:00:00', 'Australia/Sydney')).toBe('9:00 AM')
+    // Coles Junior Challenge: Roster reads "2:00 PM AWST".
+    expect(eventWallTime('2026-01-31 06:00:00', 'Australia/Perth')).toBe('2:00 PM')
+  })
+
+  it('shows nothing rather than a wrong time', () => {
+    expect(eventWallTime(undefined, 'Australia/Sydney')).toBe('')
+    expect(eventWallTime('', 'Australia/Sydney')).toBe('')
   })
 })

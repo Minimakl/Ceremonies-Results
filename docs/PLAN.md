@@ -109,6 +109,7 @@ tab writes the place within the group beside it, "A (1)".
 *Revised 2 Aug 2026: the not-started events moved off the board (see 5.1).*
 
 - A **header across the top** holding the competition name, a **sidebar button**, a **Not started button**, and a **date filter**.
+- **Card start times (added 3 Aug 2026):** every event card carries the scheduled start on its left — the venue-local wall time ("2:00 PM"), converted from the UTC schedule time with the meeting's own timezone, matching Roster's schedule column exactly (verified: Aus Champs heptathlon hurdles stored 2026-04-09 00:45 UTC renders 10:45 AM, as Roster prints). An event whose time Roster hides (`timePubliclyVisible: false`) shows no time rather than a wrong one.
 - Below the header, the screen is divided into **four quadrant sections**:
 
 | | Left | Right |
@@ -420,10 +421,28 @@ Verified against live Roster pages:
 
 Roster's gender transform takes a profile — Senior gives Men / Women / Mixed,
 Youth gives Boys / Girls / Mixed Youth, Both gives Men & Boys / Women & Girls.
-Roster's event header uses the **Senior** profile, which is why a U18 girls'
-final reads "Women · U18" on Roster itself. Age groups map `Meeting_N` → `UN`
-and underscores → spaces, so `PA_Senior` reads "PA Senior" — **not** "Para
-Senior".
+Age groups map `Meeting_N` → `UN` and underscores → spaces, so `PA_Senior`
+reads "PA Senior" — **not** "Para Senior".
+
+**Revised 3 Aug 2026 — Roster words the same event differently on its two
+surfaces.** Verified on 27351/334388 (Triple Jump U18): the **schedule** reads
+"Girls · U18" while the **results-page header** reads "Women · U18". The
+dashboard uses the schedule wording everywhere — cards, event header and
+scripts — because it is the wording that distinguishes a youth final, and
+because differing wording between our own screens would read as a bug.
+
+The schedule wording is derived from the age group's **age range**: **Youth
+(Girls/Boys) when the oldest athlete in the group is under 18**, Senior
+(Women/Men) otherwise. Verified against live schedules spanning the boundary:
+27809 U7–U8 → Boys/Girls; 28662 U10–U18 → Boys/Girls but U20 (18–19) and
+Senior → Men/Women; 27351 U18 → Girls but PA U20 → Women; 27550 U20, Senior
+and PA Senior → Men/Women. Neither the age-group `profiles` field nor its
+category predicts this (28662's U11–U18 are "Professional" yet read Girls;
+PA_Senior is "Extended" yet reads Women); only the range separates every
+observed case. A group with no range on record falls back to adult wording —
+never guessed younger. There is no per-athlete wording field in any payload:
+athletes carry `gender: Male/Female`, and the words are Roster's client-side
+transform, reproduced here.
 
 ### 9.1a-bis Gender colouring (added 3 Aug 2026)
 

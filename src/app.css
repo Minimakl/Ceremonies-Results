@@ -414,7 +414,9 @@ input {
 
 .card {
   position: relative;
-  display: block;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
   width: 100%;
   text-align: left;
   background: var(--surface);
@@ -423,6 +425,22 @@ input {
   padding: 11px 13px 11px 16px;
   cursor: pointer;
   transition: border-color 0.13s, box-shadow 0.13s, transform 0.13s;
+}
+
+/* Scheduled start on the card's left, venue time. */
+.card__time {
+  flex: 0 0 auto;
+  min-width: 52px;
+  padding-top: 1px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.card__body {
+  flex: 1;
+  min-width: 0;
 }
 
 .card::before {

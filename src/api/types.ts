@@ -158,6 +158,15 @@ export interface AgeGroupDto {
   /** Roster's internal name, e.g. "Senior", "Meeting_20", "PA_U17". */
   name?: string
   category?: string
+  /**
+   * Age band, in years relative to the reference year: U18 is 16–17, U20 is
+   * 18–19, Senior 23–29. Drives Roster's schedule gender wording — a group
+   * whose oldest athlete is under 18 reads Girls/Boys, not Women/Men.
+   */
+  rangeStart?: number
+  rangeEnd?: number
+  rangeStartFemale?: number
+  rangeEndFemale?: number
 }
 
 export interface MeetingDetailsDto {

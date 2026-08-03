@@ -237,10 +237,51 @@ export function expandState(code: string | undefined, fallback?: string): string
 }
 
 /**
- * Roster's own gender profiles. Its event header renders with the "Senior"
- * profile, which is why a U18 girls' final reads "Women · U18" on Roster.
+ * Roster's own gender profiles. Roster renders the SAME event differently on
+ * its two surfaces — verified on 27351/334388 (Triple Jump, U18), which reads
+ * **"Girls · U18" on the schedule** and **"Women · U18" on the results-page
+ * header**. The schedule wording is the one derived from the age group; the
+ * results header always uses the Senior profile.
+ *
+ * This dashboard uses the schedule wording everywhere, because it is the one
+ * that actually distinguishes a youth final, and because saying "Girls" on the
+ * card but "Women" on the event page would read as a bug to the operator.
  */
 export type GenderProfile = 'Senior' | 'Youth' | 'Both'
+
+/**
+ * Which profile an age group renders with on Roster's schedule: **Youth when
+ * the oldest athlete in the group is under 18**, Senior otherwise. Verified
+ * against three live meets spanning the boundary:
+ *
+ *   27809  U7 (5–6), U8 (6–7)          → Boys / Girls
+ *   28662  U10–U18 (8–17)              → Boys / Girls
+ *   28662  U20 (18–19), Senior (23–29) → Men / Women
+ *   27351  U18 → Girls; PA U20 → Women
+ *   27550  U20, Senior, PA Senior      → Men / Women
+ *
+ * Neither the age-group `profiles` field nor its category predicts this — the
+ * U11–U18 groups at 28662 are "Professional" yet read Girls, and PA_Senior is
+ * "Extended" yet reads Women. Only the age range separates every observed
+ * case. A group with no range falls back to Senior, never guessed younger.
+ *
+ * The female range is used for Female events where Roster states one; ranges
+ * are identical in every payload seen, so this is symmetry, not divination.
+ */
+export function genderProfileForAgeGroup(
+  gender: string,
+  ageGroup:
+    | { rangeEnd?: number; rangeEndFemale?: number }
+    | undefined,
+): GenderProfile {
+  if (!ageGroup) return 'Senior'
+  const end =
+    gender === 'Female'
+      ? (ageGroup.rangeEndFemale ?? ageGroup.rangeEnd)
+      : (ageGroup.rangeEnd ?? ageGroup.rangeEndFemale)
+  if (end == null) return 'Senior'
+  return end < 18 ? 'Youth' : 'Senior'
+}
 
 /**
  * Gender wording, reproducing Roster's `gender | header` transform verbatim so

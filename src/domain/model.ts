@@ -11,6 +11,7 @@ import {
   formatAgeGroupName,
   formatMark,
   genderLabel,
+  genderProfileForAgeGroup,
   implementLabel,
   inferResultType,
   inferScoring,
@@ -45,6 +46,8 @@ export interface FinalEvent {
   label: string
   gender: string
   genderRaw: string
+  /** Which wording profile this event renders with — Youth gives Girls/Boys. */
+  genderProfile: import('./format').GenderProfile
   ageGroup: string
   /** How Roster stores this event's marks — drives all result formatting. */
   resultType: ResultType
@@ -141,13 +144,20 @@ export function buildFinals(
       const im = me.seImplementIdFk ? implementMap.get(me.seImplementIdFk) : undefined
       const implement = implementLabel(im?.implement, im?.implementUnit)
       const baseName = se?.eventName ?? `Event ${me.eventIdFk}`
+      const ageGroupRec = (details.ageGroups ?? []).find(
+        (ag) => ag.ageGroupIdPk === me.ageGroupIdFk,
+      )
+      // Roster's schedule words a youth group Girls/Boys; reproduce that,
+      // not the results-header wording (see genderProfileForAgeGroup).
+      const genderProfile = genderProfileForAgeGroup(me.gender, ageGroupRec)
       return {
         meId: me.meetingEventIdPk,
         meetingId: me.meetingIdFk,
         name: implement ? `${baseName} (${implement})` : baseName,
         label: me.label ?? '',
-        gender: genderLabel(me.gender),
+        gender: genderLabel(me.gender, genderProfile),
         genderRaw: me.gender,
+        genderProfile,
         ageGroup: ageGroupName(me.ageGroupIdFk, details.ageGroups),
         resultType: se?.resultType ?? inferResultType(se?.eventType, isCombined),
         scoring:

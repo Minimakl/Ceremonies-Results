@@ -103,7 +103,7 @@ export function NotStartedScreen() {
             </div>
             <div className="daygroup__cards">
               {events.map((f) => (
-                <EventCard key={f.meId} event={f} colour="red" />
+                <EventCard tz={details?.tz} key={f.meId} event={f} colour="red" />
               ))}
             </div>
           </section>

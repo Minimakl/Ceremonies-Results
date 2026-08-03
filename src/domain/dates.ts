@@ -71,3 +71,27 @@ export function filterByDays(
     return key != null && selected.has(key)
   })
 }
+
+/**
+ * The wall-clock start time at the venue, formatted the way Roster's schedule
+ * formats it — "2:00 PM". Schedule times are stored UTC; the venue timezone
+ * comes from the meeting details, the same source the day grouping uses.
+ * Returns '' when the event has no meaningful time.
+ */
+export function eventWallTime(
+  startDateTime: string | undefined,
+  timeZone: string | undefined,
+): string {
+  const ms = parseRosterTime(startDateTime)
+  if (ms == null) return ''
+  try {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: timeZone || 'UTC',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }).format(new Date(ms))
+  } catch {
+    return ''
+  }
+}

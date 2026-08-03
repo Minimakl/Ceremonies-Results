@@ -105,7 +105,7 @@ export function PresentedScreen() {
             </div>
             <div className="daygroup__cards">
               {events.map((f) => (
-                <EventCard
+                <EventCard tz={details?.tz}
                   key={f.meId}
                   event={f}
                   colour="blue"

@@ -92,6 +92,7 @@ export function HomeScreen() {
 
       <main className="board">
         <Panel
+          tz={details?.tz}
           title="In ceremonies"
           tone="pink"
           events={byColour.pink}
@@ -100,6 +101,7 @@ export function HomeScreen() {
           emptyText="Events you send from Ready to present appear here"
         />
         <Panel
+          tz={details?.tz}
           title="Ready to present"
           tone="green"
           events={byColour.green}
@@ -108,6 +110,7 @@ export function HomeScreen() {
           emptyText="No finals are finalised yet"
         />
         <Panel
+          tz={details?.tz}
           title="In progress"
           tone="orange"
           events={byColour.orange}
@@ -115,6 +118,7 @@ export function HomeScreen() {
           emptyText="Nothing under way"
         />
         <Panel
+          tz={details?.tz}
           title="Awaiting final results"
           tone="yellow"
           events={byColour.yellow}
@@ -131,6 +135,7 @@ function Panel({
   tone,
   events,
   colours,
+  tz,
   onPromote,
   onDemote,
   emptyText,
@@ -139,6 +144,7 @@ function Panel({
   tone: StatusColour
   events: FinalEvent[]
   colours: Map<number, StatusColour>
+  tz?: string
   onPromote?: (meId: number) => void
   onDemote?: (meId: number) => void
   emptyText: string
@@ -154,6 +160,7 @@ function Panel({
         {events.length === 0 && <div className="empty">{emptyText}</div>}
         {events.map((f) => (
           <EventCard
+            tz={tz}
             key={f.meId}
             event={f}
             colour={colours.get(f.meId) ?? 'red'}
