@@ -172,6 +172,25 @@ The reordered, read-from-this list. Rules in Section 7.
 
 **Columns:** Place order, Overall Position, Participant, Country, Club, Result
 
+**Medallists only (revised 2 Aug 2026).** The tab shows the **top three** of the
+ceremonies order plus any **international who placed in the top three
+overall** — the people actually receiving a medal. Fourth place downwards is
+not shown: the operator is presenting, not reading a full field, and having to
+find the three names that matter in a field of twelve is the mistake this tool
+exists to prevent.
+
+One condition covers both cases, because an Australian's place order is their
+renumbered national place and an international's is their overall place when
+that is 1–3 and a hyphen otherwise: **a numeric place order of 3 or better.**
+So the Maurie Plant discus (27236/371113) shows five rows — Denny, Miller,
+Giddings, plus Okoye (GBR, silver) and Stona (JAM, bronze) — and the decathlon
+(27550/336973) shows four: Tligi, Robin, Stone, plus Talbot (GBR, who won
+outright). Max Teuruaa (COK), 9th overall, carries a hyphen and is not shown.
+
+The **scripts are unaffected** and still read from the full ceremonies list —
+the combined-events script (§9.1) reads the non-medallists aloud, so for a
+decathlon the Script tab names athletes the Ceremonies tab no longer lists.
+
 ### 6.4 Script tab
 
 The read-aloud script, auto-filled from the ceremonies data. Template in Section 9. **Currently defined for combined events only** (decathlon, heptathlon, pentathlon). Scripts for all other event types will be provided later; the tool should hold placeholders for them.

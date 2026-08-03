@@ -124,6 +124,10 @@ is 1–3 and a hyphen otherwise. Individual events drop internationals outside t
 top 3 entirely; combined events keep them. Athletes with no overall place never
 appear.
 
+The **Ceremonies tab** then shows only the rows with a numeric place order of 3
+or better — the medallists, Australian and international (plan §6.3). The
+scripts still read from the full list.
+
 ## 8. Script
 
 Generated from the ceremonies rows, so the script can never disagree with the

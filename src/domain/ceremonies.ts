@@ -18,6 +18,27 @@ export interface CeremonyRow {
   row: EventRow
 }
 
+/**
+ * The rows an operator actually presents medals to (plan §6.3, revised): the
+ * top three of the ceremonies order, plus any international who placed in the
+ * top three overall. Everyone else is dropped — a ceremonies manager reading a
+ * full field has to find the three names that matter, which is the mistake
+ * this tool exists to prevent.
+ *
+ * One condition covers both: an Australian's `placeOrder` is their renumbered
+ * national place, and an international's is their overall place when that is
+ * 1–3 and a hyphen otherwise. So a numeric place order of 3 or better is
+ * exactly "gets a medal".
+ *
+ * The full list is still what the scripts are generated from — the combined
+ * events script reads the non-medallists aloud (§9.1).
+ */
+export function medallistRows(ceremonies: CeremonyRow[]): CeremonyRow[] {
+  return ceremonies.filter(
+    (c) => typeof c.placeOrder === 'number' && c.placeOrder <= 3,
+  )
+}
+
 export function buildCeremoniesList(
   rows: EventRow[],
   isCombined: boolean,

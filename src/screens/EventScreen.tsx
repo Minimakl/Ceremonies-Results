@@ -6,7 +6,11 @@ import { LiveIndicator } from '../components/LiveIndicator'
 import { ArrowLeftIcon, SidebarToggleIcon } from '../components/icons'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
 import { groupLabel } from '../domain/format'
-import { buildCeremoniesList, type CeremonyRow } from '../domain/ceremonies'
+import {
+  buildCeremoniesList,
+  medallistRows,
+  type CeremonyRow,
+} from '../domain/ceremonies'
 import { generateScript, SCRIPT_PLACEHOLDER } from '../domain/script'
 import type { StatusColour } from '../domain/status'
 
@@ -261,14 +265,26 @@ function ResultsTab({ rows, hasPara }: { rows: EventRow[]; hasPara: boolean }) {
   )
 }
 
-/** Ceremonies (plan §6.3): the reordered read-from-this list. */
+/**
+ * Ceremonies (plan §6.3): the reordered read-from-this list, trimmed to the
+ * people receiving a medal — the top three, plus any international who placed
+ * in the top three overall. The scripts still read from the full list.
+ */
 function CeremoniesTab({
-  ceremonies,
+  ceremonies: fullList,
   hasPara,
 }: {
   ceremonies: CeremonyRow[]
   hasPara: boolean
 }) {
+  const ceremonies = medallistRows(fullList)
+  if (ceremonies.length === 0) {
+    return (
+      <div className="notice">
+        No medallists yet — this event has no finishing places from Roster.
+      </div>
+    )
+  }
   return (
     <table className="table">
       <thead>

@@ -12,7 +12,7 @@ import results336973 from '../fixtures/results-27550-336973.json'
 import results371113 from '../fixtures/results-27236-371113.json'
 import implementsJson from '../fixtures/implements.json'
 import { buildEventRows, buildFinals } from './model'
-import { buildCeremoniesList } from './ceremonies'
+import { buildCeremoniesList, medallistRows } from './ceremonies'
 
 function decathlon() {
   const finals = buildFinals(
@@ -134,5 +134,51 @@ describe('Ceremonies ordering engine (plan §7)', () => {
 
     // Claudio Romero (CHI, 4th, no medal) removed.
     expect(list.some((c) => c.row.name.includes('ROMERO'))).toBe(false)
+  })
+})
+
+/**
+ * The Ceremonies tab shows only the people receiving a medal — the operator
+ * is presenting, not reading a full field. The scripts still work from the
+ * full list, which is why these are separate.
+ */
+describe('Ceremonies tab rows (plan §6.3)', () => {
+  it('keeps the top three and the international medallists', () => {
+    const { final, rows } = discus()
+    const list = buildCeremoniesList(rows, final.isCombined)
+    expect(
+      medallistRows(list).map((c) => [c.placeOrder, c.row.name, c.row.country]),
+    ).toEqual([
+      [1, 'Matthew DENNY', 'AUS'],
+      [2, 'Darcy MILLER', 'AUS'],
+      [3, 'Darcy GIDDINGS', 'AUS'],
+      [2, 'Lawrence OKOYE', 'GBR'],
+      [3, 'Roje STONA', 'JAM'],
+    ])
+  })
+
+  it('drops 4th place downwards, and an international who did not medal', () => {
+    const { final, rows } = decathlon()
+    const list = buildCeremoniesList(rows, final.isCombined)
+    const shown = medallistRows(list)
+
+    expect(shown.map((c) => [c.placeOrder, c.row.name])).toEqual([
+      [1, 'Logoh TLIGI'],
+      [2, 'Lenny ROBIN'],
+      [3, 'Tom STONE'],
+      [1, 'Sam TALBOT'],
+    ])
+    // Connor DUGGAN was 4th of the Australians; Max TEURUAA (COK) finished
+    // 9th overall and carries a hyphen, so neither is presented to.
+    expect(shown.some((c) => c.row.name === 'Connor DUGGAN')).toBe(false)
+    expect(shown.some((c) => c.row.name === 'Max TEURUAA')).toBe(false)
+    // The full list still holds them, because the combined script reads the
+    // non-medallists aloud.
+    expect(list.some((c) => c.row.name === 'Connor DUGGAN')).toBe(true)
+    expect(list.some((c) => c.row.name === 'Max TEURUAA')).toBe(true)
+  })
+
+  it('shows nothing while an event has no finishing places', () => {
+    expect(medallistRows(buildCeremoniesList([], false))).toEqual([])
   })
 })
