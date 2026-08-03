@@ -424,7 +424,13 @@ First place and gold medallist with a time of
 …
 
 [if an international medalled]
-We also recognise {Name} representing {Country code} with a {gold/silver/bronze} medal for {his/her} performance of {spoken time}
+We also recognise
+{Name}
+representing
+{Country code}
+with a {gold/silver/bronze} medal
+for {his/her} performance of
+{spoken time}
 
 Your medallists for the
 {Sex} {Age group} {Event}
@@ -477,7 +483,13 @@ representing
 … silver, then gold …
 
 [if an international medalled]
-We also recognise {Name} representing {Country code} with a {gold/silver/bronze} medal for {his/her} performance of {xx} point {xx} metres
+We also recognise
+{Name}
+representing
+{Country code}
+with a {gold/silver/bronze} medal
+for {his/her} performance of
+{xx} point {xx} metres
 
 Your medallists for the
 {Sex} {Age group} {Event}

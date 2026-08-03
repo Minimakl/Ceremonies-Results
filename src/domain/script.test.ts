@@ -136,9 +136,21 @@ representing
 Queensland
 Matthew DENNY
 
-We also recognise Lawrence OKOYE representing GBR with a silver medal for his performance of 65 point 09 metres
+We also recognise
+Lawrence OKOYE
+representing
+GBR
+with a silver medal
+for his performance of
+65 point 09 metres
 
-We also recognise Roje STONA representing JAM with a bronze medal for his performance of 64 point 60 metres
+We also recognise
+Roje STONA
+representing
+JAM
+with a bronze medal
+for his performance of
+64 point 60 metres
 
 Your medallists for the
 Men's Open Discus Throw`)

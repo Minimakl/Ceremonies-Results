@@ -145,8 +145,12 @@ function generateMedallistScript(
   const pronoun = genderPronoun(event.genderRaw)
   for (const c of internationals) {
     blocks.push(
-      `We also recognise ${c.row.name} representing ${c.row.country} with a ` +
-        `${MEDAL_NAME[c.overallPosition]} medal for ${pronoun} performance of ` +
+      `We also recognise\n` +
+        `${c.row.name}\n` +
+        `representing\n` +
+        `${c.row.country}\n` +
+        `with a ${MEDAL_NAME[c.overallPosition]} medal\n` +
+        `for ${pronoun} performance of\n` +
         template.spoken(c.row.result),
     )
   }
