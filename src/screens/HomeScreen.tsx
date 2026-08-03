@@ -36,6 +36,8 @@ export function HomeScreen() {
       yellow: [],
       green: [],
       pink: [],
+      // Presented events are off the board; only the header count uses this.
+      blue: [],
     }
     for (const f of visibleFinals) {
       groups[colours.get(f.meId) ?? 'red'].push(f)
@@ -65,6 +67,15 @@ export function HomeScreen() {
             <span className="sect__dot" style={{ background: 'currentColor' }} />
             Not started
             <span className="chip__count num">{byColour.red.length}</span>
+            <ChevronRightIcon size={14} />
+          </button>
+          <button
+            className="chip chip--blue"
+            onClick={() => navigate(`/c/${meetingId}/presented`)}
+          >
+            <span className="sect__dot" style={{ background: 'currentColor' }} />
+            Presented
+            <span className="chip__count num">{byColour.blue.length}</span>
             <ChevronRightIcon size={14} />
           </button>
           <DateFilter

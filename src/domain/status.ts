@@ -2,7 +2,13 @@ import type { FinalEvent } from './model'
 import type { EventRow } from './model'
 
 export type AutoColour = 'red' | 'orange' | 'yellow' | 'green'
-export type StatusColour = AutoColour | 'pink'
+/**
+ * Pink is a manual promotion into ceremonies; blue is the manual "finished
+ * presenting" flag (plan §5.3). Blue is deliberately outside `displayColour`:
+ * it overrides whatever Roster says, so a presented event never returns to the
+ * board on its own.
+ */
+export type StatusColour = AutoColour | 'pink' | 'blue'
 
 /**
  * Automatic colour from schedule-level Roster status (plan §4).
@@ -42,15 +48,37 @@ export function refineWithRows(colour: AutoColour, rows: EventRow[]): AutoColour
 }
 
 /**
- * Final display colour. Pink is a manual promotion (plan §4) and is only
- * valid while the underlying event is green — if Roster ever regresses the
- * event, the pink flag is ignored until it is green again.
+ * Final display colour.
+ *
+ * Pink is a manual promotion (plan §4) and is only valid while the underlying
+ * event is green — if Roster regresses the event, the pink flag is ignored
+ * until it is green again.
+ *
+ * Blue — presented — behaves the opposite way, and deliberately (plan §5.3,
+ * option B): once the medals are handed out the event is off the board and
+ * stays off, whatever Roster later says. Nothing but the operator's own
+ * "Return to ceremonies" brings it back.
  */
-export function displayColour(auto: AutoColour, promoted: boolean): StatusColour {
+export function displayColour(
+  auto: AutoColour,
+  promoted: boolean,
+  presented = false,
+): StatusColour {
+  if (presented) return 'blue'
   return promoted && auto === 'green' ? 'pink' : auto
 }
 
 /** Hard rule: only green events can be promoted to pink. */
 export function canPromote(colour: StatusColour): boolean {
   return colour === 'green'
+}
+
+/**
+ * Only an event Roster has finalised can be marked presented — green, or pink
+ * because it was sent to ceremonies first. Marking a final that has not
+ * happened would take it off the board with nothing to show for it, and the
+ * operator would not notice until it was missing.
+ */
+export function canMarkPresented(colour: StatusColour): boolean {
+  return colour === 'green' || colour === 'pink'
 }

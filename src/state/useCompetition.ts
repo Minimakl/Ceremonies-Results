@@ -14,6 +14,7 @@ import {
 import { buildEventRows, buildFinals, type FinalEvent } from '../domain/model'
 import {
   autoColour,
+  canMarkPresented,
   displayColour,
   refineWithRows,
   type StatusColour,
@@ -43,29 +44,43 @@ export interface CompetitionState {
   promoted: Set<number>
   promote: (meId: number) => void
   demote: (meId: number) => void
+  /** Events the operator has finished presenting (plan §5.3). */
+  presented: Set<number>
+  markPresented: (meId: number) => void
+  returnToCeremonies: (meId: number) => void
   resultsCache: Map<number, ResultsPayload>
   loadResults: (meId: number) => Promise<ResultsPayload>
   refresh: () => void
 }
 
-function promotionKey(meetingId: number) {
-  return `ceremonies.promoted.${meetingId}`
+/**
+ * The two manual flags — sent to ceremonies, and finished presenting — are
+ * the operator's own state, not Roster's, so they are kept per competition in
+ * the browser. They survive a refresh; they do not follow the operator to
+ * another device.
+ */
+function flagKey(kind: 'promoted' | 'presented', meetingId: number) {
+  return `ceremonies.${kind}.${meetingId}`
 }
 
-function loadPromoted(meetingId: number): Set<number> {
+function loadFlag(kind: 'promoted' | 'presented', meetingId: number): Set<number> {
   try {
-    const raw = localStorage.getItem(promotionKey(meetingId))
+    const raw = localStorage.getItem(flagKey(kind, meetingId))
     return new Set(raw ? (JSON.parse(raw) as number[]) : [])
   } catch {
     return new Set()
   }
 }
 
-function savePromoted(meetingId: number, promoted: Set<number>) {
+function saveFlag(
+  kind: 'promoted' | 'presented',
+  meetingId: number,
+  value: Set<number>,
+) {
   try {
-    localStorage.setItem(promotionKey(meetingId), JSON.stringify([...promoted]))
+    localStorage.setItem(flagKey(kind, meetingId), JSON.stringify([...value]))
   } catch {
-    // storage unavailable — promotion just won't survive a reload
+    // storage unavailable — the flag just won't survive a reload
   }
 }
 
@@ -76,7 +91,12 @@ export function useCompetition(meetingId: number): CompetitionState {
   const [resultsCache, setResultsCache] = useState<Map<number, ResultsPayload>>(
     () => new Map(),
   )
-  const [promoted, setPromoted] = useState<Set<number>>(() => loadPromoted(meetingId))
+  const [promoted, setPromoted] = useState<Set<number>>(() =>
+    loadFlag('promoted', meetingId),
+  )
+  const [presented, setPresented] = useState<Set<number>>(() =>
+    loadFlag('presented', meetingId),
+  )
   const [lastUpdated, setLastUpdated] = useState<number | null>(null)
   const [stale, setStale] = useState(false)
   const [error, setError] = useState<string>()
@@ -85,7 +105,8 @@ export function useCompetition(meetingId: number): CompetitionState {
   // Switching competition clears everything the previous one populated, so a
   // stale schedule can never be shown under a new competition's name.
   useEffect(() => {
-    setPromoted(loadPromoted(meetingId))
+    setPromoted(loadFlag('promoted', meetingId))
+    setPresented(loadFlag('presented', meetingId))
     setResultsCache(new Map())
     setDetails(undefined)
     setSchedule(undefined)
@@ -163,10 +184,13 @@ export function useCompetition(meetingId: number): CompetitionState {
       if (auto === 'orange' && cached) {
         auto = refineWithRows(auto, buildEventRows(f, cached))
       }
-      map.set(f.meId, displayColour(auto, promoted.has(f.meId)))
+      map.set(
+        f.meId,
+        displayColour(auto, promoted.has(f.meId), presented.has(f.meId)),
+      )
     }
     return map
-  }, [finals, resultsCache, promoted])
+  }, [finals, resultsCache, promoted, presented])
 
   const promote = useCallback(
     (meId: number) => {
@@ -174,7 +198,7 @@ export function useCompetition(meetingId: number): CompetitionState {
       setPromoted((prev) => {
         const next = new Set(prev)
         next.add(meId)
-        savePromoted(meetingId, next)
+        saveFlag('promoted', meetingId, next)
         return next
       })
     },
@@ -186,7 +210,45 @@ export function useCompetition(meetingId: number): CompetitionState {
       setPromoted((prev) => {
         const next = new Set(prev)
         next.delete(meId)
-        savePromoted(meetingId, next)
+        saveFlag('promoted', meetingId, next)
+        return next
+      })
+    },
+    [meetingId],
+  )
+
+  /**
+   * Finished presenting. Only an event Roster has finalised can be marked —
+   * green, or pink because it was sent to ceremonies first. Marking a final
+   * that has not happened would take it off the board with nothing to show
+   * for it, and the operator would not notice until it was missing.
+   */
+  const markPresented = useCallback(
+    (meId: number) => {
+      if (!canMarkPresented(colours.get(meId) ?? 'red')) return
+      setPresented((prev) => {
+        const next = new Set(prev)
+        next.add(meId)
+        saveFlag('presented', meetingId, next)
+        return next
+      })
+    },
+    [colours, meetingId],
+  )
+
+  /** The undo for a mis-press: back onto the board, in ceremonies. */
+  const returnToCeremonies = useCallback(
+    (meId: number) => {
+      setPresented((prev) => {
+        const next = new Set(prev)
+        next.delete(meId)
+        saveFlag('presented', meetingId, next)
+        return next
+      })
+      setPromoted((prev) => {
+        const next = new Set(prev)
+        next.add(meId)
+        saveFlag('promoted', meetingId, next)
         return next
       })
     },
@@ -206,6 +268,9 @@ export function useCompetition(meetingId: number): CompetitionState {
     promoted,
     promote,
     demote,
+    presented,
+    markPresented,
+    returnToCeremonies,
     resultsCache,
     loadResults,
     refresh,

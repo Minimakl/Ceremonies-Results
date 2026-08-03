@@ -100,6 +100,7 @@ tab writes the place within the group beside it, "A (1)".
 | 🟡 Yellow | Finished, but results NOT yet finalised/published | Automatic |
 | 🟢 Green | Finished AND results finalised. Ready to present | Automatic |
 | 🩷 Pink | Ready and waiting in ceremonies | **Manual: the client taps a button** |
+| 🔵 Blue | Presented — medals handed out, off the board | **Manual: the client taps Presented.** See §5.3 |
 
 **Hard rule:** only a green event can be promoted to pink. Red, orange, and yellow events can never be made pink. The four automatic colours are derived entirely from whatever Roster Athletics reports; no human input.
 
@@ -141,6 +142,40 @@ zone would put a whole session on the wrong day.
 
 The selection applies to the board and to the Not started page, and is shared
 across them.
+
+### 5.3 Presented (new, 2 Aug 2026)
+
+Once the medals are handed out and the athletes have left, the event should
+stop taking up room in the pink section — over a day of finals that section
+would otherwise fill with work already done.
+
+- A **Presented** button sits at the **far right of the event page's tab row**,
+  set apart from Start List / Results / Ceremonies / Script because it is an
+  action, not a view. Pressing it returns the operator to the board.
+- The event **leaves the board entirely** and appears on a **Presented page**,
+  reached from a **blue Presented button in the header** beside the red Not
+  started one, carrying a live count. The page is laid out like Not started:
+  Back button, grouped by competition day, obeying the date filter.
+- **Every card there carries "Return to ceremonies"**, and the event page's own
+  button flips to the same, so a mis-tap is one press to undo from either
+  place. The event goes straight back to the pink section.
+
+**Only a green or pink event can be marked presented.** Marking a final that
+has not happened would take it off the board with nothing to show for it, and
+the operator would not notice until it was missing. On red, orange and yellow
+events the button is disabled.
+
+**Presented is final, whatever Roster later says (decision: option B).** If
+Roster reopens an event — a protest upheld, a time corrected — the event does
+**not** return to the board on its own; only Return to ceremonies brings it
+back. This is the opposite of the pink rule, which is ignored the moment an
+event stops being green. Chosen deliberately for now, to be revisited once a
+live meet has been observed: no reversal of a finalised event has yet been
+seen in Roster's data, so the behaviour is a decision rather than an
+observation.
+
+Like the pink promotion, the flag is stored per competition in the browser. It
+survives a refresh; it does not follow the operator to another device.
 
 ## 6. Event Screen
 

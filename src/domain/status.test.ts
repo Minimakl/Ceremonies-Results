@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import type { FinalEvent } from './model'
 import type { EventRow } from './model'
-import { autoColour, canPromote, displayColour, refineWithRows } from './status'
+import {
+  autoColour,
+  canMarkPresented,
+  canPromote,
+  displayColour,
+  refineWithRows,
+} from './status'
 
 function ev(partial: Partial<FinalEvent>): FinalEvent {
   return {
@@ -91,5 +97,30 @@ describe('pink promotion (plan §4 hard rule)', () => {
     expect(displayColour('green', false)).toBe('green')
     expect(displayColour('orange', true)).toBe('orange')
     expect(displayColour('red', true)).toBe('red')
+  })
+})
+
+describe('presented — the blue flag (plan §5.3)', () => {
+  it('only an event Roster has finalised can be marked presented', () => {
+    expect(canMarkPresented('green')).toBe(true)
+    expect(canMarkPresented('pink')).toBe(true)
+    expect(canMarkPresented('red')).toBe(false)
+    expect(canMarkPresented('orange')).toBe(false)
+    expect(canMarkPresented('yellow')).toBe(false)
+  })
+
+  it('stays presented whatever Roster later says', () => {
+    // Option B: once the medals are out, the event is off the board. Even if
+    // Roster reopens the event — a protest, a corrected time — it does not
+    // reappear on its own; only Return to ceremonies brings it back.
+    expect(displayColour('green', true, true)).toBe('blue')
+    expect(displayColour('green', false, true)).toBe('blue')
+    expect(displayColour('orange', false, true)).toBe('blue')
+    expect(displayColour('red', false, true)).toBe('blue')
+  })
+
+  it('leaves the other colours alone when nothing is presented', () => {
+    expect(displayColour('green', true, false)).toBe('pink')
+    expect(displayColour('green', false, false)).toBe('green')
   })
 })

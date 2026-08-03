@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useCompetitionContext } from '../state/competitionContext'
 import { usePoll } from '../state/usePoll'
 import { LiveIndicator } from '../components/LiveIndicator'
-import { ArrowLeftIcon, SidebarToggleIcon } from '../components/icons'
+import { ArrowLeftIcon, CheckIcon, SidebarToggleIcon } from '../components/icons'
 import { buildEventRows, startListRows, type EventRow } from '../domain/model'
 import { groupLabel } from '../domain/format'
 import {
@@ -12,7 +12,7 @@ import {
   type CeremonyRow,
 } from '../domain/ceremonies'
 import { generateScript, SCRIPT_PLACEHOLDER } from '../domain/script'
-import type { StatusColour } from '../domain/status'
+import { canMarkPresented, type StatusColour } from '../domain/status'
 
 /**
  * Results are polled harder than the schedule: this is the screen the operator
@@ -35,6 +35,7 @@ const STATUS_TEXT: Record<StatusColour, string> = {
   yellow: 'Awaiting final results',
   green: 'Ready to present',
   pink: 'In ceremonies',
+  blue: 'Presented',
 }
 
 /**
@@ -47,7 +48,14 @@ export function EventScreen() {
     useCompetitionContext()
   const { meId: meIdParam } = useParams()
   const meId = Number(meIdParam)
-  const { finals, colours, resultsCache, loadResults } = competition
+  const {
+    finals,
+    colours,
+    resultsCache,
+    loadResults,
+    markPresented,
+    returnToCeremonies,
+  } = competition
   const event = finals.find((f) => f.meId === meId)
   const [tab, setTab] = useState<Tab>('start-list')
   const [loadError, setLoadError] = useState<string>()
@@ -150,6 +158,40 @@ export function EventScreen() {
             {t.label}
           </button>
         ))}
+        {/*
+          Finished presenting, at the far right and set apart from the tabs —
+          it is an action, not a view. Only an event Roster has finalised can
+          be marked, so a mis-tap cannot take a live final off the board.
+        */}
+        {colour === 'blue' ? (
+          <button
+            className="tabs__action tabs__action--undo"
+            onClick={() => {
+              returnToCeremonies(meId)
+              back()
+            }}
+          >
+            <ArrowLeftIcon size={15} />
+            Return to ceremonies
+          </button>
+        ) : (
+          <button
+            className="tabs__action"
+            disabled={!canMarkPresented(colour)}
+            title={
+              canMarkPresented(colour)
+                ? 'Mark this event as presented'
+                : 'Available once Roster has finalised the results'
+            }
+            onClick={() => {
+              markPresented(meId)
+              back()
+            }}
+          >
+            Presented
+            <CheckIcon size={15} />
+          </button>
+        )}
       </nav>
 
       {!payload && !loadError && <div className="notice">Loading…</div>}

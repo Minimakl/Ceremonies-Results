@@ -31,6 +31,10 @@
   --green-tint: #ecf6f0;
   --pink: #b03d77;
   --pink-tint: #fcf0f6;
+  /* Presented: off the board, done with. Blue reads as settled, not as
+     another stage of the workflow. */
+  --blue: #2e5fa3;
+  --blue-tint: #eef3fb;
 
   --radius: 14px;
   --radius-sm: 10px;
@@ -450,6 +454,10 @@ input {
   --dot: var(--pink);
 }
 
+.card--blue {
+  --dot: var(--blue);
+}
+
 .card__name {
   font-size: 14px;
   font-weight: 620;
@@ -605,6 +613,11 @@ input {
   --fg: var(--green);
   --tint: var(--green-tint);
 }
+.status-pill--blue {
+  --fg: var(--blue);
+  --tint: var(--blue-tint);
+}
+
 .status-pill--pink {
   --fg: var(--pink);
   --tint: var(--pink-tint);
@@ -613,6 +626,7 @@ input {
 .tabs {
   display: flex;
   gap: 4px;
+  align-items: center;
   padding: 0 20px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -881,6 +895,18 @@ input {
   border-color: #e8c4c0;
 }
 
+.chip--blue {
+  color: var(--blue);
+  background: var(--blue-tint);
+  border-color: #d3e0f2;
+}
+
+.chip--blue:hover {
+  color: var(--blue);
+  background: #e2ecf9;
+  border-color: #c2d5ee;
+}
+
 .chip--on {
   color: var(--accent);
   background: var(--accent-tint);
@@ -989,8 +1015,15 @@ input {
   align-items: center;
   gap: 8px;
   padding: 13px 15px;
-  background: var(--red-tint);
+  /* The band takes the tone of the page it is on — red on Not started, blue
+     on Presented. */
+  background: var(--tint, var(--red-tint));
   border-bottom: 1px solid var(--border);
+}
+
+.daygroup--blue {
+  --tint: var(--blue-tint);
+  --dot: var(--blue);
 }
 
 .daygroup__cards {
@@ -1242,4 +1275,51 @@ input {
   border-style: dashed;
   border-color: var(--border-strong);
   background: var(--surface-2);
+}
+
+/* "Presented" / "Return to ceremonies" — an action on the tab row, not a tab.
+   Pushed to the far right and given a border so it never reads as a fifth
+   view. */
+.tabs__action {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #d3e0f2;
+  border-radius: 999px;
+  background: var(--blue-tint);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
+}
+
+.tabs__action:hover:not(:disabled) {
+  background: #e2ecf9;
+  border-color: #c2d5ee;
+}
+
+.tabs__action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tabs__action--undo {
+  border-color: var(--border);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.tabs__action--undo:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+
+@media (max-width: 600px) {
+  .tabs__action {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
 }

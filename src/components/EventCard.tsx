@@ -8,6 +8,7 @@ interface Props {
   colour: StatusColour
   onPromote?: () => void
   onDemote?: () => void
+  onReturnToCeremonies?: () => void
 }
 
 /**
@@ -15,7 +16,13 @@ interface Props {
  * gender and age group underneath. The panel already carries the colour, so
  * the card states it only as an accent rail.
  */
-export function EventCard({ event, colour, onPromote, onDemote }: Props) {
+export function EventCard({
+  event,
+  colour,
+  onPromote,
+  onDemote,
+  onReturnToCeremonies,
+}: Props) {
   const navigate = useNavigate()
   const open = () => navigate(`/c/${event.meetingId}/event/${event.meId}`)
   return (
@@ -57,6 +64,18 @@ export function EventCard({ event, colour, onPromote, onDemote }: Props) {
         >
           <ArrowLeftIcon size={14} />
           Return to ready
+        </button>
+      )}
+      {colour === 'blue' && onReturnToCeremonies && (
+        <button
+          className="card__action card__action--ghost"
+          onClick={(e) => {
+            e.stopPropagation()
+            onReturnToCeremonies()
+          }}
+        >
+          <ArrowLeftIcon size={14} />
+          Return to ceremonies
         </button>
       )}
     </div>

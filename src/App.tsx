@@ -10,6 +10,7 @@ import {
 import { HomeScreen } from './screens/HomeScreen'
 import { EventScreen } from './screens/EventScreen'
 import { NotStartedScreen } from './screens/NotStartedScreen'
+import { PresentedScreen } from './screens/PresentedScreen'
 import { CompetitionsScreen } from './screens/CompetitionsScreen'
 import { Sidebar } from './components/Sidebar'
 import { useCompetition } from './state/useCompetition'
@@ -150,6 +151,7 @@ export default function App() {
           <Route path="/c/:meetingId" element={<CompetitionShell />}>
             <Route index element={<HomeScreen />} />
             <Route path="not-started" element={<NotStartedScreen />} />
+            <Route path="presented" element={<PresentedScreen />} />
             <Route path="event/:meId" element={<EventScreen />} />
           </Route>
           <Route path="*" element={<Navigate to="/competitions" replace />} />

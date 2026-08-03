@@ -84,3 +84,12 @@ export function SearchIcon({ size = 15 }: IconProps = {}) {
     </svg>
   )
 }
+
+/** Tick, for the "Presented" action on the event screen. */
+export function CheckIcon({ size = 16 }: IconProps = {}) {
+  return (
+    <svg {...base(size)}>
+      <path d="m20 6-11 11-5-5" />
+    </svg>
+  )
+}
