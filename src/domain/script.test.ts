@@ -19,28 +19,40 @@ const EXPECTED_DECATHLON_SCRIPT = `Your finalists for the
 Men's Open Decathlon
 Championship.
 
-In 9th place with a total of 4482 points
-representing New South Wales
+In 9th place with a total of
+4482 points
+representing
+New South Wales
 Benjamin PITTMAN
 
-In 8th place with a total of 4937 points
-representing New South Wales
+In 8th place with a total of
+4937 points
+representing
+New South Wales
 Chase LEE
 
-In 7th place with a total of 6198 points
-representing South Australia
+In 7th place with a total of
+6198 points
+representing
+South Australia
 Fraser WESTERN
 
-In 6th place with a total of 6277 points
-representing Victoria
+In 6th place with a total of
+6277 points
+representing
+Victoria
 Benjamin DAY
 
-In 5th place with a total of 6448 points
-representing Queensland
+In 5th place with a total of
+6448 points
+representing
+Queensland
 George GARDINER
 
-In 4th place with a total of 6527 points
-representing Queensland
+In 4th place with a total of
+6527 points
+representing
+Queensland
 Connor DUGGAN
 
 And now, your medallists for the
@@ -48,18 +60,24 @@ Men's Open Decathlon
 Championship
 
 Third place and bronze medallist
-with a total of 6666 points
-representing New South Wales
+with a total of
+6666 points
+representing
+New South Wales
 Tom STONE
 
 Second place and silver medallist
-with a total of 6845 points
-representing Victoria
+with a total of
+6845 points
+representing
+Victoria
 Lenny ROBIN
 
 First place and gold medallist
-with a total of 6872 points
-representing South Australia
+with a total of
+6872 points
+representing
+South Australia
 Logoh TLIGI
 
 Your medallists for the
@@ -118,19 +136,22 @@ describe('script generator (plan §9)', () => {
     expect(generateScript(final, buildCeremoniesList(rows, false)))
       .toBe(`Your medallists for the Men's Open Discus Throw Championship.
 
-Third place and bronze medallist with a best of
+Third place and bronze medallist
+with a best of
 51 point 87 metres
 representing
 Victoria
 Darcy GIDDINGS
 
-Second place and silver medallist with a best of
+Second place and silver medallist
+with a best of
 57 point 66 metres
 representing
 South Australia
 Darcy MILLER
 
-First place and gold medallist with a best of
+First place and gold medallist
+with a best of
 67 point 51 metres
 representing
 Queensland

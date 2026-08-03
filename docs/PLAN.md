@@ -289,16 +289,22 @@ Your finalists for the
 {Men's} {Open} {Decathlon}
 Championship.
 
-In {9th} place with a total of {4482} points
-representing {New South Wales}
+In {9th} place with a total of
+{4482} points
+representing
+{New South Wales}
 {Benjamin PITTMAN}
 
-In {8th} place with a total of {4937} points
-representing {New South Wales}
+In {8th} place with a total of
+{4937} points
+representing
+{New South Wales}
 {Chase LEE}
 
-In {7th} place with a total of {6198} points
-representing {South Australia}
+In {7th} place with a total of
+{6198} points
+representing
+{South Australia}
 {Fraser WESTERN}
 
 …(continues in descending place order down to 4th)…
@@ -308,18 +314,24 @@ And now, your medallists for the
 Championship
 
 Third place and bronze medallist
-with a total of {6666} points
-representing {New South Wales}
+with a total of
+{6666} points
+representing
+{New South Wales}
 {Tom STONE}
 
 Second place and silver medallist
-with a total of {6845} points
-representing {Victoria}
+with a total of
+{6845} points
+representing
+{Victoria}
 {Lenny ROBIN}
 
 First place and gold medallist
-with a total of {6872} points
-representing {South Australia}
+with a total of
+{6872} points
+representing
+{South Australia}
 {Logoh TLIGI}
 
 Your medallists for the
@@ -411,16 +423,19 @@ Your medallists for the
 {Sex} {Age group} {Event}
 Championship
 
-Third place and bronze medallist with a time of
+Third place and bronze medallist
+with a time of
 {spoken time}
 representing
 {Club/team}
 {Name}
 
-Second place and silver medallist with a time of
+Second place and silver medallist
+with a time of
 …
 
-First place and gold medallist with a time of
+First place and gold medallist
+with a time of
 …
 
 [if an international medalled]
@@ -474,7 +489,8 @@ international medallist — with three differences:
 ```
 Your medallists for the {Sex} {Age group} {Event} Championship.
 
-Third place and bronze medallist with a best of
+Third place and bronze medallist
+with a best of
 {xx} point {xx} metres
 representing
 {Club/team}

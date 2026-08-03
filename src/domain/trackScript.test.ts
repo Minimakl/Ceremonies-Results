@@ -60,19 +60,22 @@ const EXPECTED = `Your medallists for the
 Men's U18 1500m
 Championship
 
-Third place and bronze medallist with a time of
+Third place and bronze medallist
+with a time of
 4 minutes 20 point 44 seconds
 representing
 Corpus Christi College
 Oliver LEFORT
 
-Second place and silver medallist with a time of
+Second place and silver medallist
+with a time of
 4 minutes 19 point 50 seconds
 representing
 Applecross Senior High School
 Callum CUMMING
 
-First place and gold medallist with a time of
+First place and gold medallist
+with a time of
 4 minutes 12 point 45 seconds
 representing
 Wesley College
@@ -129,19 +132,22 @@ describe('track medallists script (§9.5)', () => {
 Women's PA Senior 100m
 Championship
 
-Third place and bronze medallist with a time of
+Third place and bronze medallist
+with a time of
 13 point 15 seconds
 representing
 Western Australia
 Rhiannon CLARKE
 
-Second place and silver medallist with a time of
+Second place and silver medallist
+with a time of
 14 point 47 seconds
 representing
 New South Wales
 Mali LOVELL
 
-First place and gold medallist with a time of
+First place and gold medallist
+with a time of
 12 point 32 seconds
 representing
 New South Wales

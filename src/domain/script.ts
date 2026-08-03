@@ -134,7 +134,8 @@ function generateMedallistScript(
 
   for (const c of medallists) {
     blocks.push(
-      `${MEDALLIST_LEAD[c.placeOrder]} ${template.markLead}\n` +
+      `${MEDALLIST_LEAD[c.placeOrder]}\n` +
+        `${template.markLead}\n` +
         `${template.spoken(c.row.result)}\n` +
         `representing\n` +
         `${expandState(c.row.club, c.row.clubLong)}\n` +
@@ -209,8 +210,10 @@ export function generateScript(
 
   for (const c of nonMedallists) {
     blocks.push(
-      `In ${ordinal(c.placeOrder)} place with a total of ${c.row.result} points\n` +
-        `representing ${expandState(c.row.club, c.row.clubLong)}\n` +
+      `In ${ordinal(c.placeOrder)} place with a total of\n` +
+        `${c.row.result} points\n` +
+        `representing\n` +
+        `${expandState(c.row.club, c.row.clubLong)}\n` +
         c.row.name,
     )
   }
@@ -220,8 +223,10 @@ export function generateScript(
   for (const c of medallists) {
     blocks.push(
       `${MEDALLIST_LEAD[c.placeOrder]}\n` +
-        `with a total of ${c.row.result} points\n` +
-        `representing ${expandState(c.row.club, c.row.clubLong)}\n` +
+        `with a total of\n` +
+        `${c.row.result} points\n` +
+        `representing\n` +
+        `${expandState(c.row.club, c.row.clubLong)}\n` +
         c.row.name,
     )
   }

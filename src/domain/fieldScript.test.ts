@@ -61,19 +61,22 @@ describe('field medallists script (§9.6)', () => {
     expect(generateScript(ev, buildCeremoniesList(rows, false))).toBe(
       `Your medallists for the Men's Open Long Jump Championship.
 
-Third place and bronze medallist with a best of
+Third place and bronze medallist
+with a best of
 7 point 86 metres
 representing
 Queensland
 Jalen RUCKER
 
-Second place and silver medallist with a best of
+Second place and silver medallist
+with a best of
 8 point 12 metres
 representing
 Victoria
 Christopher MITREVSKI
 
-First place and gold medallist with a best of
+First place and gold medallist
+with a best of
 8 point 26 metres
 representing
 New South Wales
@@ -91,7 +94,8 @@ Men's Open Long Jump`,
     const rows = buildEventRows(ev, highJump as ResultsPayload)
     const script = generateScript(ev, buildCeremoniesList(rows, false))
     expect(script).toContain(
-      `First place and gold medallist with a best of
+      `First place and gold medallist
+with a best of
 2 point 20 metres
 representing
 Victoria
