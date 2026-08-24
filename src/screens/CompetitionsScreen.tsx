@@ -211,7 +211,7 @@ export function CompetitionsScreen() {
             >
               <span className="comp__name">{m.meetingName}</span>
               <span className="comp__meta num">
-                {formatMeetingDateTime(m.startDateTime, m.endDateTime)}
+                {formatMeetingDateTime(m.startDateTime, m.endDateTime, m.tz)}
               </span>
               <span className="comp__meta">
                 {[
@@ -255,6 +255,7 @@ export function CompetitionsScreen() {
                 {formatMeetingDateTime(
                   details?.startDateTime ?? selected.startDateTime,
                   details?.endDateTime ?? selected.endDateTime,
+                  details?.tz ?? selected.tz,
                 )}
                 {(details?.tz ?? selected.tz) && (
                   <span className="detail__sub">
@@ -300,7 +301,10 @@ export function CompetitionsScreen() {
                 <>
                   <dt>Registration deadline</dt>
                   <dd className="num">
-                    {formatWallTime(selected.registrationDeadline)}
+                    {formatWallTime(
+                      selected.registrationDeadline,
+                      details?.tz ?? selected.tz,
+                    )}
                   </dd>
                 </>
               )}

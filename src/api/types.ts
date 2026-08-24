@@ -219,7 +219,7 @@ export interface MeetingSummaryDto {
   organisationId?: number
   meetingName: string
   imgUrl?: string
-  /** Venue-local wall time, "YYYY-MM-DD HH:mm:ss". */
+  /** **UTC**, "YYYY-MM-DD HH:mm:ss" — convert with `tz`, as event times are. */
   startDateTime?: string
   endDateTime?: string
   tz?: string

@@ -1,4 +1,5 @@
 import type { MeetingSearchRequest } from '../api/types'
+import { eventDayKey, eventWallTime, formatDayLabel } from './dates'
 
 /**
  * Build the request body Roster's own competition browser posts, so the
@@ -65,18 +66,33 @@ export function hasAnyFilter(filters: SearchFilters): boolean {
 export function formatMeetingDateTime(
   startDateTime: string | undefined,
   endDateTime: string | undefined,
+  timeZone: string | undefined,
 ): string {
-  const start = formatWallTime(startDateTime)
-  const end = formatWallTime(endDateTime)
+  const start = formatWallTime(startDateTime, timeZone)
+  const end = formatWallTime(endDateTime, timeZone)
   if (!start) return ''
   return end ? `${start} – ${end}` : start
 }
 
-/** "2026-04-08 23:00:00" → "08/04/2026, 23:00" */
-export function formatWallTime(value: string | undefined): string {
-  if (!value) return ''
-  const m = value.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
-  if (!m) return value
-  const [, year, month, day, hour, minute] = m
-  return `${day}/${month}/${year}, ${hour}:${minute}`
+/**
+ * A meeting's own timestamps are **UTC**, exactly like the schedule's — the
+ * string carries no zone marker, which makes it easy to print as if it were
+ * local and be a whole day out. Verified on three meets, each matching what
+ * Roster's own page prints:
+ *
+ *   27550  2026-04-08 23:00 UTC · Australia/Sydney    → 09/04/2026, 9:00 AM
+ *   28351  2026-08-21 23:15 UTC · Australia/Melbourne → 22/08/2026, 9:15 AM
+ *   27809  2026-01-31 06:00 UTC · Australia/Perth     → 31/01/2026, 2:00 PM
+ *
+ * So it is converted with the meeting's own `tz`, the same way event times
+ * are. With no timezone the raw UTC instant is shown rather than a guess.
+ */
+export function formatWallTime(
+  value: string | undefined,
+  timeZone: string | undefined,
+): string {
+  const day = eventDayKey(value, timeZone)
+  const time = eventWallTime(value, timeZone)
+  if (!day || !time) return ''
+  return `${formatDayLabel(day)}, ${time}`
 }

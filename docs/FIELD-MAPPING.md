@@ -18,7 +18,9 @@ rather than blanking the page.
 
 Competitions browser: `GET /api/public/meeting/list/v2` (Roster's featured
 list) and `POST /api/public/meeting/search/v2` (the same body Roster's own
-browser posts).
+browser posts). A meeting's `startDateTime` / `endDateTime` /
+`registrationDeadline` are **UTC**, like the schedule's, and are converted
+with the meeting's own `tz` before display.
 
 ## 2. Which events appear
 
